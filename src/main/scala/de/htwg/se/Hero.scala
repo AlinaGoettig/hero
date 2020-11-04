@@ -5,8 +5,8 @@ object Hero {
         val student = Player("Alina & Ronny")
         println("Hello," + student.name)
         println(gameName())
-        println(stringTry())
-        //println(line())
+        //println(stringTry())
+        println(line())
     }
 
     def gameName(): String = {
@@ -47,77 +47,28 @@ object Hero {
         board //
     }
 
-    def getBoard(): String = {
-        var board = " "
-        for (l <- 0 to 10) {
-            for (line <- 0 to 61) {
-                board = board + "-"
-            }
-            board = board + "\n"
-            for (vert <- 0 to 61) {
-                if (vert % 3 == 0) {
-
-                } else {
-
-                }
-            }
-            board = board + "\n"
-        }
-        board
-    }
-
     def line(): String = {
-        val line = Array(lines() * 15 + "\n" + mid("HA.") + mid("") * 13 + mid(".FA") + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("MA.") + mid("") * 5 + mid("xxx") + mid("") * 7 + mid("MAG") + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("RO.") + mid("") * 6 + mid("xxx") + mid("") * 6 + mid(".CE") + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("") * 15 + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("") * 5 + mid("xxx") * 2 + mid("") * 8 + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("AN.") + mid("") * 13 + mid(".DE") + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("") * 15 + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("") * 15 + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("CH.") + mid("") * 6 + mid("xxx") * 2 + mid("") * 5 + mid(".EF") + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("ZE.") + mid("") * 5 + mid("xxx") + mid("") * 7 + mid(".PI") + "\n" + lines() * 15 + "\n",
-            lines() * 15 + "\n" + mid("CR.") + mid("") * 13 + mid(".HO") + "\n" + lines() * 15 + "\n",
-            "IPlayer1I" + "" * 81 + "IPlayer2I" + "\n")
+        val li = Array(lines() + mid("HA.") + mid("   ") * 13 + mid(".FA") + "\n",
+            lines() + mid("MA.") + mid("   ") * 5 + mid("xxx") + mid("   ") * 7 + mid("MAG") + "\n",
+            lines() + mid("RO.") + mid("   ") * 6 + mid("xxx") + mid("   ") * 6 + mid(".CE") + "\n",
+            lines() + mid("   ") * 15 + "\n",
+            lines() + mid("   ") * 5 + mid("xxx") * 2 + mid("   ") * 8 + "\n",
+            lines() + mid("AN.") + mid("   ") * 13 + mid(".DE") + "\n",
+            lines() + mid("   ") * 15 + "\n",
+            lines() + mid("   ") * 15 + "\n",
+            lines() + mid("CH.") + mid("   ") * 6 + mid("xxx") * 2 + mid("   ") * 5 + mid(".EF") + "\n",
+            lines() + mid("ZE.") + mid("   ") * 5 + mid("xxx") + mid("   ") * 7 + mid(".PI") + "\n",
+            lines() + mid("CR.") + mid("   ") * 13 + mid(".HO") + "\n" + lines(),
+            mid("Player1") + " " * 83 + mid("Player2") + "\n")
 
         val board = "%s%s%s%s%s%s%s%s%s%s%s%s"
-            .format(line(11), line(0), line(1), line(2), line(3), line(4), line(5), line(6), line(7), line(8), line(9), line(10))
+            .format(li(11), li(0), li(1), li(2), li(3), li(4), li(5), li(6), li(7), li(8), li(9), li(10))
         board
     }
 
-    def lines(): String = {
-        val x = "=" * 7
-        x
-    }
+    def lines(): String = "=" * 7 * 15 + "\n"
 
-    def mid(x: String): String = {
-        val y = "I" + x + "I"
-        y
-    }
 
-    def getBoardFinshed(): String = {
-        "-------------------------------------------------------------" +
-            "\n|HA.||||||||||||||.FA|" +
-            "\n-------------------------------------------------------------" +
-            "\n|MA.||||||xxx||||||||MAG|" +
-            "\n-------------------------------------------------------------" +
-            "\n|RO.|...||||||xxx||||||...|.CE|" +
-            "\n-------------------------------------------------------------" +
-            "\n||||||||||||||||" +
-            "\n-------------------------------------------------------------" +
-            "\n||||||xxx|xxx|||||||||" +
-            "\n-------------------------------------------------------------" +
-            "\n|AN.||||||||||||||.DE|" +
-            "\n-------------------------------------------------------------" +
-            "\n||||||||||||||||" +
-            "\n-------------------------------------------------------------" +
-            "\n||||||||||||||||" +
-            "\n-------------------------------------------------------------" +
-            "\n|CH.|...||||||xxx|xxx||||||.EF|" +
-            "\n-------------------------------------------------------------" +
-            "\n|ZE.||||||xxx||||||||.PI|" +
-            "\n-------------------------------------------------------------" +
-            "\n|CR.||||||||||||||.HO|" +
-            "\n-------------------------------------------------------------"
-    }
+    def mid(x: String): String = "│ " + x + " │"
+
 }
