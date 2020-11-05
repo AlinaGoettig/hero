@@ -1,0 +1,130 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Hero</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">de.htwg.se.Hero.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Hero (de.htwg.se.Hero.model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+  <tr>
+    <td class="name">Hero$</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (20/ 24)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (20/ 24)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package de.htwg.se.Hero.model
+<i>2</i>&nbsp;
+<b class="fc"><i>3</i>&nbsp;object Hero {</b>
+<i>4</i>&nbsp;    def main(args: Array[String]): Unit = {
+<b class="nc"><i>5</i>&nbsp;        val student = Player(&quot;Alina &amp; Ronny&quot;)</b>
+<b class="nc"><i>6</i>&nbsp;        println(&quot;Hello,&quot; + student.name)</b>
+<b class="nc"><i>7</i>&nbsp;        println(gameName())</b>
+<b class="nc"><i>8</i>&nbsp;        println(line())</b>
+<i>9</i>&nbsp;    }
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    def gameName(): String = {
+<b class="fc"><i>12</i>&nbsp;        &quot;Hero&quot;</b>
+<i>13</i>&nbsp;    }
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    def line(): String = {
+<b class="fc"><i>17</i>&nbsp;        val li = Array(lines() + mid(&quot;HA.&quot;) + mid(&quot;   &quot;) * 13 + mid(&quot;.FA&quot;) + &quot;\n&quot;,</b>
+<b class="fc"><i>18</i>&nbsp;            lines() + mid(&quot;MA.&quot;) + mid(&quot;   &quot;) * 5 + mid(&quot;xxx&quot;) + mid(&quot;   &quot;) * 7 + mid(&quot;MAG&quot;) + &quot;\n&quot;,</b>
+<b class="fc"><i>19</i>&nbsp;            lines() + mid(&quot;RO.&quot;) + mid(&quot;   &quot;) * 6 + mid(&quot;xxx&quot;) + mid(&quot;   &quot;) * 6 + mid(&quot;.CE&quot;) + &quot;\n&quot;,</b>
+<b class="fc"><i>20</i>&nbsp;            lines() + mid(&quot;   &quot;) * 15 + &quot;\n&quot;,</b>
+<b class="fc"><i>21</i>&nbsp;            lines() + mid(&quot;   &quot;) * 5 + mid(&quot;xxx&quot;) * 2 + mid(&quot;   &quot;) * 8 + &quot;\n&quot;,</b>
+<b class="fc"><i>22</i>&nbsp;            lines() + mid(&quot;AN.&quot;) + mid(&quot;   &quot;) * 13 + mid(&quot;.DE&quot;) + &quot;\n&quot;,</b>
+<b class="fc"><i>23</i>&nbsp;            lines() + mid(&quot;   &quot;) * 15 + &quot;\n&quot;,</b>
+<b class="fc"><i>24</i>&nbsp;            lines() + mid(&quot;   &quot;) * 15 + &quot;\n&quot;,</b>
+<b class="fc"><i>25</i>&nbsp;            lines() + mid(&quot;CH.&quot;) + mid(&quot;   &quot;) * 6 + mid(&quot;xxx&quot;) * 2 + mid(&quot;   &quot;) * 5 + mid(&quot;.EF&quot;) + &quot;\n&quot;,</b>
+<b class="fc"><i>26</i>&nbsp;            lines() + mid(&quot;ZE.&quot;) + mid(&quot;   &quot;) * 5 + mid(&quot;xxx&quot;) + mid(&quot;   &quot;) * 7 + mid(&quot;.PI&quot;) + &quot;\n&quot;,</b>
+<b class="fc"><i>27</i>&nbsp;            lines() + mid(&quot;CR.&quot;) + mid(&quot;   &quot;) * 13 + mid(&quot;.HO&quot;) + &quot;\n&quot; + lines(),</b>
+<b class="fc"><i>28</i>&nbsp;            mid(&quot;Player1&quot;) + &quot; &quot; * 83 + mid(&quot;Player2&quot;) + &quot;\n&quot;)</b>
+<i>29</i>&nbsp;
+<b class="fc"><i>30</i>&nbsp;        val board = &quot;%s%s%s%s%s%s%s%s%s%s%s%s&quot;</b>
+<b class="fc"><i>31</i>&nbsp;            .format(li(11), li(0), li(1), li(2), li(3), li(4), li(5), li(6), li(7), li(8), li(9), li(10))</b>
+<b class="fc"><i>32</i>&nbsp;        board</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<b class="fc"><i>35</i>&nbsp;    def lines(): String = &quot;=&quot; * 7 * 15 + &quot;\n&quot;</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;
+<b class="fc"><i>38</i>&nbsp;    def mid(x: String): String = &quot;? &quot; + x + &quot; ?&quot;</b>
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;}</b>
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-11-05 17:24</div>
+</div>
+</body>
+</html>
