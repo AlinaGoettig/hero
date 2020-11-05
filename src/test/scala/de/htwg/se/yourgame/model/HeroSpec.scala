@@ -1,4 +1,4 @@
-package de.htwg.se.Hero.player
+package de.htwg.se
 
 import de.htwg.se.Hero.model.Hero._
 import org.scalatest._
