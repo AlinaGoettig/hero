@@ -1,6 +1,5 @@
-package de.htwg.se.Hero.model
+package de.htwg.se
 
-import com.ibm.jvm.dtfjview.Output
 import de.htwg.se.Hero.model.Hero._
 import org.scalatest._
 import org.junit.runner.RunWith
@@ -8,17 +7,6 @@ import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class HeroSpec extends WordSpec with Matchers {
-
-    "A Player" when { "new" should {
-        val player = Player("Test")
-        "have a name"  in {
-            player.name should be("Test")
-        }
-        "have a nice String representation" in {
-            player.toString should be("Test")
-        }
-    }}
-
     "At start of the game," when { "first text appear" should {
         val start = gameName()
         "it show the title"  in {
@@ -63,5 +51,4 @@ class HeroSpec extends WordSpec with Matchers {
             board should include(".HO")
         }
     }}
-
 }
