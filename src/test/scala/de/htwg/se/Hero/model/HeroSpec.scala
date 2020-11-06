@@ -20,6 +20,13 @@ class HeroSpec extends WordSpec with Matchers {
         }
     }}
 
+    "A instance of a Player" when { "new" should {
+        val player = Player
+        "have the typ"  in {
+            player should be(Player)
+        }
+    }}
+
     "At start of the game," when { "first text appear" should {
         val start = gameName()
         "show the title"  in {
