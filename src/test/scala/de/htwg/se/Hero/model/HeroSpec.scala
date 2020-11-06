@@ -22,14 +22,14 @@ class HeroSpec extends WordSpec with Matchers {
 
     "At start of the game," when { "first text appear" should {
         val start = gameName()
-        "it show the title"  in {
+        "show the title"  in {
            start should be("Hero")
         }
     }}
 
-    "Number of lines" when { "shown" should {
+    "A line" when { "shown" should {
         val line = lines()
-        "get a line out of ="  in {
+        "be out of ="  in {
             line should be("=" * 7 * 15 + "\n")
         }
     }}
@@ -42,7 +42,7 @@ class HeroSpec extends WordSpec with Matchers {
         }
     }}
 
-    "Board created" when { "the programm start," should {
+    "Board created" when { "the programm starts," should {
         val board = line()
         "include all given names"  in {
             board should include("Player1")
