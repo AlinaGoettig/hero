@@ -27,7 +27,6 @@ class HeroSpec extends WordSpec with Matchers {
     "Two Creatures fight, " when { "the attack deal dmg, " should {
         val board = Board(Array.ofDim[Cell](11,15))
         board.fillboard(board.field)
-        board.startboard(board.field)
         val attacker = Cell("HA.",3,10,5,false,28)
         val defender = Cell(".HO",9,40,6,false,8)
         val dmg = board.attack(0,0,14,10,board.field)

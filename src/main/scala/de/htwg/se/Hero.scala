@@ -1,5 +1,7 @@
 package de.htwg.se.Hero.model
 
+import java.awt.geom.Point2D
+
 import scala.io.StdIn
 
 //noinspection ScalaStyle
@@ -10,12 +12,15 @@ object Hero {
         println("Made by " + student.name)
         val board = Board(Array.ofDim[Cell](11,15))
         board.fillboard(board.field)
-        board.startboard(board.field)
         val dmg = board.attack(0,0,14,10,board.field)
-        println("Damage sended: " + dmg)
-        board.move(0,0,4,5,board.field)
-        board.move(14,10,5,6,board.field)
-        println(printi(board.field))
+        println("Damage given: " + dmg)
+        board.prediction(14,2,board.field)
+        println(board.printboard(board.field))
+        board.move(14,2,9,6,board.field)
+        println(board.printboard(board.field))
+        //board.move(0,0,4,5,board.field)
+        //board.move(14,10,5,6,board.field)
+        //println(board.printboard(board.field))
 
 
         //println(line())
@@ -32,19 +37,31 @@ object Hero {
     }
 
     case class Board(field: Array[Array[Cell]]) {
-        def fillboard(f: Array[Array[Cell]]): Array[Array[Cell]] = fill(field)
-        def startboard(f: Array[Array[Cell]]): Array[Array[Cell]] = start(field)
+        def fillboard(f: Array[Array[Cell]]): Array[Array[Cell]] = start(fill(field))
         def move(X1: Int, Y1: Int, X2: Int, Y2: Int, arr: Array[Array[Cell]]): Array[Array[Cell]]
         = swapCells(X1,Y1,X2,Y2,field)
         def attack(X1:Int,Y1:Int, X2:Int, Y2:Int, field:Array[Array[Cell]]): String
         = attackCell(X1,Y1, X2, Y2, field)
-        def printboard(): String = printboard()
+        def prediction(X: Int, Y:Int, field:Array[Array[Cell]]): Array[Array[Cell]] = posmove(X, Y, field)
+        def printboard(f: Array[Array[Cell]]): String = printfield(f)
     }
 
     def fill(field: Array[Array[Cell]]): Array[Array[Cell]] = {
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
                 field(i)(j) = emptycell()
+            }
+        }
+        field
+    }
+
+    def posmove (X: Int, Y: Int, field: Array[Array[Cell]]): Array[Array[Cell]] = {
+        for (i <- 0 to 14) {
+            for (j <- 0 to 10) {
+                val distance = Point2D.distance(X,Y,i,j).toInt
+                if(field(j)(i).name.equals("   ") && distance <= field(Y)(X).speed-1) {
+                    field(j)(i) = marker()
+                }
             }
         }
         field
@@ -174,8 +191,17 @@ object Hero {
 
     def lines(): String = "=" * 7 * 15 + "\n"
 
-
     def mid(x: String): String = "│ " + x + " │"
+
+    def fieldnumber(x: String): String = {
+        val tmp = Array("")
+        if (x.length == 2) {
+            tmp(0) = "  " + x + "   "
+        } else {
+            tmp(0) = "   " + x + "   "
+        }
+        tmp(0)
+    }
 
 
     def game(): Boolean = {
@@ -225,6 +251,13 @@ object Hero {
 
     def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
         val tmp = arr
+        for (i <- 0 to 14) {
+            for (j <- 0 to 10) {
+                if(tmp(j)(i).name.equals(" V ")) {
+                    tmp(j)(i) = emptycell()
+                }
+            }
+        }
         val cret1 = arr(Y1)(X1)
         val cret2 = arr(Y2)(X2)
         arr(Y1)(X1) = cret2
@@ -233,14 +266,18 @@ object Hero {
         arr
     }
 
-    def printi(b: Array[Array[Cell]]) : String = {
+    def printfield(b: Array[Array[Cell]]) : String = {
         var text = ""
-        text += lines()
+        for (x <- 0 to 14) {
+            text += fieldnumber(x.toString)
+        }
+
+        text += "\n" + lines()
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
                 text += b(i)(j).printcell()
             }
-            text += "\n" + lines()
+            text += " " + i.toString + "\n" + lines()
         }
         text
     }
