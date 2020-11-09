@@ -1,22 +1,68 @@
 package de.htwg.se.Hero.model
 
 import scala.io.StdIn
-import scala.util.control.Breaks.break
 
+//noinspection ScalaStyle
 object Hero {
     def main(args: Array[String]): Unit = {
-        val student = Player("Alina & Ronny")
-        println("Hello," + student.name)
+        val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
+        println("Made by " + student.name)
         println(line())
 
         while(game()){}
     }
 
     def gameName(): String = {
-        "Hero"
+        "\n ======== Welcome to Hero ======== \n"
     }
 
+    case class Cell(name: String, dmg: Int, hp: Int, speed: Int, style: Boolean, multiplier: Int) {
+        def printcell(): String = "│ " + name + " │"
+    }
+
+    def obstacle(): Cell = Cell("XXX",0,0,0,false,0)
+
+    def emptycell(): Cell = Cell("   ",0,0,0,false,0)
+
+    def marker(): Cell = Cell(" V ",0,0,0,false,0)
+
+    def creatureliststart(): Map[Vector[Int], Cell] = {
+        val name = namelist()
+        val list = Map(
+            Vector(0,0) -> Cell(name(0),3,10,5,false,28),
+            Vector(0,1) -> Cell(name(1),3,10,5,false,28),
+            Vector(0,2) -> Cell(name(2),6,10,6,true,18),
+            Vector(0,5) -> Cell(name(3),50,250,18,false,2),
+            Vector(0,8) -> Cell(name(4),25,100,9,false,4),
+            Vector(0,9) -> Cell(name(5),12,24,7,true,6),
+            Vector(0,10) -> Cell(name(6),10,35,6,false,8),
+            Vector(14,0) -> Cell(name(7),2,4,7,false,44),
+            Vector(14,1) -> Cell(name(8),4,13,6,true,20),
+            Vector(14,2) -> Cell(name(9),7,25,8,false,10),
+            Vector(14,5) -> Cell(name(10),40,200,17,false,2),
+            Vector(14,8) -> Cell(name(11),24,90,13,false,4),
+            Vector(14,9) -> Cell(name(12),17,45,7,false,6),
+            Vector(14,10) -> Cell(name(13),9,40,6,false,8)
+        )
+        list
+    }
+
+    def attack (attacker: Cell, defender: Cell): Cell = {
+        val dmg = attacker.dmg * attacker.multiplier
+        val multicheck = defender.hp - dmg
+        val multiplier = if(multicheck < 0 ) (defender.hp/dmg).toInt else defender.multiplier
+        val hp = if (multiplier != defender.multiplier) defender.hp*(defender.hp/dmg).toInt - dmg else defender.hp -dmg
+
+        Cell(defender.name,defender.dmg,hp,defender.speed,defender.style,multiplier)
+    }
+
+    def move (creature: Cell, goal: Vector[Int]): String = {
+        "worked"
+    }
+
+    def namelist(): IndexedSeq[String] =
+        IndexedSeq("HA.","MA.","RO.","AN.","CH.","ZE.","CR.",".FA","MAG",".CE",".DE",".EF",".PI",".HO")
 
     def line(): String = {
         val li = Array(lines() + mid("HA.") + mid("   ") * 13 + mid(".FA") + "\n",
