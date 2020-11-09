@@ -48,6 +48,27 @@ object Hero {
         list
     }
 
+    def creatures() : Array[Cell] = {
+        val name = namelist()
+        val c = Array(
+            Cell(name(0),3,10,5,false,28),
+            Cell(name(1),3,10,5,false,28),
+            Cell(name(2),6,10,6,true,18),
+            Cell(name(3),50,250,18,false,2),
+            Cell(name(4),25,100,9,false,4),
+            Cell(name(5),12,24,7,true,6),
+            Cell(name(6),10,35,6,false,8),
+            Cell(name(7),2,4,7,false,44),
+            Cell(name(8),4,13,6,true,20),
+            Cell(name(9),7,25,8,false,10),
+            Cell(name(10),40,200,17,false,2),
+            Cell(name(11),24,90,13,false,4),
+            Cell(name(12),17,45,7,false,6),
+            Cell(name(13),9,40,6,false,8)
+        )
+        c
+    }
+
     def attack (attacker: Cell, defender: Cell): Cell = {
         val dmg = attacker.dmg * attacker.multiplier
         val multicheck = defender.hp - dmg
@@ -103,11 +124,11 @@ object Hero {
         // X15>B   Y11^Z
         if (input.length == 3) {
             if (input(0) == ("a") && isvalid(input)) {
-                //attack(input(1), input(2).toInt)
+                //attack(in(1).charAt(0), input(2).toInt)
                 println("attack")
             }
             if (input(0) == ("m") && isvalid(input)) {
-                //move(input(1), input(2).toInt)
+                //move(in(1).charAt(0), input(2).toInt)
                 println("move")
             }
         } else if (input.length == 1) {
@@ -133,4 +154,30 @@ object Hero {
             false
         }
     }
+
+    def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
+        val tmp = arr(Y1)(X1)
+        arr(Y1).update(X1, findCreature(X2,Y2))
+        arr(Y2).update(X2, findCreature(X1,Y1))
+        arr
+    }
+
+    /*def swapCells(XY1:Vector[Int], XY2:Vector[Int], map: Map[Vector[Int], Cell]) = {
+        val tmp = XY1
+        map.updated(XY1, findCreature(XY2))
+        map.updated(XY2, findCreature(XY1))
+        map.
+    }*/
+
+    def findCreature(X:Int, Y:Int) : Cell = {
+        for (c <- creatures()){
+            if(c.)
+        }
+    }
+
+    def board() : String[] = {
+        board = Array{}
+    }
+
+
 }
