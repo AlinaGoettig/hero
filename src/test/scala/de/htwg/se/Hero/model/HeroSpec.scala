@@ -4,10 +4,7 @@ import de.htwg.se.Hero.model.Hero._
 import de.htwg.se.Hero.model.Player
 
 import org.scalatest._
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 
-@RunWith(classOf[JUnitRunner])
 class HeroSpec extends WordSpec with Matchers {
 
     "A Player" when { "new" should {

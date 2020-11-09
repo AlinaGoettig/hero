@@ -1,11 +1,16 @@
 package de.htwg.se.Hero.model
 
+import scala.io.StdIn
+import scala.util.control.Breaks.break
+
 object Hero {
     def main(args: Array[String]): Unit = {
         val student = Player("Alina & Ronny")
         println("Hello," + student.name)
         println(gameName())
         println(line())
+
+        while(game()){}
     }
 
     def gameName(): String = {
@@ -37,4 +42,49 @@ object Hero {
 
     def mid(x: String): String = "│ " + x + " │"
 
+
+    def game(): Boolean = {
+        println("=============================")
+        println("a X Y   = attack")
+        println("m X Y   = move")
+        println("p       = pass")
+        println("exit    = exit game")
+        println("=============================")
+        //Bord ausgeben
+        print("neue Eingabe: ")
+        val input = StdIn.readLine().split(" ")
+
+        // X15>B   Y11^Z
+        if (input.length == 3) {
+            if (input(0) == ("a") && isvalid(input)) {
+                //attack(input(1), input(2).toInt)
+                println("attack")
+            }
+            if (input(0) == ("m") && isvalid(input)) {
+                //move(input(1), input(2).toInt)
+                println("move")
+            }
+        } else if (input.length == 1) {
+            if (input(0) == "p") {
+                //pass()
+                println("pass")
+            }
+            if(input(0) == "exit") {
+                return false
+            }
+        } else {
+            println("Ungültige Eingabe")
+        }
+        true
+    }
+
+    def isvalid(in : Array[String]) : Boolean = {
+        if ((in(1).charAt(0).toInt > 64) && (in(1).charAt(0).toInt < 80)
+            && (in(2).toInt > 0) && (in(2).toInt < 12)
+            && in(1).length == 1 && in(2).length == 1) {
+            true
+        } else {
+            false
+        }
+    }
 }
