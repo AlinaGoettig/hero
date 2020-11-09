@@ -8,8 +8,14 @@ object Hero {
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
         println("Made by " + student.name)
-        val test = swapCells(0,0,1,1,board())
-        println(printi(test))
+        val board = Board(Array.ofDim[Cell](11,15))
+        board.fillboard(board.field)
+        board.startboard(board.field)
+        board.move(0,0,4,5,board.field)
+        board.move(14,10,5,6,board.field)
+        println(printi(board.field))
+
+
         //println(line())
         //while(game()){}
 
@@ -21,6 +27,39 @@ object Hero {
 
     case class Cell(name: String, dmg: Int, hp: Int, speed: Int, style: Boolean, multiplier: Int) {
         def printcell(): String = "│ " + name + " │"
+    }
+
+    case class Board(field: Array[Array[Cell]]) {
+        def fillboard(f: Array[Array[Cell]]): Array[Array[Cell]] = fill(field)
+        def startboard(f: Array[Array[Cell]]): Array[Array[Cell]] = start(field)
+        def move(X1: Int, Y1: Int, X2: Int, Y2: Int, arr: Array[Array[Cell]]): Array[Array[Cell]]
+        = swapCells(X1,Y1,X2,Y2,field)
+        def printboard(): String = printboard()
+    }
+
+    def fill(field: Array[Array[Cell]]): Array[Array[Cell]] = {
+        for (i <- 0 to 10) {
+            for (j <- 0 to 14) {
+                field(i)(j) = emptycell()
+            }
+        }
+        field
+    }
+
+    def start(field: Array[Array[Hero.Cell]]): Array[Array[Hero.Cell]] = {
+        val list = creatureliststart()
+        for (c <- list) {
+            val y = c._1.head
+            val x = c._1.last
+            field(x)(y) = c._2
+        }
+        val obs = obstaclelist()
+        for (o <- obs) {
+            val y = o._1.head
+            val x = o._1.last
+            field(x)(y) = o._2
+        }
+        field
     }
 
     def obstacle(): Cell = Cell("XXX",0,0,0,false,0)
@@ -48,30 +87,20 @@ object Hero {
             Vector(14,9) -> Cell(name(12),17,45,7,false,6),
             Vector(14,10) -> Cell(name(13),9,40,6,false,8)
         )
-
-
         list
     }
 
-    def creatures() : Array[Cell] = {
-        val name = namelist()
-        val c = Array(
-            Cell(name(0),3,10,5,false,28),
-            Cell(name(1),3,10,5,false,28),
-            Cell(name(2),6,10,6,true,18),
-            Cell(name(3),50,250,18,false,2),
-            Cell(name(4),25,100,9,false,4),
-            Cell(name(5),12,24,7,true,6),
-            Cell(name(6),10,35,6,false,8),
-            Cell(name(7),2,4,7,false,44),
-            Cell(name(8),4,13,6,true,20),
-            Cell(name(9),7,25,8,false,10),
-            Cell(name(10),40,200,17,false,2),
-            Cell(name(11),24,90,13,false,4),
-            Cell(name(12),17,45,7,false,6),
-            Cell(name(13),9,40,6,false,8)
+    def obstaclelist(): Map[Vector[Int], Cell] = {
+        val list = Map(
+            Vector(6,1) -> obstacle(),
+            Vector(7,2) -> obstacle(),
+            Vector(5,4) -> obstacle(),
+            Vector(6,4) -> obstacle(),
+            Vector(7,8) -> obstacle(),
+            Vector(8,8) -> obstacle(),
+            Vector(6,9) -> obstacle()
         )
-        c
+        list
     }
 
     def attack (attacker: Cell, defender: Cell): Cell = {
@@ -82,10 +111,6 @@ object Hero {
         val hp = if (multiplier != defender.multiplier) defender.hp*(defender.hp/dmg).toInt - dmg else defender.hp -dmg
 
         Cell(defender.name,defender.dmg,hp,defender.speed,defender.style,multiplier)
-    }
-
-    def move (creature: Cell, goal: Vector[Int]): String = {
-        "worked"
     }
 
     def namelist(): IndexedSeq[String] =
@@ -117,13 +142,13 @@ object Hero {
 
 
     def game(): Boolean = {
+        val board = Board(Array.ofDim[Cell](11,15))
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
         println("p       = pass")
         println("exit    = exit game")
         println("=============================")
-        //Bord ausgeben
         print("neue Eingabe: ")
         val input = StdIn.readLine().split(" ")
 
@@ -163,43 +188,22 @@ object Hero {
 
     def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
         val tmp = arr
-        val cret1 = arr(X1)(Y1)
-        val cret2 = arr(X2)(Y2)
-        arr(X1)(Y1) = cret2
-        arr(X2)(Y2) = cret1
+        val cret1 = arr(Y1)(X1)
+        val cret2 = arr(Y2)(X2)
+        arr(Y1)(X1) = cret2
+        arr(Y2)(X2) = cret1
 
         arr
     }
 
-    /*def swapCells(XY1:Vector[Int], XY2:Vector[Int], map: Map[Vector[Int], Cell]) = {
-        val tmp = XY1
-        map.updated(XY1, findCreature(XY2))
-        map.updated(XY2, findCreature(XY1))
-        map.
-    }*/
-
-    def findCreature(X:Int, Y:Int) : Cell = {
-        val boardtmp = board()
-        boardtmp(X)(Y)
-    }
-
-    def board() : Array[Array[Cell]] = {
-        val cret = creatures()
-        val b = Array.ofDim[Cell](2,2)
-        b(0)(0) = emptycell()
-        b(0)(0) = cret(0)
-        b(0)(1) = emptycell()
-        b(1)(0) = emptycell()
-        b(1)(1) = cret(3)
-        b
-    }
-
     def printi(b: Array[Array[Cell]]) : String = {
         var text = ""
-        for (i <- 0 to 1) {
-            for (j <- 0 to 1) {
+        text += lines()
+        for (i <- 0 to 10) {
+            for (j <- 0 to 14) {
                 text += b(i)(j).printcell()
             }
+            text += "\n" + lines()
         }
         text
     }
