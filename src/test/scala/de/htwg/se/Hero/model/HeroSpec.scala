@@ -31,15 +31,6 @@ class HeroSpec extends WordSpec with Matchers {
         }
     }}
 
-    "Two creatures fight," when { "the attack deal dmg," should {
-        val attacker = Cell("HA.",3,10,5,false,28)
-        val defender = Cell(".FA",2,4,7,false,44)
-        val newdef = attack(attacker,defender)
-        "the defender get lower HP"  in {
-            newdef.multiplier should be(10)
-        }
-    }}
-
     "A line" when { "shown" should {
         val line = lines()
         "be out of ="  in {

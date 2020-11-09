@@ -11,6 +11,8 @@ object Hero {
         val board = Board(Array.ofDim[Cell](11,15))
         board.fillboard(board.field)
         board.startboard(board.field)
+        val dmg = board.attack(0,0,14,10,board.field)
+        println("Damage sended: " + dmg)
         board.move(0,0,4,5,board.field)
         board.move(14,10,5,6,board.field)
         println(printi(board.field))
@@ -34,6 +36,8 @@ object Hero {
         def startboard(f: Array[Array[Cell]]): Array[Array[Cell]] = start(field)
         def move(X1: Int, Y1: Int, X2: Int, Y2: Int, arr: Array[Array[Cell]]): Array[Array[Cell]]
         = swapCells(X1,Y1,X2,Y2,field)
+        def attack(X1:Int,Y1:Int, X2:Int, Y2:Int, field:Array[Array[Cell]]): String
+        = attackCell(X1,Y1, X2, Y2, field)
         def printboard(): String = printboard()
     }
 
@@ -103,18 +107,51 @@ object Hero {
         list
     }
 
-    def attack (attacker: Cell, defender: Cell): Cell = {
+    def getCreature(field: Array[Array[Cell]],x: Int, y: Int): Cell = {
+        field(x)(y)
+    }
+
+    def attackCell (X1:Int, Y1:Int, X2:Int, Y2:Int, field:Array[Array[Cell]]): String = {
+        val attacker = field(Y1)(X1)
+        val defender = field(Y2)(X2)
         val dmg = attacker.dmg * attacker.multiplier
         val multicheck = defender.hp - dmg
-        val multidif = Integer.divideUnsigned(defender.hp,dmg)
+        val multidif = dmg.toFloat/defender.hp
+        val basehp = findbasehp(defender.name)
         val multiplier = if(multicheck < 0) defender.multiplier - multidif.toInt else defender.multiplier
-        val hp = if (multiplier != defender.multiplier) defender.hp*(defender.hp/dmg).toInt - dmg else defender.hp -dmg
+        val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt+1) - dmg else defender.hp - dmg
 
-        Cell(defender.name,defender.dmg,hp,defender.speed,defender.style,multiplier)
+        if (multiplier <= 0) {
+            field(Y2)(X2) = emptycell()
+        } else {
+            field(Y2)(X2) = Cell(defender.name,defender.dmg,hp,defender.speed,defender.style,multiplier)
+        }
+
+        dmg.toString
+    }
+
+    def deathcheck (X:Int, Y:Int, field:Array[Array[Cell]]): Array[Array[Cell]] = {
+        if (field(X)(Y).multiplier <= 0) {
+            field(X)(Y) = emptycell()
+        }
+        field
     }
 
     def namelist(): IndexedSeq[String] =
         IndexedSeq("HA.","MA.","RO.","AN.","CH.","ZE.","CR.",".FA","MAG",".CE",".DE",".EF",".PI",".HO")
+
+    def findbasehp (name: String): Int = {
+        val crelist = creatureliststart()
+        val hp = Array(0)
+        for (cell <- creatureliststart()) {
+            if (cell._2.name.equals(name)) {
+                hp(0) = cell._2.hp
+            } else {
+                hp(0) = 0
+            }
+        }
+        hp(0)
+    }
 
     def line(): String = {
         val li = Array(lines() + mid("HA.") + mid("   ") * 13 + mid(".FA") + "\n",
