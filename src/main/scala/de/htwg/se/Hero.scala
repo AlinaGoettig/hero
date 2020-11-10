@@ -10,6 +10,8 @@ object Hero {
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
         println("Made by " + student.name)
+
+        /*
         val board = Board(Array.ofDim[Cell](11,15),Array(Player("RonnyKlotz"),Player("AlinaGöttig")))
 
         board.start()
@@ -22,10 +24,10 @@ object Hero {
         //currentcreatureinfo(14,5,board.field)
         //println(board.printboard(board.field))
         board.printfield()
-
+         */
 
         //println(line())
-        //game()
+        game()
 
     }
 
@@ -45,7 +47,7 @@ object Hero {
         def printcell(): String = "│ " + name + " │"
     }
 
-    case class Board(field: Array[Array[Cell]],player: Array[Player]) {
+    case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: Array[Player]) {
         def start(): Array[Array[Hero.Cell]] = {
             fill(field)
             val list = creatureliststart(player)
@@ -254,7 +256,7 @@ object Hero {
     }
 
     def nextplayer(current: String, names: Array[Player]): Player = {
-        val next = if (current.contains(names(0))) {
+        val next = if (current.equals(names(0).toString)) {
             names(1)
         } else {
             names(0)
@@ -284,7 +286,7 @@ object Hero {
 
 
 
-        val board = Board(Array.ofDim[Cell](11,15),player)
+        val board = Board(Array.ofDim[Cell](11,15),player,Array(player(0)))
         board.start()
         board.printfield()
         while(input(board)){
@@ -300,8 +302,9 @@ object Hero {
     }
 
     def input(field:Board) : Boolean = {
-        val p = nextplayer(field.player(0).toString, field.player)
-        println(currentPlayerOutput(p))
+        val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
+        println(currentPlayerOutput(p(0)))
+        field.currentplayer(0) = p(0)
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
@@ -315,14 +318,14 @@ object Hero {
         if (input.length == 3) {
             if (input(0) == ("a") && isvalid(input)) {
                 //attack(in(1).charAt(0), input(2).toInt)
-                if(!active(field, input(1).toInt, input(2).toInt, p))
+                if(!active(field, input(1).toInt, input(2).toInt, p(0)))
                     println("attack")
                 else
                     println("Creature can't be attacked")
             }
             if (input(0) == ("m") && isvalid(input)) {
                 //move(in(1).charAt(0), input(2).toInt)
-                if(active(field, input(1).toInt, input(2).toInt, p))
+                if(active(field, input(1).toInt, input(2).toInt, p(0)))
                     println("move")
                 else
                     println("Creature can't be moved")
