@@ -24,7 +24,7 @@ object Hero {
 
 
         //println(line())
-        //while(game()){}
+        //game()
 
     }
 
@@ -221,8 +221,15 @@ object Hero {
     }
 
 
-    def game(): Boolean = {
+
+    def game(): Nothing = {
         val board = Board(Array.ofDim[Cell](11,15))
+        nextRound(board)
+        while(input()){}
+
+    }
+
+    def input() : Boolean = {
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
@@ -266,6 +273,10 @@ object Hero {
         }
     }
 
+    def nextRound(board: Board) : Nothing = {
+
+    }
+
     def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
         val tmp = arr
         for (i <- 0 to 14) {
@@ -298,6 +309,5 @@ object Hero {
         }
         text
     }
-
 
 }
