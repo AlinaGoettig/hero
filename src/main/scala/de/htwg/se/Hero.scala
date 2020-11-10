@@ -10,7 +10,7 @@ object Hero {
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
         println("Made by " + student.name)
-        /*val board = Board(Array.ofDim[Cell](11,15),Array("RonnyKlotz","AlinaGöttig"))
+        val board = Board(Array.ofDim[Cell](11,15),Array(Player("RonnyKlotz"),Player("AlinaGöttig")))
 
         board.start()
         board.prediction(14,5)
@@ -22,11 +22,19 @@ object Hero {
         //currentcreatureinfo(14,5,board.field)
         //println(board.printboard(board.field))
         board.printfield()
-*/
+
 
         //println(line())
-        game()
+        //game()
 
+    }
+
+    def playerside(player: Array[Player]): String = {
+        val player1 = "│ " + player(0).name + " │"
+        val player2 = "│ " + player(1).name + " │"
+        val distance = 15*7 - (player1.length + player2.length)
+        val info = lines() + player1 + " " * distance + player2 + "\n" + lines()
+        info
     }
 
     def gameName(): String = {
@@ -52,6 +60,7 @@ object Hero {
                 val x = o._1.last
                 field(x)(y) = o._2
             }
+            println(playerside(player))
             field
         }
         def move(X1:Int,Y1:Int, X2:Int, Y2:Int) : Array[Array[Cell]] = {
@@ -153,20 +162,20 @@ object Hero {
         val name = namelist()
 
         val list = Map(
-            Vector(0,0) -> Cell(name(0),3,10,5,false,28,player(0)),
-            Vector(0,1) -> Cell(name(1),3,10,5,false,28,player(0)),
-            Vector(0,2) -> Cell(name(2),6,10,6,true,18,player(0)),
-            Vector(0,5) -> Cell(name(3),50,250,18,false,2,player(0)),
-            Vector(0,8) -> Cell(name(4),25,100,9,false,4,player(0)),
-            Vector(0,9) -> Cell(name(5),12,24,7,true,6,player(0)),
-            Vector(0,10) -> Cell(name(6),10,35,6,false,8,player(0)),
-            Vector(14,0) -> Cell(name(7),2,4,7,false,44,player(1)),
-            Vector(14,1) -> Cell(name(8),4,13,6,true,20,player(1)),
-            Vector(14,2) -> Cell(name(9),7,25,8,false,10,player(1)),
-            Vector(14,5) -> Cell(name(10),40,200,17,false,2,player(1)),
-            Vector(14,8) -> Cell(name(11),24,90,13,false,4,player(1)),
-            Vector(14,9) -> Cell(name(12),17,45,7,false,6,player(1)),
-            Vector(14,10) -> Cell(name(13),9,40,6,false,8,player(1))
+            Vector(0,0) -> Cell(name(0),3,10,3,false,28,player(0)),//5
+            Vector(0,1) -> Cell(name(1),3,10,3,false,28,player(0)),//5
+            Vector(0,2) -> Cell(name(2),6,10,4,true,18,player(0)),//6
+            Vector(0,5) -> Cell(name(3),50,250,12,false,2,player(0)),//18
+            Vector(0,8) -> Cell(name(4),25,100,6,false,4,player(0)),//9
+            Vector(0,9) -> Cell(name(5),12,24,5,true,6,player(0)),//7
+            Vector(0,10) -> Cell(name(6),10,35,4,false,8,player(0)),//6
+            Vector(14,0) -> Cell(name(7),2,4,5,false,44,player(1)),//7
+            Vector(14,1) -> Cell(name(8),4,13,4,true,20,player(1)),//6
+            Vector(14,2) -> Cell(name(9),7,25,5,false,10,player(1)),//8
+            Vector(14,5) -> Cell(name(10),40,200,11,false,2,player(1)),//17
+            Vector(14,8) -> Cell(name(11),24,90,9,false,4,player(1)),//13
+            Vector(14,9) -> Cell(name(12),17,45,5,false,6,player(1)),//7
+            Vector(14,10) -> Cell(name(13),9,40,4,false,8,player(1))//6
         )
         list
     }
@@ -281,7 +290,6 @@ object Hero {
         while(input(board)){
             board.printfield()
         }
-
     }
 
     def active(board: Board,X : Int, Y: Int, player:Player) : Boolean = {
@@ -341,23 +349,6 @@ object Hero {
         } else {
             false
         }
-    }
-
-    def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
-        val tmp = arr
-        for (i <- 0 to 14) {
-            for (j <- 0 to 10) {
-                if(tmp(j)(i).name.equals(" _ ")) {
-                    tmp(j)(i) = emptycell()
-                }
-            }
-        }
-        val cret1 = arr(Y1)(X1)
-        val cret2 = arr(Y2)(X2)
-        arr(Y1)(X1) = cret2
-        arr(Y2)(X2) = cret1
-
-        arr
     }
 
 }
