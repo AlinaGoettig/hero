@@ -10,7 +10,7 @@ object Hero {
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
         println("Made by " + student.name)
-        val board = Board(Array.ofDim[Cell](11,15),Array("RonnyKlotz","AlinaGöttig"))
+        /*val board = Board(Array.ofDim[Cell](11,15),Array("RonnyKlotz","AlinaGöttig"))
 
         board.start()
         board.prediction(14,5)
@@ -22,10 +22,10 @@ object Hero {
         //currentcreatureinfo(14,5,board.field)
         //println(board.printboard(board.field))
         board.printfield()
-
+*/
 
         //println(line())
-        //game()
+        game()
 
     }
 
@@ -39,6 +39,7 @@ object Hero {
 
     case class Board(field: Array[Array[Cell]],player: Array[Player]) {
         def start(): Array[Array[Hero.Cell]] = {
+            fill(field)
             val list = creatureliststart(player)
             for (c <- list) {
                 val y = c._1.head
@@ -243,15 +244,16 @@ object Hero {
         tmp(0)
     }
 
-    def nextplayer(current: String, names: Array[Player]): String = {
+    def nextplayer(current: String, names: Array[Player]): Player = {
         val next = if (current.contains(names(0))) {
-            names(1).toString
+            names(1)
         } else {
-            names(0).toString
+            names(0)
         }
-        val info = lines() + "Current Player: " + next + "\n" + lines()
-        info
+        next
     }
+
+    def currentPlayerOutput(player: Player) : String = lines() + "Current Player: " + player + "\n" + lines()
 
     def game(): Unit = {
         // Print of gamelogo and creator mention
@@ -275,12 +277,23 @@ object Hero {
 
         val board = Board(Array.ofDim[Cell](11,15),player)
         board.start()
+        board.printfield()
+        while(input(board)){
+            board.printfield()
+        }
 
-        nextRound(board)
-        while(input()){}
     }
 
-    def input() : Boolean = {
+    def active(board: Board,X : Int, Y: Int, player:Player) : Boolean = {
+        //Wenn X Y Creaturen von p dann true
+        if(getCreature(board.field, X,Y).player == player)
+            return true
+        false
+    }
+
+    def input(field:Board) : Boolean = {
+        val p = nextplayer(field.player(0).toString, field.player)
+        println(currentPlayerOutput(p))
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
@@ -294,11 +307,17 @@ object Hero {
         if (input.length == 3) {
             if (input(0) == ("a") && isvalid(input)) {
                 //attack(in(1).charAt(0), input(2).toInt)
-                println("attack")
+                if(!active(field, input(1).toInt, input(2).toInt, p))
+                    println("attack")
+                else
+                    println("Creature can't be attacked")
             }
             if (input(0) == ("m") && isvalid(input)) {
                 //move(in(1).charAt(0), input(2).toInt)
-                println("move")
+                if(active(field, input(1).toInt, input(2).toInt, p))
+                    println("move")
+                else
+                    println("Creature can't be moved")
             }
         } else if (input.length == 1) {
             if (input(0) == "p") {
@@ -324,8 +343,21 @@ object Hero {
         }
     }
 
-    def nextRound(board: Board) : Unit = {
+    def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
+        val tmp = arr
+        for (i <- 0 to 14) {
+            for (j <- 0 to 10) {
+                if(tmp(j)(i).name.equals(" _ ")) {
+                    tmp(j)(i) = emptycell()
+                }
+            }
+        }
+        val cret1 = arr(Y1)(X1)
+        val cret2 = arr(Y2)(X2)
+        arr(Y1)(X1) = cret2
+        arr(Y2)(X2) = cret1
 
+        arr
     }
 
 }

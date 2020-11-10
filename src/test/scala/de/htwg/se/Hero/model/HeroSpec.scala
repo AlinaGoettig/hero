@@ -24,7 +24,7 @@ class HeroSpec extends WordSpec with Matchers {
         }
     }}
 
-    "Two Creatures fight, " when { "the attack deal dmg, " should {
+    /*"Two Creatures fight, " when { "the attack deal dmg, " should {
         val board = Board(Array.ofDim[Cell](11,15))
         board.fillboard(board.field)
         val attacker = Cell("HA.",3,10,5,false,28)
@@ -36,7 +36,7 @@ class HeroSpec extends WordSpec with Matchers {
             board.field(10)(14).multiplier should be (6)
             board.field(10)(14).hp should be (36)
         }
-    }}
+    }}*/
 
     "At start of the game," when { "first text appear" should {
         val start = gameName()
