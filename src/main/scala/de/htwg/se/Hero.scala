@@ -13,15 +13,15 @@ object Hero {
         val board = Board(Array.ofDim[Cell](11,15),Array("RonnyKlotz","AlinaGöttig"))
 
         board.start()
-        board.prediction(14,5,board.field)
-        println(board.printboard(board.field))
+        board.prediction(14,5)
+        board.printfield()
         board.move(14,5,9,6)
-        println(board.printboard(board.field))
-        board.prediction(9,6,board.field)
+        board.printfield()
+        board.prediction(9,6)
         //creatureinfo(0,5,board.field)
         //currentcreatureinfo(14,5,board.field)
         //println(board.printboard(board.field))
-        println(board.printboard(board.field))
+        board.printfield()
 
 
         //println(line())
@@ -69,10 +69,51 @@ object Hero {
 
             field
         }
-        def attack(X1:Int,Y1:Int, X2:Int, Y2:Int, field:Array[Array[Cell]]): String
-        = attackCell(X1,Y1, X2, Y2, field)
-        def prediction(X: Int, Y:Int, field:Array[Array[Cell]]): Array[Array[Cell]] = posmove(X, Y, field)
-        def printboard(f: Array[Array[Cell]]): String = printfield(f)
+        def attack (X1:Int, Y1:Int, X2:Int, Y2:Int): String = {
+            val attacker = field(Y1)(X1)
+            val defender = field(Y2)(X2)
+            val dmg = attacker.dmg * attacker.multiplier
+            val multicheck = defender.hp - dmg
+            val multidif = dmg.toFloat/defender.hp
+            val basehp = findbasehp(defender.name,player)
+            val multiplier = if(multicheck < 0) defender.multiplier - multidif.toInt else defender.multiplier
+            val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt+1) - dmg else defender.hp - dmg
+
+            if (multiplier <= 0) {
+                field(Y2)(X2) = emptycell()
+            } else {
+                field(Y2)(X2) = Cell(defender.name,defender.dmg,hp,defender.speed,defender.style,multiplier,defender.player)
+            }
+
+            dmg.toString
+        }
+        def prediction (X: Int, Y: Int): Array[Array[Cell]] = {
+            for (i <- 0 to 14) {
+                for (j <- 0 to 10) {
+                    val dist = Math.abs(X - i) + Math.abs(Y - j)
+                    if(field(j)(i).name.equals("   ") && dist <= field(Y)(X).speed) {
+                        field(j)(i) = marker()
+                    }
+                }
+            }
+            field
+        }
+        def printfield() : String = {
+            var text = ""
+            for (x <- 0 to 14) {
+                text += fieldnumber(x.toString)
+            }
+
+            text += "\n" + lines()
+            for (i <- 0 to 10) {
+                for (j <- 0 to 14) {
+                    text += field(i)(j).printcell()
+                }
+                text += " " + i.toString + "\n" + lines()
+            }
+            println(text)
+            text
+        }
     }
 
     def fill(field: Array[Array[Cell]]): Array[Array[Cell]] = {
@@ -99,18 +140,6 @@ object Hero {
             field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
         println(info)
         info
-    }
-
-    def posmove (X: Int, Y: Int, field: Array[Array[Cell]]): Array[Array[Cell]] = {
-        for (i <- 0 to 14) {
-            for (j <- 0 to 10) {
-                val dist = Math.abs(X - i) + Math.abs(Y - j)
-                if(field(j)(i).name.equals("   ") && dist <= field(Y)(X).speed) {
-                    field(j)(i) = marker()
-                }
-            }
-        }
-        field
     }
 
     def obstacle(): Cell = Cell("XXX",0,0,0,false,0,Player("none"))
@@ -156,25 +185,6 @@ object Hero {
 
     def getCreature(field: Array[Array[Cell]],x: Int, y: Int): Cell = {
         field(x)(y)
-    }
-
-    def attackCell (X1:Int, Y1:Int, X2:Int, Y2:Int, field:Array[Array[Cell]]): String = {
-        val attacker = field(Y1)(X1)
-        val defender = field(Y2)(X2)
-        val dmg = attacker.dmg * attacker.multiplier
-        val multicheck = defender.hp - dmg
-        val multidif = dmg.toFloat/defender.hp
-        val basehp = findbasehp(defender.name)
-        val multiplier = if(multicheck < 0) defender.multiplier - multidif.toInt else defender.multiplier
-        val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt+1) - dmg else defender.hp - dmg
-
-        if (multiplier <= 0) {
-            field(Y2)(X2) = emptycell()
-        } else {
-            field(Y2)(X2) = Cell(defender.name,defender.dmg,hp,defender.speed,defender.style,multiplier)
-        }
-
-        dmg.toString
     }
 
     def deathcheck (X:Int, Y:Int, field:Array[Array[Cell]]): Array[Array[Cell]] = {
@@ -263,7 +273,7 @@ object Hero {
 
 
 
-        val board = Board(Array.ofDim[Cell](11,15))
+        val board = Board(Array.ofDim[Cell](11,15),player)
         board.start()
 
         nextRound(board)
@@ -317,22 +327,5 @@ object Hero {
     def nextRound(board: Board) : Unit = {
 
     }
-
-    def printfield(b: Array[Array[Cell]]) : String = {
-        var text = ""
-        for (x <- 0 to 14) {
-            text += fieldnumber(x.toString)
-        }
-
-        text += "\n" + lines()
-        for (i <- 0 to 10) {
-            for (j <- 0 to 14) {
-                text += b(i)(j).printcell()
-            }
-            text += " " + i.toString + "\n" + lines()
-        }
-        text
-    }
-
 
 }
