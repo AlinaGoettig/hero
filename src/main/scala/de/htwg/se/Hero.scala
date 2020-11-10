@@ -10,11 +10,12 @@ object Hero {
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
         println("Made by " + student.name)
-        val board = Board(Array.ofDim[Cell](11,15))
-        board.fillboard(board.field)
+        val board = Board(Array.ofDim[Cell](11,15),Array("RonnyKlotz","AlinaGöttig"))
+
+        board.start()
         board.prediction(14,5,board.field)
         println(board.printboard(board.field))
-        board.move(14,5,9,6,board.field)
+        board.move(14,5,9,6)
         println(board.printboard(board.field))
         board.prediction(9,6,board.field)
         //creatureinfo(0,5,board.field)
@@ -32,14 +33,42 @@ object Hero {
         "\n ======== Welcome to Hero ======== \n"
     }
 
-    case class Cell(name: String, dmg: Int, hp: Int, speed: Int, style: Boolean, multiplier: Int) {
+    case class Cell(name: String, dmg: Int, hp: Int, speed: Int, style: Boolean, multiplier: Int, player: Player) {
         def printcell(): String = "│ " + name + " │"
     }
 
-    case class Board(field: Array[Array[Cell]]) {
-        def fillboard(f: Array[Array[Cell]]): Array[Array[Cell]] = start(fill(field))
-        def move(X1: Int, Y1: Int, X2: Int, Y2: Int, arr: Array[Array[Cell]]): Array[Array[Cell]]
-        = swapCells(X1,Y1,X2,Y2,field)
+    case class Board(field: Array[Array[Cell]],player: Array[Player]) {
+        def start(): Array[Array[Hero.Cell]] = {
+            val list = creatureliststart(player)
+            for (c <- list) {
+                val y = c._1.head
+                val x = c._1.last
+                field(x)(y) = c._2
+            }
+            val obs = obstaclelist()
+            for (o <- obs) {
+                val y = o._1.head
+                val x = o._1.last
+                field(x)(y) = o._2
+            }
+            field
+        }
+        def move(X1:Int,Y1:Int, X2:Int, Y2:Int) : Array[Array[Cell]] = {
+            val tmp = field
+            for (i <- 0 to 14) {
+                for (j <- 0 to 10) {
+                    if(tmp(j)(i).name.equals(" _ ")) {
+                        tmp(j)(i) = emptycell()
+                    }
+                }
+            }
+            val cret1 = field(Y1)(X1)
+            val cret2 = field(Y2)(X2)
+            field(Y1)(X1) = cret2
+            field(Y2)(X2) = cret1
+
+            field
+        }
         def attack(X1:Int,Y1:Int, X2:Int, Y2:Int, field:Array[Array[Cell]]): String
         = attackCell(X1,Y1, X2, Y2, field)
         def prediction(X: Int, Y:Int, field:Array[Array[Cell]]): Array[Array[Cell]] = posmove(X, Y, field)
@@ -84,46 +113,30 @@ object Hero {
         field
     }
 
-    def start(field: Array[Array[Hero.Cell]]): Array[Array[Hero.Cell]] = {
-        val list = creatureliststart()
-        for (c <- list) {
-            val y = c._1.head
-            val x = c._1.last
-            field(x)(y) = c._2
-        }
-        val obs = obstaclelist()
-        for (o <- obs) {
-            val y = o._1.head
-            val x = o._1.last
-            field(x)(y) = o._2
-        }
-        field
-    }
+    def obstacle(): Cell = Cell("XXX",0,0,0,false,0,Player("none"))
 
-    def obstacle(): Cell = Cell("XXX",0,0,0,false,0)
+    def emptycell(): Cell = Cell("   ",0,0,0,false,0,Player("none"))
 
-    def emptycell(): Cell = Cell("   ",0,0,0,false,0)
+    def marker(): Cell = Cell(" _ ",0,0,0,false,0,Player("none"))
 
-    def marker(): Cell = Cell(" _ ",0,0,0,false,0)
-
-    def creatureliststart(): Map[Vector[Int], Cell] = {
+    def creatureliststart(player: Array[Player]): Map[Vector[Int], Cell] = {
         val name = namelist()
 
         val list = Map(
-            Vector(0,0) -> Cell(name(0),3,10,5,false,28),
-            Vector(0,1) -> Cell(name(1),3,10,5,false,28),
-            Vector(0,2) -> Cell(name(2),6,10,6,true,18),
-            Vector(0,5) -> Cell(name(3),50,250,18,false,2),
-            Vector(0,8) -> Cell(name(4),25,100,9,false,4),
-            Vector(0,9) -> Cell(name(5),12,24,7,true,6),
-            Vector(0,10) -> Cell(name(6),10,35,6,false,8),
-            Vector(14,0) -> Cell(name(7),2,4,7,false,44),
-            Vector(14,1) -> Cell(name(8),4,13,6,true,20),
-            Vector(14,2) -> Cell(name(9),7,25,8,false,10),
-            Vector(14,5) -> Cell(name(10),40,200,17,false,2),
-            Vector(14,8) -> Cell(name(11),24,90,13,false,4),
-            Vector(14,9) -> Cell(name(12),17,45,7,false,6),
-            Vector(14,10) -> Cell(name(13),9,40,6,false,8)
+            Vector(0,0) -> Cell(name(0),3,10,5,false,28,player(0)),
+            Vector(0,1) -> Cell(name(1),3,10,5,false,28,player(0)),
+            Vector(0,2) -> Cell(name(2),6,10,6,true,18,player(0)),
+            Vector(0,5) -> Cell(name(3),50,250,18,false,2,player(0)),
+            Vector(0,8) -> Cell(name(4),25,100,9,false,4,player(0)),
+            Vector(0,9) -> Cell(name(5),12,24,7,true,6,player(0)),
+            Vector(0,10) -> Cell(name(6),10,35,6,false,8,player(0)),
+            Vector(14,0) -> Cell(name(7),2,4,7,false,44,player(1)),
+            Vector(14,1) -> Cell(name(8),4,13,6,true,20,player(1)),
+            Vector(14,2) -> Cell(name(9),7,25,8,false,10,player(1)),
+            Vector(14,5) -> Cell(name(10),40,200,17,false,2,player(1)),
+            Vector(14,8) -> Cell(name(11),24,90,13,false,4,player(1)),
+            Vector(14,9) -> Cell(name(12),17,45,7,false,6,player(1)),
+            Vector(14,10) -> Cell(name(13),9,40,6,false,8,player(1))
         )
         list
     }
@@ -174,10 +187,10 @@ object Hero {
     def namelist(): IndexedSeq[String] =
         IndexedSeq("HA.","MA.","RO.","AN.","CH.","ZE.","CR.",".FA","MAG",".CE",".DE",".EF",".PI",".HO")
 
-    def findbasehp (name: String): Int = {
-        val crelist = creatureliststart()
+    def findbasehp (name: String, player: Array[Player]): Int = {
+        val crelist = creatureliststart(player)
         val hp = Array(0)
-        for (cell <- creatureliststart()) {
+        for (cell <- creatureliststart(player)) {
             if (cell._2.name.equals(name)) {
                 hp(0) = cell._2.hp
             } else {
@@ -220,11 +233,17 @@ object Hero {
         tmp(0)
     }
 
+    def nextplayer(current: String, names: Array[Player]): String = {
+        val next = if (current.contains(names(0))) {
+            names(1).toString
+        } else {
+            names(0).toString
+        }
+        val info = lines() + "Current Player: " + next + "\n" + lines()
+        info
+    }
 
-
-    def game(): Nothing = {
-    def game(): Boolean = {
-
+    def game(): Unit = {
         // Print of gamelogo and creator mention
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
@@ -233,21 +252,22 @@ object Hero {
         println("=============================")
         println("Enter name(player 1):")
         println("=============================")
-        val player1 = StdIn.readLine()
+        val player1 = Player(StdIn.readLine())
 
         println("=============================")
         println("Enter name(player 2):")
         println("=============================")
-        val player2 = StdIn.readLine()
+        val player2 = Player(StdIn.readLine())
 
         val player = Array(player1,player2)
 
 
 
         val board = Board(Array.ofDim[Cell](11,15))
+        board.start()
+
         nextRound(board)
         while(input()){}
-
     }
 
     def input() : Boolean = {
@@ -294,25 +314,8 @@ object Hero {
         }
     }
 
-    def nextRound(board: Board) : Nothing = {
+    def nextRound(board: Board) : Unit = {
 
-    }
-
-    def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
-        val tmp = arr
-        for (i <- 0 to 14) {
-            for (j <- 0 to 10) {
-                if(tmp(j)(i).name.equals(" _ ")) {
-                    tmp(j)(i) = emptycell()
-                }
-            }
-        }
-        val cret1 = arr(Y1)(X1)
-        val cret2 = arr(Y2)(X2)
-        arr(Y1)(X1) = cret2
-        arr(Y2)(X2) = cret1
-
-        arr
     }
 
     def printfield(b: Array[Array[Cell]]) : String = {
