@@ -23,7 +23,6 @@ object Hero {
         println(board.printboard(board.field))
 
 
-        //println(line())
         //while(game()){}
 
     }
