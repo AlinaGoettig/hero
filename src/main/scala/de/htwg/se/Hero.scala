@@ -23,7 +23,8 @@ object Hero {
         println(board.printboard(board.field))
 
 
-        //while(game()){}
+        //println(line())
+        //game()
 
     }
 
@@ -219,16 +220,9 @@ object Hero {
         tmp(0)
     }
 
-    def changeplayer (current: String,names: Array[String]): String = {
-        val next = if (current.equals(names(0))) {
-            names(1)
-        } else {
-            names(0)
-        }
-        next
-    }
 
 
+    def game(): Nothing = {
     def game(): Boolean = {
 
         // Print of gamelogo and creator mention
@@ -251,7 +245,12 @@ object Hero {
 
 
         val board = Board(Array.ofDim[Cell](11,15))
+        nextRound(board)
+        while(input()){}
 
+    }
+
+    def input() : Boolean = {
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
@@ -259,7 +258,6 @@ object Hero {
         println("exit    = exit game")
         println("=============================")
         print("neue Eingabe: ")
-
         val input = StdIn.readLine().split(" ")
 
         // X15>B   Y11^Z
@@ -296,6 +294,10 @@ object Hero {
         }
     }
 
+    def nextRound(board: Board) : Nothing = {
+
+    }
+
     def swapCells(X1:Int,Y1:Int, X2:Int, Y2:Int, arr:Array[Array[Cell]]) : Array[Array[Cell]] = {
         val tmp = arr
         for (i <- 0 to 14) {
@@ -328,7 +330,6 @@ object Hero {
         }
         text
     }
-
 
 
 }
