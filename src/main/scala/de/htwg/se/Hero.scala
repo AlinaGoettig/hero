@@ -14,9 +14,12 @@ object Hero {
         board.fillboard(board.field)
         val dmg = board.attack(0,0,14,10,board.field)
         println("Damage given: " + dmg)
-        board.prediction(14,2,board.field)
+        board.prediction(0,0,board.field)
         println(board.printboard(board.field))
-        board.move(14,2,9,6,board.field)
+        board.move(0,0,9,6,board.field)
+        println(board.printboard(board.field))
+        board.prediction(9,6,board.field)
+        creatureinfo(9,6,board.field)
         println(board.printboard(board.field))
         //board.move(0,0,4,5,board.field)
         //board.move(14,10,5,6,board.field)
@@ -55,11 +58,20 @@ object Hero {
         field
     }
 
+    def creatureinfo(Y: Int, X: Int, field: Array[Array[Cell]]): String = {
+        val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
+        val info = lines() + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
+            field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t\t\t" +
+            field(X)(Y).dmg + "\t\t\t\t\t\t\t" +attackstyle + "\n" + lines()
+        println(info)
+        info
+    }
+
     def posmove (X: Int, Y: Int, field: Array[Array[Cell]]): Array[Array[Cell]] = {
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
-                val distance = Point2D.distance(X,Y,i,j).toInt
-                if(field(j)(i).name.equals("   ") && distance <= field(Y)(X).speed-1) {
+                val distance = Point2D.distance(X+1,Y+1,i+1,j+1).toInt
+                if(field(j)(i).name.equals("   ") && distance <= field(Y)(X).speed) {
                     field(j)(i) = marker()
                 }
             }
@@ -87,7 +99,7 @@ object Hero {
 
     def emptycell(): Cell = Cell("   ",0,0,0,false,0)
 
-    def marker(): Cell = Cell(" V ",0,0,0,false,0)
+    def marker(): Cell = Cell(" _ ",0,0,0,false,0)
 
     def creatureliststart(): Map[Vector[Int], Cell] = {
         val name = namelist()
@@ -253,7 +265,7 @@ object Hero {
         val tmp = arr
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
-                if(tmp(j)(i).name.equals(" V ")) {
+                if(tmp(j)(i).name.equals(" _ ")) {
                     tmp(j)(i) = emptycell()
                 }
             }
