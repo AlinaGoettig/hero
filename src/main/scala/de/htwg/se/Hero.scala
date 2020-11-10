@@ -12,18 +12,15 @@ object Hero {
         println("Made by " + student.name)
         val board = Board(Array.ofDim[Cell](11,15))
         board.fillboard(board.field)
-        val dmg = board.attack(0,0,14,10,board.field)
-        println("Damage given: " + dmg)
-        board.prediction(0,0,board.field)
+        board.prediction(14,5,board.field)
         println(board.printboard(board.field))
-        board.move(0,0,9,6,board.field)
+        board.move(14,5,9,6,board.field)
         println(board.printboard(board.field))
         board.prediction(9,6,board.field)
-        creatureinfo(9,6,board.field)
-        println(board.printboard(board.field))
-        //board.move(0,0,4,5,board.field)
-        //board.move(14,10,5,6,board.field)
+        //creatureinfo(0,5,board.field)
+        //currentcreatureinfo(14,5,board.field)
         //println(board.printboard(board.field))
+        println(board.printboard(board.field))
 
 
         //println(line())
@@ -58,11 +55,19 @@ object Hero {
         field
     }
 
-    def creatureinfo(Y: Int, X: Int, field: Array[Array[Cell]]): String = {
+    def currentcreatureinfo(Y: Int, X: Int, field: Array[Array[Cell]]): String = {
         val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
-        val info = lines() + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
-            field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t\t\t" +
-            field(X)(Y).dmg + "\t\t\t\t\t\t\t" +attackstyle + "\n" + lines()
+        val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
+            field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t" +
+            field(X)(Y).dmg + "\t\t\t\t\t" +attackstyle + "\n" + lines()
+        println(info)
+        info
+    }
+
+    def creatureinfo(Y: Int, X: Int, field: Array[Array[Cell]]): String = {
+        val shortline = "=" * 33 + "\n"
+        val info =  "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
+            field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
         println(info)
         info
     }
@@ -70,8 +75,8 @@ object Hero {
     def posmove (X: Int, Y: Int, field: Array[Array[Cell]]): Array[Array[Cell]] = {
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
-                val distance = Point2D.distance(X+1,Y+1,i+1,j+1).toInt
-                if(field(j)(i).name.equals("   ") && distance <= field(Y)(X).speed) {
+                val dist = Math.abs(X - i) + Math.abs(Y - j)
+                if(field(j)(i).name.equals("   ") && dist <= field(Y)(X).speed) {
                     field(j)(i) = marker()
                 }
             }
