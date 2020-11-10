@@ -219,9 +219,39 @@ object Hero {
         tmp(0)
     }
 
+    def changeplayer (current: String,names: Array[String]): String = {
+        val next = if (current.equals(names(0))) {
+            names(1)
+        } else {
+            names(0)
+        }
+        next
+    }
+
 
     def game(): Boolean = {
+
+        // Print of gamelogo and creator mention
+        val student = Player("Alina Göttig & Ronny Klotz")
+        println(gameName())
+        println("Made by " + student.name)
+
+        println("=============================")
+        println("Enter name(player 1):")
+        println("=============================")
+        val player1 = StdIn.readLine()
+
+        println("=============================")
+        println("Enter name(player 2):")
+        println("=============================")
+        val player2 = StdIn.readLine()
+
+        val player = Array(player1,player2)
+
+
+
         val board = Board(Array.ofDim[Cell](11,15))
+
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
@@ -229,6 +259,7 @@ object Hero {
         println("exit    = exit game")
         println("=============================")
         print("neue Eingabe: ")
+
         val input = StdIn.readLine().split(" ")
 
         // X15>B   Y11^Z
@@ -297,6 +328,7 @@ object Hero {
         }
         text
     }
+
 
 
 }
