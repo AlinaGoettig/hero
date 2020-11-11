@@ -1,6 +1,5 @@
 package de.htwg.se
 
-import de.htwg.se.Hero.model.Hero._
 import de.htwg.se.Hero.model.Player
 
 import org.scalatest._
