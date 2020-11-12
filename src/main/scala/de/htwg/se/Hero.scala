@@ -318,11 +318,8 @@ object Hero {
 
         val board = Board(Array.ofDim[Cell](11,15),player,Array(player(0)))
         board.start()
-        board.printfield()
         val creatureTurn = CreatureTurn(board)
-        while(input(creatureTurn.next(), board)){
-            board.printfield()
-        }
+        while(input(creatureTurn.next(), board)){}
     }
 
     def active(board: Board,X : Int, Y: Int) : Boolean = {
@@ -334,10 +331,11 @@ object Hero {
 
     def input(creature: (Vector[Int],Cell), field:Board) : Boolean = {
         val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
+        field.currentplayer(0) = p(0)
+        field.prediction(creature._1(0), creature._1(1))
+        field.printfield()
         println(currentPlayerOutput(p(0)))
         println("Current Creature: " + creature._2.name)
-        field.currentplayer(0) = p(0)
-        field.prediction(creature._1(0), creature._1(0))
 
         println("=============================")
         println("a X Y   = attack")
@@ -359,7 +357,6 @@ object Hero {
                     println("Creature can't be attacked")
             }
             if (input(0) == ("m") && isvalid(input)) {
-                //move(in(1).charAt(0), input(2).toInt)
                 if(active(field, input(1).toInt, input(2).toInt)) {
                     println("move")
                     field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
