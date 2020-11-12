@@ -1,20 +1,21 @@
 package de.htwg.se.Hero.model
 
-import java.util.concurrent.ThreadLocalRandom
+/**
+ * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ * @author Ronny Klotz & Alina Göttig
+ * @since 9.Nov.2020
+ */
 
 import scala.io.StdIn
-import scala.util.control.Breaks._
 
 //noinspection ScalaStyle
 object Hero {
 
-    // Main for execute the game
-    def main(args: Array[String]): Unit = {
-
-        // game function
-        game()
-
-    }
+    /**
+     * Main for executing the game function
+     * @param args launch parameter
+     */
+    def main(args: Array[String]): Unit = game()
 
     /**
      * Information which side the players are. Used after first fieldprint
@@ -33,9 +34,7 @@ object Hero {
      * Welcome the players after game start
      * @return String with font
      */
-    def gameName(): String = {
-        "\n ======== Welcome to Hero ======== \n"
-    }
+    def gameName(): String = "\n ======== Welcome to Hero ======== \n"
 
     /**
      * An obstacle which the creatures cant interact with
@@ -103,9 +102,7 @@ object Hero {
      * @param y Coordinate
      * @return Cell of the Vector
      */
-    def getCreature(field: Array[Array[Cell]],x: Int, y: Int): Cell = {
-        field(x)(y)
-    }
+    def getCreature(field: Array[Array[Cell]],x: Int, y: Int): Cell = field(x)(y)
 
     /**
      * Checks if creature is dead and replace them with empty cell if needed
@@ -128,18 +125,18 @@ object Hero {
      * @return Int of creature
      */
     def findbasehp(name: String, player: Array[Player]): Int = {
-        val cret = creatureliststart(player)
         val hp = Array(0)
 
-        for (cell <- cret) {
+        for (cell <- creatureliststart(player)) {
             if (cell._2.name.equals(name)) {
                 hp(0) = cell._2.hp
-                return hp(0)
+                return cell._2.hp
             } else {
                 hp(0) = 0
             }
         }
         hp(0)
+
     }
 
     /**
@@ -153,28 +150,16 @@ object Hero {
      * @param x the Number to print
      * @return String adapted on length of the number
      */
-    def fieldnumber(x: String): String = {
-        if (x.length == 2) {
-             "  " + x + "   "
-        } else {
-            "   " + x + "   "
-        }
-    }
+    def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
 
     /**
      * Gives the next player
      * @param current is current player
-     * @param names array of both player
+     * @param names Array of both player
      * @return the other player (player1,player2)
      */
-    def nextplayer(current: String, names: Array[Player]): Player = {
-        val next = if (current.equals(names(0).toString)) {
-            names(1)
-        } else {
-            names(0)
-        }
-        next
-    }
+    def nextplayer(current: String, names: Array[Player]): Player =
+        if (current.equals(names(0).toString)) names(1) else names(0)
 
     /**
      * For printing current player
@@ -218,12 +203,15 @@ object Hero {
 
         while(command(creatureTurn.next(),board)){
             val winner = creatureTurn.winner()
+
             if (winner == 1) {
                 return printwin(creatureTurn.field,player1)
             } else if (winner == 2) {
                 return printwin(creatureTurn.field,player2)
             }
+
         }
+
         return "\n" + lines() + "Game got closed!" + "\n" + lines()
 
     }
@@ -235,15 +223,19 @@ object Hero {
      * @return top layer of winner output
      */
     def printwin(field: Array[Cell],player: Player): String = {
+
         val top = lines() + player.name + " won the game!\n" + lines()
         val middle = "Remaining creatures of winner\n\nName:\t\t\tMultiplier:\t\t\tHealth:\n"
         println(top+middle)
+
         for(c <- field) {
             if (c.multiplier > 0) {
                 println(c.name + "\t\t\t" + c.multiplier + "\t\t\t" + c.hp)
             }
         }
+
         println(lines())
+
         top
     }
 
@@ -254,12 +246,8 @@ object Hero {
      * @param Y coordinate
      * @return true if he ownes, false if not
      */
-    def active(board: Board,X : Int, Y: Int) : Boolean = {
-        // Wenn X Y Creaturen von p dann true
-        if(getCreature(board.field, X,Y).player.name == board.currentplayer(0).name)
-            return true
-        false
-    }
+    def active(board: Board,X : Int, Y: Int) : Boolean =
+        if(getCreature(board.field, X,Y).player.name == board.currentplayer(0).name) true else false
 
     /**
      * Process player inputs
@@ -291,8 +279,10 @@ object Hero {
         if (input.length == 3) {
             if (input(0).equals("a")) {
                 if(!active(field, input(2).toInt, input(1).toInt)) {
+
                         val dmg = field.attack(coordinates.head, coordinates.last, input(1).toInt, input(2).toInt)
                         val defender = getCreature(field.field,input(2).toInt, input(1).toInt)
+
                         val info = lines() + creature.name + " dealt " + dmg + " points of damage to " +
                             defender.name + "\n" + lines() + "Remaining values\n\nMultiplier: " + defender.multiplier +
                             "\nHP: " + getCreature(field.field,input(2).toInt, input(1).toInt).hp + "\n" + lines()
@@ -325,13 +315,16 @@ object Hero {
      * @return the input of the player
      */
     def validInput(field:Board, creature:Cell) : Array[String] = {
+
         val in = StdIn.readLine().split(" ")
+
         if(!(in(0).equals("a") || in(0).equals("m") || in(0).equals("p") || in(0).equals("exit") || in(0).equals("i"))) {
             println("Ungültige Eingabe")
             println("neue Eingabe: ")
             val out = validInput(field, creature)
             return out
         }
+
         if (in.length == 3) {
             if (checkmove(in, field) || in(0).equals("a") && creature.style || in(0).equals("a") && checkattack(in, field)) {
                 return in
@@ -348,7 +341,9 @@ object Hero {
             }
 
         }
+
         in
+
     }
 
     /**
@@ -357,13 +352,10 @@ object Hero {
      * @param field of board
      * @return true if correct, false if the input is wrong
      */
-    def checkmove(in:Array[String], field:Board): Boolean = {
+    def checkmove(in:Array[String], field:Board): Boolean =
         if (in(0) == ("m") && isvalid(in) &&
-            getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
-            return true
-        }
-        false
-    }
+            getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) true else false
+
 
     /**
      * More specialized review for attack
@@ -396,13 +388,6 @@ object Hero {
      * @param in input of player
      * @return true if correct, false if input is wrong
      */
-    def isvalid(in : Array[String]) : Boolean = {
-        if ((in(1).toInt >= 0) && (in(1).toInt <= 14)
-            && (in(2).toInt >= 0) && (in(2).toInt <= 11)) {
-            true
-        } else {
-            false
-        }
-    }
+    def isvalid(in : Array[String]) : Boolean =
+        if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
 }
-

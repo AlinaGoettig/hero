@@ -1,7 +1,13 @@
 package de.htwg.se.Hero.model
 
-import de.htwg.se.Hero.model.Hero.{active, creatureliststart, emptycell, fieldnumber, findbasehp, lines, marker, obstaclelist, playerside}
-import de.htwg.se.Hero.model.Cell
+/**
+ * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ * @author Ronny Klotz & Alina Göttig
+ * @since 9.Nov.2020
+ */
+
+import de.htwg.se.Hero.model.Hero.
+{active, creatureliststart, emptycell, fieldnumber, findbasehp, lines, marker, obstaclelist, playerside}
 
 /**
  * Class for the Board with all functions
