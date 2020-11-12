@@ -349,7 +349,7 @@ object Hero {
                 else
                     println("Creature can't be attacked")
             }
-            if (input(0) == ("m") && isvalid(input)) {
+            if (checkmove(input, field)) {
                     println("move")
                     field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
             }
@@ -369,7 +369,7 @@ object Hero {
 
     def validInput(field:Board, creature:Cell) : Array[String] = {
         val in = StdIn.readLine().split(" ")
-        if(!(in(0).equals("a") || in(0).equals("m") || in(0).equals("p") || in(0).equals("exit"))) {
+        if(!(in(0).equals("a") || in(0).equals("m") || in(0).equals("p") || in(0).equals("exit") || in(0).equals("info"))) {
             println("Ungültige Eingabe")
             println("neue Eingabe: ")
             val out = validInput(field, creature)
@@ -378,21 +378,26 @@ object Hero {
         if (in.length == 3) {
             if (checkmove(in, field) || in(1).equals("a") && creature.style || in(1).equals("a") && checkattack(in, field)) {
                 return in
-            }
-            if (in(0) == ("i") && isvalid(in)) {
+            } else if (in(0) == ("i") && isvalid(in)) {
                 println("info")
                 field.creatureinfo(in(1).toInt, in(2).toInt)
                 println("neue Eingabe: ")
                 val out = validInput(field, creature)
                 return out
+            } else {
+                println("Ungültige Eingabe")
+                println("neue Eingabe: ")
+                val out = validInput(field, creature)
+                return out
             }
+
         }
         in
     }
 
     def checkmove(in:Array[String], field:Board): Boolean = {
         if (in(0) == ("m") && isvalid(in) &&
-            getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
+            getCreature(field.field, in(1).toInt, in(2).toInt).name.equals(" _ ")) {
             return true
         }
         false
