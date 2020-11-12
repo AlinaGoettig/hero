@@ -118,6 +118,11 @@ object Hero {
                 }
                 text += " " + i.toString + "\n" + lines()
             }
+            println(text)
+            text
+        }
+
+        def clear():Array[Array[Cell]] = {
             for (i <- 0 to 14) {
                 for (j <- 0 to 10) {
                     if(field(j)(i).name.equals(" _ ")) {
@@ -125,9 +130,9 @@ object Hero {
                     }
                 }
             }
-            println(text)
-            text
+            field
         }
+
         def fill(): Array[Array[Cell]] = {
             for (i <- 0 to 10) {
                 for (j <- 0 to 14) {
@@ -317,6 +322,7 @@ object Hero {
     def command(creature: (Vector[Int],Cell), field:Board) : Boolean = {
         val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
         field.currentplayer(0) = p(0)
+        field.clear()
         field.prediction(creature._1(0), creature._1(1))
         field.printfield()
         println(currentPlayerOutput(p(0)))
@@ -334,7 +340,7 @@ object Hero {
 
         // X15>B   Y11^Z
         if (input.length == 3) {
-            if (input(0) == ("a") && isvalid(input)) {
+            if (input(0).equals("a")) {
                 if(!active(field, input(2).toInt, input(1).toInt)) {
                         val dmg = field.attack(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
                         val defender = getCreature(field.field,input(2).toInt, input(1).toInt)
@@ -343,22 +349,21 @@ object Hero {
                             "\nHP: " + defender.hp + "\n" + lines()
 
                         println(info)
-                    println("attack")
 
                 }
                 else
                     println("Creature can't be attacked")
             }
-            if (checkmove(input, field)) {
+            if (input(0).equals("m")) {
                     println("move")
                     field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
             }
         } else if (input.length == 1) {
-            if (input(0) == "p") {
+            if (input(0).equals("p")) {
                 //pass
                 println("pass")
             }
-            if(input(0) == "exit") {
+            if(input(0).equals("exit")) {
                 return false
             }
         } else {
@@ -369,17 +374,16 @@ object Hero {
 
     def validInput(field:Board, creature:Cell) : Array[String] = {
         val in = StdIn.readLine().split(" ")
-        if(!(in(0).equals("a") || in(0).equals("m") || in(0).equals("p") || in(0).equals("exit") || in(0).equals("info"))) {
+        if(!(in(0).equals("a") || in(0).equals("m") || in(0).equals("p") || in(0).equals("exit") || in(0).equals("i"))) {
             println("Ungültige Eingabe")
             println("neue Eingabe: ")
             val out = validInput(field, creature)
             return out
         }
         if (in.length == 3) {
-            if (checkmove(in, field) || in(1).equals("a") && creature.style || in(1).equals("a") && checkattack(in, field)) {
+            if (checkmove(in, field) || in(0).equals("a") && creature.style || in(0).equals("a") && checkattack(in, field)) {
                 return in
-            } else if (in(0) == ("i") && isvalid(in)) {
-                println("info")
+            } else if (in(0).equals("i") && isvalid(in)) {
                 field.creatureinfo(in(1).toInt, in(2).toInt)
                 println("neue Eingabe: ")
                 val out = validInput(field, creature)
@@ -397,15 +401,15 @@ object Hero {
 
     def checkmove(in:Array[String], field:Board): Boolean = {
         if (in(0) == ("m") && isvalid(in) &&
-            getCreature(field.field, in(1).toInt, in(2).toInt).name.equals(" _ ")) {
+            getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
             return true
         }
         false
     }
 
     def checkattack(in:Array[String], board:Board) : Boolean = {
-        val i = in(1).toInt
-        val j = in(2).toInt
+        val i = in(2).toInt
+        val j = in(1).toInt
         val field = board.field
         if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
             && !active(board, i - 1, j - 1)) {
