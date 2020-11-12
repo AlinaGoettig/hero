@@ -26,7 +26,7 @@ object Hero {
          */
 
         //println(line())
-        //game()
+        game()
 
     }
 
@@ -310,6 +310,7 @@ object Hero {
         println("Enter name(Underworld):")
         println("=============================")
         val player2 = Player(StdIn.readLine())
+        println()
 
         val player = Array(player1,player2)
 
@@ -318,22 +319,26 @@ object Hero {
         val board = Board(Array.ofDim[Cell](11,15),player,Array(player(0)))
         board.start()
         board.printfield()
-        while(input(board)){
+        val creatureTurn = CreatureTurn(board)
+        while(input(creatureTurn.next(), board)){
             board.printfield()
         }
     }
 
-    def active(board: Board,X : Int, Y: Int, player:Player) : Boolean = {
+    def active(board: Board,X : Int, Y: Int) : Boolean = {
         //Wenn X Y Creaturen von p dann true
-        if(getCreature(board.field, X,Y).player == player)
+        if(getCreature(board.field, X,Y).player == board.currentplayer)
             return true
         false
     }
 
-    def input(field:Board) : Boolean = {
+    def input(creature: (Vector[Int],Cell), field:Board) : Boolean = {
         val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
         println(currentPlayerOutput(p(0)))
+        println("Current Creature: " + creature._2.name)
         field.currentplayer(0) = p(0)
+        field.prediction(creature._1(0), creature._1(0))
+
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
@@ -346,17 +351,19 @@ object Hero {
         // X15>B   Y11^Z
         if (input.length == 3) {
             if (input(0) == ("a") && isvalid(input)) {
-                //attack(in(1).charAt(0), input(2).toInt)
-                if(!active(field, input(1).toInt, input(2).toInt, p(0)))
+                if(!active(field, input(1).toInt, input(2).toInt)) {
                     println("attack")
+                    field.attack(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+                }
                 else
                     println("Creature can't be attacked")
             }
             if (input(0) == ("m") && isvalid(input)) {
                 //move(in(1).charAt(0), input(2).toInt)
-                if(active(field, input(1).toInt, input(2).toInt, p(0)))
+                if(active(field, input(1).toInt, input(2).toInt)) {
                     println("move")
-                else
+                    field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+                } else
                     println("Creature can't be moved")
             }
         } else if (input.length == 1) {
@@ -374,14 +381,31 @@ object Hero {
     }
 
     def isvalid(in : Array[String]) : Boolean = {
-        if ((in(1).charAt(0).toInt > 64) && (in(1).charAt(0).toInt < 80)
-            && (in(2).toInt > 0) && (in(2).toInt < 12)
-            && in(1).length == 1 && in(2).length == 1) {
+        if ((in(1).toInt >= 0) && (in(1).toInt < 15)
+            && (in(2).toInt >= 0) && (in(2).toInt < 11)
+            && in(1).length <= 2 && in(2).length <= 2) {
             true
         } else {
             false
         }
     }
 
+    case class CreatureTurn(field: Board) {
+        val list = creatureliststart(field.player);
+        val it = Array(list.iterator)
+        val current = Array(it(0).next())
+        def next() : (Vector[Int], Cell) = {
+            if(!it(0).hasNext) {
+                it(0) = list.iterator
+            }
+            current(0) = it(0).next
+            current(0)
+        }
+
+        def printCell() : Unit = {
+            println(current(0).toString())
+        }
+
+    }
 }
 
