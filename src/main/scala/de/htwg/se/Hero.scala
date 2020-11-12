@@ -6,27 +6,7 @@ import scala.io.StdIn
 //noinspection ScalaStyle
 object Hero {
     def main(args: Array[String]): Unit = {
-        val student = Player("Alina Göttig & Ronny Klotz")
-        println(gameName())
-        println("Made by " + student.name)
-
-        /*val player1 = Player("RonnyKlotz")
-        val board = Board(Array.ofDim[Cell](11,15),Array(player1,Player("AlinaGöttig")), Array(player1))
-
-        board.start()
-        board.prediction(0,0)
-        board.printfield()
-        board.move(0,0,9,6)
-        board.printfield()
-        board.prediction(9,6)
-        //creatureinfo(0,5,board.field)
-        //currentcreatureinfo(14,5,board.field)
-        //println(board.printboard(board.field))
-        board.printfield()
-*/
-        //println(line())
         game()
-
     }
 
     def playerside(player: Array[Player]): String = {
@@ -316,8 +296,6 @@ object Hero {
 
         val player = Array(player1,player2)
 
-
-
         val board = Board(Array.ofDim[Cell](11,15),player,Array(player(1)))
 
         board.start()
@@ -345,11 +323,12 @@ object Hero {
         println("=============================")
         println("a X Y   = attack")
         println("m X Y   = move")
+        println("i X Y   = info")
         println("p       = pass")
         println("exit    = exit game")
         println("=============================")
         print("neue Eingabe: ")
-        val input = validInput()
+        val input = validInput(field, creature._2)
 
         // X15>B   Y11^Z
         if (input.length == 3) {
@@ -379,21 +358,60 @@ object Hero {
         true
     }
 
-    def validInput() : Array[String] = {
+    def validInput(field:Board, creature:Cell) : Array[String] = {
         val in = StdIn.readLine().split(" ")
         if(!(in(0).equals("a") || in(0).equals("m") || in(0).equals("p") || in(0).equals("exit"))) {
             println("Ungültige Eingabe")
             println("neue Eingabe: ")
-            val out = validInput()
+            val out = validInput(field, creature)
             return out
+        }
+        if (in.length == 3) {
+            if (checkmove(in, field) || in(1).equals("a") && creature.style || in(1).equals("a") && checkattack(in, field)) {
+                return in
+            }
+            if (in(0) == ("i") && isvalid(in)) {
+                println("info")
+                field.creatureinfo(in(1).toInt, in(2).toInt)
+                println("neue Eingabe: ")
+                val out = validInput(field, creature)
+                return out
+            }
         }
         in
     }
 
+    def checkmove(in:Array[String], field:Board): Boolean = {
+        if (in(0) == ("m") && isvalid(in) &&
+            getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
+            return true
+        }
+        false
+    }
+
+    def checkattack(in:Array[String], board:Board) : Boolean = {
+        val i = in(1).toInt
+        val j = in(2).toInt
+        val field = board.field
+        if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
+            && !active(board, i - 1, j - 1)) {
+            if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
+                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
+                ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
+                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
+                ((i + 1 < 11 && j >= 0) && field(i + 1)(j).name.equals(" _ ")) ||
+                ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
+                ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
+                ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
+                return true
+            }
+        }
+        false
+    }
+
     def isvalid(in : Array[String]) : Boolean = {
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14)
-            && (in(2).toInt >= 0) && (in(2).toInt <= 11)
-            && in(1).length == 1 && in(2).length == 1) {
+            && (in(2).toInt >= 0) && (in(2).toInt <= 11)) {
             true
         } else {
             false
