@@ -1,7 +1,6 @@
 package de.htwg.se.Hero.model
 
-import java.awt.geom.Point2D
-
+import java.util.concurrent.ThreadLocalRandom
 import scala.io.StdIn
 
 //noinspection ScalaStyle
@@ -27,7 +26,7 @@ object Hero {
          */
 
         //println(line())
-        game()
+        //game()
 
     }
 
@@ -43,8 +42,15 @@ object Hero {
         "\n ======== Welcome to Hero ======== \n"
     }
 
-    case class Cell(name: String, dmg: Int, hp: Int, speed: Int, style: Boolean, multiplier: Int, player: Player) {
+    case class Cell(name: String, dmg: String, hp: Int, speed: Int, style: Boolean, multiplier: Int, player: Player) {
         def printcell(): String = "│ " + name + " │"
+        def attackamount(): Int = {
+            val input = dmg.split("-")
+            val random = ThreadLocalRandom.current()
+            val value = if (input.length == 2) Array(input(0).toInt,input(1).toInt) else Array(input(0).toInt)
+            val amount = if (value.length == 2) random.nextInt(value(0),value(1)+1) else value(0)
+            amount
+        }
     }
 
     case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: Array[Player]) {
@@ -84,7 +90,7 @@ object Hero {
         def attack (X1:Int, Y1:Int, X2:Int, Y2:Int): String = {
             val attacker = field(Y1)(X1)
             val defender = field(Y2)(X2)
-            val dmg = attacker.dmg * attacker.multiplier
+            val dmg = attacker.attackamount() * attacker.multiplier
             val multicheck = defender.hp - dmg
             val multidif = dmg.toFloat/defender.hp
             val basehp = findbasehp(defender.name,player)
@@ -154,30 +160,42 @@ object Hero {
         info
     }
 
-    def obstacle(): Cell = Cell("XXX",0,0,0,false,0,Player("none"))
+    def obstacle(): Cell = Cell("XXX","0",0,0,false,0,Player("none"))
 
-    def emptycell(): Cell = Cell("   ",0,0,0,false,0,Player("none"))
+    def emptycell(): Cell = Cell("   ","0",0,0,false,0,Player("none"))
 
-    def marker(): Cell = Cell(" _ ",0,0,0,false,0,Player("none"))
+    def marker(): Cell = Cell(" _ ","0",0,0,false,0,Player("none"))
+
+    case class creatures(alls: Array[Cell]) {
+        val current: Array[Cell] = Array(alls(0))
+        def list(): Array[Cell] = alls
+        def next(): Array[Cell] = {
+            current(0) = alls(alls.indexOf(current(0))+1)
+            while(current(0).multiplier <= 0) {
+                current(0) = alls(alls.indexOf(current(0))+1)
+            }
+            current
+        }
+    }
 
     def creatureliststart(player: Array[Player]): Map[Vector[Int], Cell] = {
         val name = namelist()
 
         val list = Map(
-            Vector(0,0) -> Cell(name(0),3,10,3,false,28,player(0)),//5
-            Vector(0,1) -> Cell(name(1),3,10,3,false,28,player(0)),//5
-            Vector(0,2) -> Cell(name(2),6,10,4,true,18,player(0)),//6
-            Vector(0,5) -> Cell(name(3),50,250,12,false,2,player(0)),//18
-            Vector(0,8) -> Cell(name(4),25,100,6,false,4,player(0)),//9
-            Vector(0,9) -> Cell(name(5),12,24,5,true,6,player(0)),//7
-            Vector(0,10) -> Cell(name(6),10,35,4,false,8,player(0)),//6
-            Vector(14,0) -> Cell(name(7),2,4,5,false,44,player(1)),//7
-            Vector(14,1) -> Cell(name(8),4,13,4,true,20,player(1)),//6
-            Vector(14,2) -> Cell(name(9),7,25,5,false,10,player(1)),//8
-            Vector(14,5) -> Cell(name(10),40,200,11,false,2,player(1)),//17
-            Vector(14,8) -> Cell(name(11),24,90,9,false,4,player(1)),//13
-            Vector(14,9) -> Cell(name(12),17,45,5,false,6,player(1)),//7
-            Vector(14,10) -> Cell(name(13),9,40,4,false,8,player(1))//6
+            Vector(0,0) -> Cell(name(0),"2-3",10,3,false,28,player(0)),//5
+            Vector(14,0) -> Cell(name(7),"1-2",4,5,false,44,player(1)),//7
+            Vector(0,1) -> Cell(name(1),"4-6",10,3,false,28,player(0)),//5
+            Vector(14,1) -> Cell(name(8),"2-4",13,4,true,20,player(1)),//6
+            Vector(0,2) -> Cell(name(2),"3-6",10,4,true,18,player(0)),//6
+            Vector(14,2) -> Cell(name(9),"2-7",25,5,false,10,player(1)),//8
+            Vector(0,5) -> Cell(name(3),"50",250,12,false,2,player(0)),//18
+            Vector(14,5) -> Cell(name(10),"30-40",200,11,false,2,player(1)),//17
+            Vector(0,8) -> Cell(name(4),"20-25",100,6,false,4,player(0)),//9
+            Vector(14,8) -> Cell(name(11),"16-24",90,9,false,4,player(1)),//13
+            Vector(0,9) -> Cell(name(5),"10-12",24,5,true,6,player(0)),//7
+            Vector(14,9) -> Cell(name(12),"13-17",45,5,false,6,player(1)),//7
+            Vector(0,10) -> Cell(name(6),"7-10",35,4,false,8,player(0)),//6
+            Vector(14,10) -> Cell(name(13),"7-9",40,4,false,8,player(1))//6
         )
         list
     }
@@ -273,12 +291,12 @@ object Hero {
         println("Made by " + student.name)
 
         println("=============================")
-        println("Enter name(player 1):")
+        println("Enter name(Castle):")
         println("=============================")
         val player1 = Player(StdIn.readLine())
 
         println("=============================")
-        println("Enter name(player 2):")
+        println("Enter name(Underworld):")
         println("=============================")
         val player2 = Player(StdIn.readLine())
 
