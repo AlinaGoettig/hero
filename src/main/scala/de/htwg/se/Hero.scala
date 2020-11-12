@@ -142,6 +142,7 @@ object Hero {
             field
         }
 
+
         def currentcreatureinfo(Y: Int, X: Int): String = {
             val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
             val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
@@ -306,8 +307,11 @@ object Hero {
         val board = Board(Array.ofDim[Cell](11,15),player,Array(player(1)))
 
         board.start()
+        val field = board.field
+        val creatures = Array(field(0)(0),field(14)(0),field(0)(1),field(14)(1),field(0)(2),field(14)(2),field(0)(5),
+            field(14)(5),field(0)(8),field(14)(8),field(0)(9),field(14)(9),field(0)(10),field(14)(10))
 
-        val creatureTurn = CreatureTurn(board)
+        val creatureTurn = Creaturefield(creatures,Array(creatures(creatures.length-1)))
         while(command(creatureTurn.next(), board)){}
 
     }
@@ -319,14 +323,15 @@ object Hero {
         false
     }
 
-    def command(creature: (Vector[Int],Cell), field:Board) : Boolean = {
+    def command(creature: Cell, field:Board) : Boolean = {
         val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
+        val coordinates = field.postition(creature)
         field.currentplayer(0) = p(0)
         field.clear()
-        field.prediction(creature._1(0), creature._1(1))
+        field.prediction(coordinates.head, coordinates.last)
         field.printfield()
         println(currentPlayerOutput(p(0)))
-        field.currentcreatureinfo(creature._1(0),creature._1(1))
+        field.currentcreatureinfo(coordinates.head,coordinates.last)
 
         println("=============================")
         println("a X Y   = attack")
@@ -336,15 +341,15 @@ object Hero {
         println("exit    = exit game")
         println("=============================")
         print("neue Eingabe: ")
-        val input = validInput(field, creature._2)
+        val input = validInput(field, creature)
 
         // X15>B   Y11^Z
         if (input.length == 3) {
             if (input(0).equals("a")) {
                 if(!active(field, input(2).toInt, input(1).toInt)) {
-                        val dmg = field.attack(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+                        val dmg = field.attack(coordinates.head, coordinates.last, input(1).toInt, input(2).toInt)
                         val defender = getCreature(field.field,input(2).toInt, input(1).toInt)
-                        val info = lines() + creature._2.name + " dealt " + dmg + " points of damage to " +
+                        val info = lines() + creature.name + " dealt " + dmg + " points of damage to " +
                             defender.name + "\n" + lines() + "Remaining values\n\nMultiplier: " + defender.multiplier +
                             "\nHP: " + defender.hp + "\n" + lines()
 
@@ -356,7 +361,7 @@ object Hero {
             }
             if (input(0).equals("m")) {
                     println("move")
-                    field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+                    field.move(coordinates.head,coordinates.last, input(1).toInt, input(2).toInt)
             }
         } else if (input.length == 1) {
             if (input(0).equals("p")) {
@@ -436,22 +441,22 @@ object Hero {
         }
     }
 
-    case class CreatureTurn(field: Board) {
-        val list: Map[Vector[Int], Cell] = creatureliststart(field.player);
-        val it: Array[Iterator[(Vector[Int], Cell)]] = Array(list.iterator)
-        val current: Array[(Vector[Int], Cell)] = Array(it(0).next())
-        def next() : (Vector[Int], Cell) = {
-            if(!it(0).hasNext) {
-                it(0) = list.iterator
+    case class Creaturefield(field: Array[Cell], current: Array[Cell]) {
+        def next(): Cell = {
+            if (field.indexOf(current(0))+1 == field.length) {
+                current(0) = field(0)
+            } else {
+                current(0) = field(field.indexOf(current(0))+1)
             }
-            current(0) = it(0).next
+            while (current(0).multiplier <= 0) {
+                if (field.indexOf(current(0))+1 == field.length) {
+                    current(0) = field(0)
+                } else {
+                    current(0) = field(field.indexOf(current(0))+1)
+                }
+            }
             current(0)
         }
-
-        def printCell() : Unit = {
-            println(current(0).toString())
-        }
-
     }
 }
 
