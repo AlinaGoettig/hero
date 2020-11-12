@@ -6,7 +6,9 @@ import scala.io.StdIn
 //noinspection ScalaStyle
 object Hero {
     def main(args: Array[String]): Unit = {
+
         game()
+
     }
 
     def playerside(player: Array[Player]): String = {
@@ -97,15 +99,15 @@ object Hero {
             text += "\n" + lines()
             for (i <- 0 to 10) {
                 for (j <- 0 to 14) {
-                    if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")) {
-                        if (((i-1 >= 0 && j-1 >= 0) && field(i-1)(j-1).name.equals(" _ ")) && !active(this,i-1,j-1) ||
-                            ((i-1 >= 0 && j >= 0) && field(i-1)(j).name.equals(" _ ")) && !active(this,i-1,j) ||
-                            ((i-1 >= 0 && j+1 < 14) && field(i-1)(j+1).name.equals(" _ ")) && !active(this,i-1,j+1) ||
-                            ((i-1 >= 0 && j >= 0) && field(i-1)(j).name.equals(" _ ")) && !active(this,i-1,j) ||
-                            ((i+1 < 11 && j >= 0) && field(i+1)(j).name.equals(" _ ")) && !active(this,i+1,j) ||
-                            ((i+1 < 11 && j-1 >= 0) && field(i+1)(j-1).name.equals(" _ ")) && !active(this,i+1,j-1) ||
-                            ((i >= 0 && j+1 < 14) && field(i)(j+1).name.equals(" _ ")) && !active(this,i,j+1) ||
-                            ((i+1 < 11 && j+1 < 14) && field(i+1)(j+1).name.equals(" _ ")) && !active(this,i+1,j+1) ) {
+                    if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX") && !active(this,i,j)) {
+                        if (((i-1 >= 0 && j-1 >= 0) && field(i-1)(j-1).name.equals(" _ ")) ||
+                            ((i-1 >= 0 && j >= 0) && field(i-1)(j).name.equals(" _ ")) ||
+                            ((i-1 >= 0 && j+1 < 14) && field(i-1)(j+1).name.equals(" _ ")) ||
+                            ((i-1 >= 0 && j >= 0) && field(i-1)(j).name.equals(" _ ")) ||
+                            ((i+1 < 11 && j >= 0) && field(i+1)(j).name.equals(" _ ")) ||
+                            ((i+1 < 11 && j-1 >= 0) && field(i+1)(j-1).name.equals(" _ ")) ||
+                            ((i >= 0 && j+1 < 14) && field(i)(j+1).name.equals(" _ ")) ||
+                            ((i+1 < 11 && j+1 < 14) && field(i+1)(j+1).name.equals(" _ "))) {
                             text += field(i)(j).attackable()
                         } else {
                             text += field(i)(j).printcell()
@@ -139,7 +141,7 @@ object Hero {
             val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
             val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
                 field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t" +
-                field(X)(Y).dmg + "\t\t\t\t\t" +attackstyle + "\n" + lines()
+                field(X)(Y).dmg + " " * (20 - field(X)(Y).dmg.length) + attackstyle + "\n" + lines()
             println(info)
             info
         }
@@ -281,7 +283,7 @@ object Hero {
         // Print of gamelogo and creator mention
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
-        println("Made by " + student.name)
+        println("Made by " + student.name + "\n")
 
         println("=============================")
         println("Enter name(Castle):")
@@ -333,20 +335,27 @@ object Hero {
         // X15>B   Y11^Z
         if (input.length == 3) {
             if (input(0) == ("a") && isvalid(input)) {
-                if(!active(field, input(1).toInt, input(2).toInt)) {
+                if(!active(field, input(2).toInt, input(1).toInt)) {
+                        val dmg = field.attack(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+                        val defender = getCreature(field.field,input(2).toInt, input(1).toInt)
+                        val info = lines() + creature._2.name + " dealt " + dmg + " points of damage to " +
+                            defender.name + "\n" + lines() + "Remaining values\n\nMultiplier: " + defender.multiplier +
+                            "\nHP: " + defender.hp + "\n" + lines()
+
+                        println(info)
                     println("attack")
-                    field.attack(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+
                 }
                 else
                     println("Creature can't be attacked")
             }
             if (input(0) == ("m") && isvalid(input)) {
-                println("move")
-                field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+                    println("move")
+                    field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
             }
         } else if (input.length == 1) {
             if (input(0) == "p") {
-                //pass()
+                //pass
                 println("pass")
             }
             if(input(0) == "exit") {
