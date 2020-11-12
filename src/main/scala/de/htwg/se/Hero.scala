@@ -321,7 +321,7 @@ object Hero {
         val board = Board(Array.ofDim[Cell](11,15),player,Array(player(0)))
         board.start()
         val creatureTurn = CreatureTurn(board)
-        while(input(creatureTurn.next(), board)){}
+        while(command(creatureTurn.next(), board)){}
     }
 
     def active(board: Board,X : Int, Y: Int) : Boolean = {
@@ -331,7 +331,7 @@ object Hero {
         false
     }
 
-    def input(creature: (Vector[Int],Cell), field:Board) : Boolean = {
+    def command(creature: (Vector[Int],Cell), field:Board) : Boolean = {
         val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
         field.currentplayer(0) = p(0)
         field.prediction(creature._1(0), creature._1(1))
@@ -346,7 +346,7 @@ object Hero {
         println("exit    = exit game")
         println("=============================")
         print("neue Eingabe: ")
-        val input = StdIn.readLine().split(" ")
+        val input = validInput()
 
         // X15>B   Y11^Z
         if (input.length == 3) {
@@ -374,6 +374,17 @@ object Hero {
             println("Ungültige Eingabe")
         }
         true
+    }
+
+    def validInput() : Array[String] = {
+        val in = StdIn.readLine().split(" ")
+        if(!(in(0).equals("a") || in(0).equals("m") || in(0).equals("p") || in(0).equals("exit"))) {
+            println("Ungültige Eingabe")
+            println("neue Eingabe: ")
+            val out = validInput()
+            return out
+        }
+        in
     }
 
     def isvalid(in : Array[String]) : Boolean = {
