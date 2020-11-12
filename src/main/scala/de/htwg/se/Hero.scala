@@ -1,13 +1,15 @@
 package de.htwg.se.Hero.model
 
 import java.util.concurrent.ThreadLocalRandom
+
 import scala.io.StdIn
+import scala.util.control.Breaks._
 
 //noinspection ScalaStyle
 object Hero {
     def main(args: Array[String]): Unit = {
 
-        game()
+        println(game())
 
     }
 
@@ -53,7 +55,7 @@ object Hero {
             println(playerside(player))
             field
         }
-        def move(X1:Int,Y1:Int, X2:Int, Y2:Int) : Array[Array[Cell]] = {
+        def move(Y1:Int,X1:Int, X2:Int, Y2:Int) : Array[Array[Cell]] = {
             val cret1 = field(Y1)(X1)
             val cret2 = field(Y2)(X2)
             field(Y1)(X1) = cret2
@@ -61,7 +63,7 @@ object Hero {
 
             field
         }
-        def attack (X1:Int, Y1:Int, X2:Int, Y2:Int): String = {
+        def attack (Y1:Int, X1:Int, X2:Int, Y2:Int): String = {
             val attacker = field(Y1)(X1)
             val defender = field(Y2)(X2)
             val dmg = attacker.attackamount() * attacker.multiplier
@@ -79,7 +81,7 @@ object Hero {
 
             dmg.toString
         }
-        def prediction (X: Int, Y: Int): Array[Array[Cell]] = {
+        def prediction (Y: Int, X: Int): Array[Array[Cell]] = {
             for (i <- 0 to 14) {
                 for (j <- 0 to 10) {
                     val dist = Math.abs(X - i) + Math.abs(Y - j)
@@ -143,7 +145,7 @@ object Hero {
         }
 
 
-        def currentcreatureinfo(Y: Int, X: Int): String = {
+        def currentcreatureinfo(X: Int, Y: Int): String = {
             val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
             val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
                 field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t" +
@@ -228,12 +230,14 @@ object Hero {
     def namelist(): IndexedSeq[String] =
         IndexedSeq("HA.","MA.","RO.","AN.","CH.","ZE.","CR.",".FA","MAG",".CE",".DE",".EF",".PI",".HO")
 
-    def findbasehp (name: String, player: Array[Player]): Int = {
-        val crelist = creatureliststart(player)
+    def findbasehp(name: String, player: Array[Player]): Int = {
+        val cret = creatureliststart(player)
         val hp = Array(0)
-        for (cell <- creatureliststart(player)) {
+
+        for (cell <- cret) {
             if (cell._2.name.equals(name)) {
                 hp(0) = cell._2.hp
+                return hp(0)
             } else {
                 hp(0) = 0
             }
@@ -285,7 +289,7 @@ object Hero {
 
     def currentPlayerOutput(player: Player) : String = lines() + "Current Player: " + player + "\n" + lines()
 
-    def game(): Unit = {
+    def game(): String = {
         // Print of gamelogo and creator mention
         val student = Player("Alina Göttig & Ronny Klotz")
         println(gameName())
@@ -308,11 +312,19 @@ object Hero {
 
         board.start()
         val field = board.field
-        val creatures = Array(field(0)(0),field(14)(0),field(0)(1),field(14)(1),field(0)(2),field(14)(2),field(0)(5),
-            field(14)(5),field(0)(8),field(14)(8),field(0)(9),field(14)(9),field(0)(10),field(14)(10))
+        val creatures = Array(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
+            field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
 
-        val creatureTurn = Creaturefield(creatures,Array(creatures(creatures.length-1)))
-        while(command(creatureTurn.next(), board)){}
+        val creatureTurn = Creaturefield(creatures,Array(creatures(creatures.length-1)),player)
+        while(command(creatureTurn.next(),board)){
+            val winner = creatureTurn.winner()
+            if (winner == 1) {
+                return lines() + player1.name + " won the game!\n" + lines()
+            } else if (winner == 2) {
+                return lines() + player2.name + " won the game!\n" + lines()
+            }
+        }
+        return "\n" + lines() + "Game got closed!" + "\n" + lines()
 
     }
 
@@ -351,7 +363,7 @@ object Hero {
                         val defender = getCreature(field.field,input(2).toInt, input(1).toInt)
                         val info = lines() + creature.name + " dealt " + dmg + " points of damage to " +
                             defender.name + "\n" + lines() + "Remaining values\n\nMultiplier: " + defender.multiplier +
-                            "\nHP: " + defender.hp + "\n" + lines()
+                            "\nHP: " + getCreature(field.field,input(2).toInt, input(1).toInt).hp + "\n" + lines()
 
                         println(info)
 
@@ -417,7 +429,7 @@ object Hero {
         val j = in(1).toInt
         val field = board.field
         if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
-            && !active(board, i - 1, j - 1)) {
+            && !active(board, i, j)) {
             if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
                 ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
                 ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
@@ -441,7 +453,7 @@ object Hero {
         }
     }
 
-    case class Creaturefield(field: Array[Cell], current: Array[Cell]) {
+    case class Creaturefield(field: Array[Cell], current: Array[Cell], player: Array[Player]) {
         def next(): Cell = {
             if (field.indexOf(current(0))+1 == field.length) {
                 current(0) = field(0)
@@ -456,6 +468,24 @@ object Hero {
                 }
             }
             current(0)
+        }
+        def winner(): Int = {
+            val sides = Array(false,false)
+            for (y <- field) {
+                if (y.player == player(0)) {
+                    sides(0) = true
+                }
+                if (y.player == player(1)) {
+                    sides(1) = true
+                }
+            }
+            if (sides(0) && !sides(1)) {
+                return 1
+            } else if (!sides(0) && sides(1)) {
+                return 2
+            } else {
+                return 0
+            }
         }
     }
 }
