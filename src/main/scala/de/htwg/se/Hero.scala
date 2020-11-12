@@ -55,7 +55,7 @@ object Hero {
 
     case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: Array[Player]) {
         def start(): Array[Array[Hero.Cell]] = {
-            fill(field)
+            fill()
             val list = creatureliststart(player)
             for (c <- list) {
                 val y = c._1.head
@@ -132,32 +132,43 @@ object Hero {
             println(text)
             text
         }
-    }
-
-    def fill(field: Array[Array[Cell]]): Array[Array[Cell]] = {
-        for (i <- 0 to 10) {
-            for (j <- 0 to 14) {
-                field(i)(j) = emptycell()
+        def fill(): Array[Array[Cell]] = {
+            for (i <- 0 to 10) {
+                for (j <- 0 to 14) {
+                    field(i)(j) = emptycell()
+                }
             }
+            field
         }
-        field
-    }
 
-    def currentcreatureinfo(Y: Int, X: Int, field: Array[Array[Cell]]): String = {
-        val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
-        val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
-            field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t" +
-            field(X)(Y).dmg + "\t\t\t\t\t" +attackstyle + "\n" + lines()
-        println(info)
-        info
-    }
+        def currentcreatureinfo(Y: Int, X: Int): String = {
+            val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
+            val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
+                field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t" +
+                field(X)(Y).dmg + "\t\t\t\t\t" +attackstyle + "\n" + lines()
+            println(info)
+            info
+        }
 
-    def creatureinfo(Y: Int, X: Int, field: Array[Array[Cell]]): String = {
-        val shortline = "=" * 33 + "\n"
-        val info =  "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
-            field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
-        println(info)
-        info
+        def creatureinfo(Y: Int, X: Int): String = {
+            val shortline = "=" * 33 + "\n"
+            val info =  "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
+                field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
+            println(info)
+            info
+        }
+
+        def postition(creature: Cell): Vector[Int] = {
+            val posi = Array(Vector(0,0))
+            for (i <- 0 to 10) {
+                for (j <- 0 to 14) {
+                    if (field(i)(j).equals(creature)) {
+                        posi(0) = Vector(i,j)
+                    }
+                }
+            }
+            posi(0)
+        }
     }
 
     def obstacle(): Cell = Cell("XXX","0",0,0,false,0,Player("none"))
