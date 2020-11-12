@@ -318,15 +318,18 @@ object Hero {
 
 
 
-        val board = Board(Array.ofDim[Cell](11,15),player,Array(player(0)))
+        val board = Board(Array.ofDim[Cell](11,15),player,Array(player(1)))
+
         board.start()
+
         val creatureTurn = CreatureTurn(board)
         while(command(creatureTurn.next(), board)){}
+
     }
 
     def active(board: Board,X : Int, Y: Int) : Boolean = {
-        //Wenn X Y Creaturen von p dann true
-        if(getCreature(board.field, X,Y).player.equals(board.currentplayer(0)))
+        // Wenn X Y Creaturen von p dann true
+        if(getCreature(board.field, X,Y).player.name == board.currentplayer(0).name)
             return true
         false
     }
@@ -337,7 +340,7 @@ object Hero {
         field.prediction(creature._1(0), creature._1(1))
         field.printfield()
         println(currentPlayerOutput(p(0)))
-        println("Current Creature: " + creature._2.name)
+        field.currentcreatureinfo(creature._1(0),creature._1(1))
 
         println("=============================")
         println("a X Y   = attack")
@@ -359,8 +362,8 @@ object Hero {
                     println("Creature can't be attacked")
             }
             if (input(0) == ("m") && isvalid(input)) {
-                    println("move")
-                    field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
+                println("move")
+                field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
             }
         } else if (input.length == 1) {
             if (input(0) == "p") {
