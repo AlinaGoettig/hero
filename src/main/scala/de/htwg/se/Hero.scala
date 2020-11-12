@@ -10,7 +10,7 @@ object Hero {
         println(gameName())
         println("Made by " + student.name)
 
-        val player1 = Player("RonnyKlotz")
+        /*val player1 = Player("RonnyKlotz")
         val board = Board(Array.ofDim[Cell](11,15),Array(player1,Player("AlinaGöttig")), Array(player1))
 
         board.start()
@@ -23,7 +23,7 @@ object Hero {
         //currentcreatureinfo(14,5,board.field)
         //println(board.printboard(board.field))
         board.printfield()
-
+*/
         //println(line())
         game()
 
@@ -326,7 +326,7 @@ object Hero {
 
     def active(board: Board,X : Int, Y: Int) : Boolean = {
         //Wenn X Y Creaturen von p dann true
-        if(getCreature(board.field, X,Y).player == board.currentplayer(0))
+        if(getCreature(board.field, X,Y).player.equals(board.currentplayer(0)))
             return true
         false
     }
@@ -359,11 +359,8 @@ object Hero {
                     println("Creature can't be attacked")
             }
             if (input(0) == ("m") && isvalid(input)) {
-                if(active(field, input(1).toInt, input(2).toInt)) {
                     println("move")
                     field.move(creature._1(0), creature._1(1), input(1).toInt, input(2).toInt)
-                } else
-                    println("Creature can't be moved")
             }
         } else if (input.length == 1) {
             if (input(0) == "p") {
