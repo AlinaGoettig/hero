@@ -9,19 +9,8 @@ package de.htwg.se.Hero.model
 import de.htwg.se.Hero.model.Hero.
 {active, creatureliststart, emptycell, fieldnumber, findbasehp, lines, marker, obstaclelist, playerside}
 
-/**
- * Class for the Board with all functions
- *
- * @param field 2D Array to represent the Board
- * @param player Array with both player
- * @param currentplayer current activ player
- */
 case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: Array[Player]) {
 
-    /**
-     * Initialize the Board by filling it with all cells
-     * @return filled field
-     */
     def start(): Array[Array[Cell]] = {
         fill()
         val list = creatureliststart(player)
@@ -40,14 +29,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         field
     }
 
-    /**
-     * Move a creature from pointA to pointB
-     * @param Y1 Start
-     * @param X1 Start
-     * @param X2 End
-     * @param Y2 End
-     * @return renewed field
-     */
     def move(Y1:Int,X1:Int, X2:Int, Y2:Int) : Array[Array[Cell]] = {
         val cret1 = field(Y1)(X1)
         val cret2 = field(Y2)(X2)
@@ -57,14 +38,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         field
     }
 
-    /**
-     * Action of one creature attack another
-     * @param Y1 Attacker
-     * @param X1 Attacker
-     * @param X2 Defender
-     * @param Y2 Defender
-     * @return renewed field
-     */
     def attack (Y1:Int, X1:Int, X2:Int, Y2:Int): String = {
         val attacker = field(Y1)(X1)
         val defender = field(Y2)(X2)
@@ -84,12 +57,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         dmg.toString
     }
 
-    /**
-     * Prediction where the creature is able to walk
-     * @param Y creature
-     * @param X creature
-     * @return renewed field
-     */
     def prediction (Y: Int, X: Int): Array[Array[Cell]] = {
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
@@ -102,11 +69,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         field
     }
 
-    /**
-     * Prints the Board into the console
- *
-     * @return String with entire entries
-     */
     //noinspection ScalaStyle
     def printfield() : String = {
         var text = ""
@@ -140,10 +102,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         text
     }
 
-    /**
-     * Replace prediction marker with emptycells
-     * @return renewed field
-     */
     def clear():Array[Array[Cell]] = {
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
@@ -155,10 +113,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         field
     }
 
-    /**
-     * Fill the board with empty cells
-     * @return renewed field
-     */
     def fill(): Array[Array[Cell]] = {
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
@@ -168,12 +122,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         field
     }
 
-    /**
-     * Prints information about current creature (automatic)
-     * @param X creature
-     * @param Y creature
-     * @return String with all informations
-     */
     def currentcreatureinfo(X: Int, Y: Int): String = {
         val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
         val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
@@ -183,12 +131,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         info
     }
 
-    /**
-     * Prints information about asked field/creature (command call)
-     * @param Y
-     * @param X
-     * @return
-     */
     def creatureinfo(Y: Int, X: Int): String = {
         val shortline = "=" * 33 + "\n"
         val info =  "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
@@ -197,11 +139,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         info
     }
 
-    /**
-     * Gives Vector where the asked creature is in the field
-     * @param creature which needs to be searched
-     * @return Vector(Int,Int) with the coordinates
-     */
     def postition(creature: Cell): Vector[Int] = {
         val posi = Array(Vector(0,0))
         for (i <- 0 to 10) {
@@ -215,4 +152,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
     }
 
 }
+
+
 

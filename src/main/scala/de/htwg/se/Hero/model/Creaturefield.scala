@@ -6,19 +6,8 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
-/**
- * Reference list of the creatures on the board
- *
- * @param field list with creatures
- * @param current creature which is activ
- * @param player Array with both players
- */
 case class Creaturefield(field: Array[Cell], current: Array[Cell], player: Array[Player]) {
 
-    /**
-     * Change current creature to the next possible
-     * @return creature with multiplier > 0
-     */
     def next(): Cell = {
         if (field.indexOf(current(0)) + 1 == field.length) {
             current(0) = field(0)
@@ -35,10 +24,6 @@ case class Creaturefield(field: Array[Cell], current: Array[Cell], player: Array
         current(0)
     }
 
-    /**
-     * Check if one of the player have <= 0 creatures of the board left with multiplier > 0
-     * @return Int with information about state. 1 = player 1 won, 2 = player 2 won, 0 = game goes on
-     */
     def winner(): Int = {
         val sides = Array(false,false)
         for (y <- field) {

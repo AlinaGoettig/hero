@@ -11,17 +11,8 @@ import scala.io.StdIn
 //noinspection ScalaStyle
 object Hero {
 
-    /**
-     * Main for executing the game function
-     * @param args launch parameter
-     */
     def main(args: Array[String]): Unit = game()
 
-    /**
-     * Information which side the players are. Used after first fieldprint
-     * @param player Array with both players
-     * @return String with information
-     */
     def playerside(player: Array[Player]): String = {
         val player1 = "│ " + player(0).name + " │"
         val player2 = "│ " + player(1).name + " │"
@@ -30,36 +21,14 @@ object Hero {
         info
     }
 
-    /**
-     * Welcome the players after game start
-     * @return String with font
-     */
     def gameName(): String = "\n ======== Welcome to Hero ======== \n"
 
-    /**
-     * An obstacle which the creatures cant interact with
-     * @return Cell
-     */
     def obstacle(): Cell = Cell("XXX","0",0,0,false,0,Player("none"))
 
-    /**
-     * An empty cell for the board
-     * @return Cell
-     */
     def emptycell(): Cell = Cell("   ","0",0,0,false,0,Player("none"))
 
-    /**
-     * An marker for the prediction of current creature movmentrange
-     * @return Cell
-     */
     def marker(): Cell = Cell(" _ ","0",0,0,false,0,Player("none"))
 
-    /**
-     * Map with coordinates -> creature cells for initialize the board
- *
-     * @param player Array of both players
-     * @return Map with entries
-     */
     def creatureliststart(player: Array[Player]): Map[Vector[Int], Cell] = Map(
         Vector(0,0) -> Cell("HA.","2-3",10,3,style = false,28,player(0)),//5
         Vector(14,0) -> Cell(".FA","1-2",4,5,style = false,44,player(1)),//7
@@ -76,11 +45,6 @@ object Hero {
         Vector(0,10) -> Cell("CR.","7-10",35,4,style = false,8,player(0)),//6
         Vector(14,10) -> Cell(".HO","7-9",40,4,style = false,8,player(1)))//6
 
-    /**
-     * Map with coordinates -> obstacle cells for initialize the board
-     *
-     * @return Map with entries
-     */
     def obstaclelist(): Map[Vector[Int], Cell] = Map(
             Vector(6,1) -> obstacle(),
             Vector(7,2) -> obstacle(),
@@ -90,23 +54,8 @@ object Hero {
             Vector(8,8) -> obstacle(),
             Vector(6,9) -> obstacle())
 
-
-    /**
-     * Get creature with coordinates in the field
-     * @param field of the board
-     * @param x Coordinate
-     * @param y Coordinate
-     * @return Cell of the Vector
-     */
     def getCreature(field: Array[Array[Cell]],x: Int, y: Int): Cell = field(x)(y)
 
-    /**
-     * Checks if creature is dead and replace them with empty cell if needed
-     * @param X Creature
-     * @param Y Creature
-     * @param field of the board
-     * @return renewed field
-     */
     def deathcheck (X:Int, Y:Int, field:Array[Array[Cell]]): Array[Array[Cell]] = {
         if (field(X)(Y).multiplier <= 0) {
             field(X)(Y) = emptycell()
@@ -114,12 +63,6 @@ object Hero {
         field
     }
 
-    /**
-     * Give base health points of creature
-     * @param name of the creature
-     * @param player for tunneling
-     * @return Int of creature
-     */
     def findbasehp(name: String, player: Array[Player]): Int = {
         val hp = Array(0)
 
@@ -135,40 +78,15 @@ object Hero {
 
     }
 
-    /**
-     * For printing lines
-     * @return String with line
-     */
     def lines(): String = "=" * 7 * 15 + "\n"
 
-    /**
-     * For printing top raw of field number
-     * @param x the Number to print
-     * @return String adapted on length of the number
-     */
     def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
 
-    /**
-     * Gives the next player
-     * @param current is current player
-     * @param names Array of both player
-     * @return the other player (player1,player2)
-     */
     def nextplayer(current: String, names: Array[Player]): Player =
         if (current.equals(names(0).toString)) names(1) else names(0)
 
-    /**
-     * For printing current player
-     * @param player class for the name
-     * @return String with lines and name
-     */
     def currentPlayerOutput(player: Player) : String = lines() + "Current Player: " + player + "\n" + lines()
 
-    /**
-     * Game procedure
-     *
-     * @return information about winner
-     */
     def game(): String = {
 
         // Print of gamelogo and creator mention
@@ -209,16 +127,10 @@ object Hero {
 
         }
 
-        return "\n" + lines() + "Game got closed!" + "\n" + lines()
+        "\n" + lines() + "Game got closed!" + "\n" + lines()
 
     }
 
-    /**
-     * For printing the winner information
-     * @param field of board
-     * @param player which won the game
-     * @return top layer of winner output
-     */
     def printwin(field: Array[Cell],player: Player): String = {
 
         val top = lines() + player.name + " won the game!\n" + lines()
@@ -236,23 +148,9 @@ object Hero {
         top
     }
 
-    /**
-     * Checks if the given creatures get owned by the current player
-     * @param board class for field
-     * @param X coordinate
-     * @param Y coordinate
-     * @return true if he ownes, false if not
-     */
     def active(board: Board,X : Int, Y: Int) : Boolean =
         if(getCreature(board.field, X,Y).player.name == board.currentplayer(0).name) true else false
 
-    /**
-     * Process player inputs
- *
-     * @param creature is the current creature
-     * @param field of the board
-     * @return false if player want to exit, true if an import appears
-     */
     def command(creature: Cell, field:Board) : Boolean = {
         val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
         val coordinates = field.postition(creature)
@@ -306,13 +204,6 @@ object Hero {
         true
     }
 
-    /**
-     * Check input about accuracy
-     *
-     * @param field of board
-     * @param creature is the current creature
-     * @return the input of the player
-     */
     def validInput(field:Board, creature:Cell) : Array[String] = {
 
         val in = StdIn.readLine().split(" ")
@@ -345,23 +236,11 @@ object Hero {
 
     }
 
-    /**
-     * More specialized review for move
-     * @param in input of player
-     * @param field of board
-     * @return true if correct, false if the input is wrong
-     */
     def checkmove(in:Array[String], field:Board): Boolean =
-        if (in(0) == ("m") && isvalid(in) &&
+        if (in(0) == "m" && isvalid(in) &&
             getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) true else false
 
 
-    /**
-     * More specialized review for attack
-     * @param in input of player
-     * @param board as instance of
-     * @return true if correct, false if input is wrong
-     */
     def checkattack(in:Array[String], board:Board) : Boolean = {
         val i = in(2).toInt
         val j = in(1).toInt
@@ -382,11 +261,6 @@ object Hero {
         false
     }
 
-    /**
-     * Check for the player input coordinates
-     * @param in input of player
-     * @return true if correct, false if input is wrong
-     */
     def isvalid(in : Array[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
 }
