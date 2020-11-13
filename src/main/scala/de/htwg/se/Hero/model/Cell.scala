@@ -19,7 +19,6 @@ import java.util.concurrent.ThreadLocalRandom
  * @param multiplier amount of creatures
  * @param player which player own the creature (Player1,Player2,None)
  */
-//noinspection ScalaStyle
 case class Cell(name: String, dmg: String, hp: Int, speed: Int, style: Boolean, multiplier: Int, player: Player) {
 
     /**
@@ -42,7 +41,7 @@ case class Cell(name: String, dmg: String, hp: Int, speed: Int, style: Boolean, 
         val input = dmg.split("-")
         val random = ThreadLocalRandom.current()
         val value = if (input.length == 2) Array(input(0).toInt,input(1).toInt) else Array(input(0).toInt)
-        val amount = if (value.length == 2) random.nextInt(value(0),value(1)+1) else value(0)
+        val amount = if (value.length == 2) random.nextInt(value(0),value(1) + 1) else value(0)
         amount
     }
 

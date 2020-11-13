@@ -13,7 +13,6 @@ package de.htwg.se.Hero.model
  * @param current creature which is activ
  * @param player Array with both players
  */
-//noinspection ScalaStyle
 case class Creaturefield(field: Array[Cell], current: Array[Cell], player: Array[Player]) {
 
     /**
@@ -21,16 +20,16 @@ case class Creaturefield(field: Array[Cell], current: Array[Cell], player: Array
      * @return creature with multiplier > 0
      */
     def next(): Cell = {
-        if (field.indexOf(current(0))+1 == field.length) {
+        if (field.indexOf(current(0)) + 1 == field.length) {
             current(0) = field(0)
         } else {
-            current(0) = field(field.indexOf(current(0))+1)
+            current(0) = field(field.indexOf(current(0)) + 1)
         }
         while (current(0).multiplier <= 0) {
-            if (field.indexOf(current(0))+1 == field.length) {
+            if (field.indexOf(current(0)) + 1 == field.length) {
                 current(0) = field(0)
             } else {
-                current(0) = field(field.indexOf(current(0))+1)
+                current(0) = field(field.indexOf(current(0)) + 1)
             }
         }
         current(0)
@@ -51,11 +50,11 @@ case class Creaturefield(field: Array[Cell], current: Array[Cell], player: Array
             }
         }
         if (sides(0) && !sides(1)) {
-            return 1
+            1
         } else if (!sides(0) && sides(1)) {
-            return 2
+            2
         } else {
-            return 0
+            0
         }
     }
 

@@ -16,7 +16,6 @@ import de.htwg.se.Hero.model.Hero.
  * @param player Array with both player
  * @param currentplayer current activ player
  */
-//noinspection ScalaStyle
 case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: Array[Player]) {
 
     /**
@@ -37,7 +36,7 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
             val x = o._1.last
             field(x)(y) = o._2
         }
-        println(playerside(player))
+        println( playerside(player) )
         field
     }
 
@@ -74,7 +73,7 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
         val multidif = dmg.toFloat/defender.hp
         val basehp = findbasehp(defender.name,player)
         val multiplier = if(multicheck < 0) defender.multiplier - multidif.toInt else defender.multiplier
-        val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt+1) - dmg else defender.hp - dmg
+        val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt + 1) - dmg else defender.hp - dmg
 
         if (multiplier <= 0) {
             field(Y2)(X2) = emptycell()
@@ -105,8 +104,10 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
 
     /**
      * Prints the Board into the console
+ *
      * @return String with entire entries
      */
+    //noinspection ScalaStyle
     def printfield() : String = {
         var text = ""
         for (x <- 0 to 14) {
