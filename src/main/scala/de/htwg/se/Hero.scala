@@ -6,6 +6,7 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
+import scala.collection.JavaConverters._
 import scala.io.StdIn
 
 //noinspection ScalaStyle
@@ -13,7 +14,7 @@ object Hero {
 
     def main(args: Array[String]): Unit = game()
 
-    def playerside(player: Array[Player]): String = {
+    def playerside(player: Vector[Player]): String = {
         val player1 = "│ " + player(0).name + " │"
         val player2 = "│ " + player(1).name + " │"
         val distance = 15*7 - (player1.length + player2.length)
@@ -29,7 +30,7 @@ object Hero {
 
     def marker(): Cell = Cell(" _ ","0",0,0,false,0,Player("none"))
 
-    def creatureliststart(player: Array[Player]): Map[Vector[Int], Cell] = Map(
+    def creatureliststart(player: Vector[Player]): Map[Vector[Int], Cell] = Map(
         Vector(0,0) -> Cell("HA.","2-3",10,3,style = false,28,player(0)),//5
         Vector(14,0) -> Cell(".FA","1-2",4,5,style = false,44,player(1)),//7
         Vector(0,1) -> Cell("MA.","4-6",10,3,style = false,28,player(0)),//5
@@ -54,35 +55,29 @@ object Hero {
             Vector(8,8) -> obstacle(),
             Vector(6,9) -> obstacle())
 
-    def getCreature(field: Array[Array[Cell]],x: Int, y: Int): Cell = field(x)(y)
+    def getCreature(field: Vector[Vector[Cell]],x: Int, y: Int): Cell = field(x)(y)
 
-    def deathcheck (X:Int, Y:Int, field:Array[Array[Cell]]): Array[Array[Cell]] = {
+    def deathcheck (X:Int, Y:Int, field:Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
         if (field(X)(Y).multiplier <= 0) {
-            field(X)(Y) = emptycell()
+            field.updated(X, field(X).updated(Y, emptycell()))
+        } else {
+            field
         }
-        field
     }
 
-    def findbasehp(name: String, player: Array[Player]): Int = {
-        val hp = Array(0)
-
+    def findbasehp(name: String, player: Vector[Player]): Int = {
         for (cell <- creatureliststart(player)) {
-            if (cell._2.name.equals(name)) {
-                hp(0) = cell._2.hp
+            if (cell._2.name.equals(name))
                 return cell._2.hp
-            } else {
-                hp(0) = 0
-            }
         }
-        hp(0)
-
+        0
     }
 
     def lines(): String = "=" * 7 * 15 + "\n"
 
     def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
 
-    def nextplayer(current: String, names: Array[Player]): Player =
+    def nextplayer(current: String, names: Vector[Player]): Player =
         if (current.equals(names(0).toString)) names(1) else names(0)
 
     def currentPlayerOutput(player: Player) : String = lines() + "Current Player: " + player + "\n" + lines()
@@ -105,16 +100,16 @@ object Hero {
         println()
 
         // Initialise board and playerlist
-        val player = Array(player1,player2)
-        val board = Board(Array.ofDim[Cell](11,15),player,Array(player(1)))
+        val player = Vector(player1,player2)
+        val board = Board(Array.ofDim[Cell](11,15),player,Vector(player(1)))
 
         // Fills the board and create a refernece list
         board.start()
         val field = board.field
-        val creatures = Array(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
+        val creatures = Vector(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
             field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
 
-        val creatureTurn = Creaturefield(creatures,Array(creatures(creatures.length-1)),player)
+        val creatureTurn = Creaturefield(creatures,Vector(creatures(creatures.length-1)),player)
 
         while(command(creatureTurn.next(),board)){
             val winner = creatureTurn.winner()
@@ -131,7 +126,7 @@ object Hero {
 
     }
 
-    def printwin(field: Array[Cell],player: Player): String = {
+    def printwin(field: Vector[Cell],player: Player): String = {
 
         val top = lines() + player.name + " won the game!\n" + lines()
         val middle = "Remaining creatures of winner\n\nName:\t\t\tMultiplier:\t\t\tHealth:\n"
@@ -152,7 +147,7 @@ object Hero {
         if(getCreature(board.field, X,Y).player.name == board.currentplayer(0).name) true else false
 
     def command(creature: Cell, field:Board) : Boolean = {
-        val p = Array(nextplayer(field.currentplayer(0).toString,field.player))
+        val p = Vector(nextplayer(field.currentplayer(0).toString,field.player))
         val coordinates = field.postition(creature)
         field.currentplayer(0) = p(0)
         field.clear()
@@ -204,7 +199,7 @@ object Hero {
         true
     }
 
-    def validInput(field:Board, creature:Cell) : Array[String] = {
+    def validInput(field:Board, creature:Cell) : Vector[String] = {
 
         val in = StdIn.readLine().split(" ")
 
@@ -216,9 +211,9 @@ object Hero {
         }
 
         if (in.length == 3) {
-            if (checkmove(in, field) || in(0).equals("a") && creature.style || in(0).equals("a") && checkattack(in, field)) {
-                return in
-            } else if (in(0).equals("i") && isvalid(in)) {
+            if (checkmove(in.toVector, field) || in(0).equals("a") && creature.style || in(0).equals("a") && checkattack(in, field)) {
+                return in.toVector
+            } else if (in(0).equals("i") && isvalid(in.toVector)) {
                 field.creatureinfo(in(1).toInt, in(2).toInt)
                 println("neue Eingabe: ")
                 val out = validInput(field, creature)
@@ -232,16 +227,16 @@ object Hero {
 
         }
 
-        in
+        in.toVector
 
     }
 
-    def checkmove(in:Array[String], field:Board): Boolean =
+    def checkmove(in:Vector[String], field:Board): Boolean =
         if (in(0) == "m" && isvalid(in) &&
             getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) true else false
 
 
-    def checkattack(in:Array[String], board:Board) : Boolean = {
+    def checkattack(in:Vector[String], board:Board) : Boolean = {
         val i = in(2).toInt
         val j = in(1).toInt
         val field = board.field
@@ -261,6 +256,6 @@ object Hero {
         false
     }
 
-    def isvalid(in : Array[String]) : Boolean =
+    def isvalid(in : Vector[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
 }

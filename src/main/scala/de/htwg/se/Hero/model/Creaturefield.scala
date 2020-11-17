@@ -6,7 +6,7 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
-case class Creaturefield(field: Array[Cell], current: Array[Cell], player: Array[Player]) {
+case class Creaturefield(field: Vector[Cell], current: Vector[Cell], player: Vector[Player]) {
 
     def next(): Cell = {
         if (field.indexOf(current(0)) + 1 == field.length) {
