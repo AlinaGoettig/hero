@@ -10,15 +10,14 @@ import java.util.concurrent.ThreadLocalRandom
 
 case class Cell(name: String, dmg: String, hp: Int, speed: Int, style: Boolean, multiplier: Int, player: Player) {
 
-    def printcell(): String = "│ " + name + " │"
+    override def toString(): String = "│ " + name + " │"
 
     def attackable(): String = "│>" + name + "<│"
 
     def attackamount(): Int = {
-        val input = dmg.split("-")
+        val input = Vector(dmg.split("-"))
         val random = ThreadLocalRandom.current()
-        val value = if (input.length == 2) Array(input(0).toInt,input(1).toInt) else Array(input(0).toInt)
-        val amount = if (value.length == 2) random.nextInt(value(0),value(1) + 1) else value(0)
+        val amount = if (input(0).length == 2) random.nextInt(input(0).head.toInt,input(0).last.toInt + 1) else input(0).head.toInt
         amount
     }
 
