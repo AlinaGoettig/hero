@@ -1,7 +1,7 @@
 package de.htwg.se
 
 import de.htwg.se.Hero.model.Hero._
-import de.htwg.se.Hero.model.{Board, Board2, Cell, Player}
+import de.htwg.se.Hero.model.{Board, Cell, Player}
 import org.scalatest._
 
 class HeroSpec extends WordSpec with Matchers {
@@ -19,7 +19,7 @@ class HeroSpec extends WordSpec with Matchers {
     "Test kacka" when { "new" should {
         val creature = Cell("HE.","10-20",2,2,true,2,Player("Test"))
         val players = Vector(Player("Test"),Player("Test2"))
-        val board = Board2(Vector(Vector(emptycell(),emptycell()),Vector(emptycell(),creature)),players,players(0))
+        val board = Board(Vector(Vector(emptycell(),emptycell()),Vector(emptycell(),creature)),players,players(0))
         "have the typ"  in {
             board.toString() should be ("test")
             board.currentcreatureinfo(1,1) should be("Test0")

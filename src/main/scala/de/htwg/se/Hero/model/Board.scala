@@ -7,7 +7,7 @@ package de.htwg.se.Hero.model
  */
 
 import de.htwg.se.Hero.model.Hero.
-{active, creatureliststart, emptycell, fieldnumber, findbasehp, lines, marker, obstaclelist, playerside}
+{active, creatureliststart, emptycell, findbasehp, lines, marker, obstaclelist, playerside}
 
 /*
 case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: Array[Player]) {
@@ -158,38 +158,6 @@ case class Board(field: Array[Array[Cell]],player: Array[Player],currentplayer: 
 //noinspection ScalaStyle
 case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player) {
 
-    override def toString(): String = {
-        var text = ""
-        for (x <- 0 to 14) {
-            text += fieldnumber(x.toString)
-        }
-
-        text += "\n" + lines()
-        for (i <- 0 to 10) {
-            for (j <- 0 to 14) {
-                if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX") && !active(this,i,j)) {
-                    if (((i-1 >= 0 && j-1 >= 0) && field(i-1)(j-1).name.equals(" _ ")) ||
-                        ((i-1 >= 0 && j >= 0) && field(i-1)(j).name.equals(" _ ")) ||
-                        ((i-1 >= 0 && j+1 < 14) && field(i-1)(j+1).name.equals(" _ ")) ||
-                        ((i-1 >= 0 && j >= 0) && field(i-1)(j).name.equals(" _ ")) ||
-                        ((i+1 < 11 && j >= 0) && field(i+1)(j).name.equals(" _ ")) ||
-                        ((i+1 < 11 && j-1 >= 0) && field(i+1)(j-1).name.equals(" _ ")) ||
-                        ((i >= 0 && j+1 < 14) && field(i)(j+1).name.equals(" _ ")) ||
-                        ((i+1 < 11 && j+1 < 14) && field(i+1)(j+1).name.equals(" _ "))) {
-                        text += field(i)(j).attackable()
-                    } else {
-                        text += field(i)(j).toString()
-                    }
-                } else {
-                    text += field(i)(j).toString()
-                }
-
-            }
-            text += " " + i.toString + "\n" + lines()
-        }
-        text
-    }
-
     def currentcreatureinfo(X: Int, Y: Int): String = {
         val attackstyle = if(field(X)(Y).style) "Ranged" else "Melee"
         val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
@@ -204,6 +172,8 @@ case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentpla
             field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
         info
     }
+
+    def lines(): String = "=" * 7 * 15 + "\n"
 }
 
 

@@ -24,61 +24,7 @@ object Hero {
 
     def gameName(): String = "\n ======== Welcome to Hero ======== \n"
 
-    def obstacle(): Cell = Cell("XXX","0",0,0,false,0,Player("none"))
-
-    def emptycell(): Cell = Cell("   ","0",0,0,false,0,Player("none"))
-
-    def marker(): Cell = Cell(" _ ","0",0,0,false,0,Player("none"))
-
-    def creatureliststart(player: Vector[Player]): Map[Vector[Int], Cell] = Map(
-        Vector(0,0) -> Cell("HA.","2-3",10,3,style = false,28,player(0)),//5
-        Vector(14,0) -> Cell(".FA","1-2",4,5,style = false,44,player(1)),//7
-        Vector(0,1) -> Cell("MA.","4-6",10,3,style = false,28,player(0)),//5
-        Vector(14,1) -> Cell("MAG","2-4",13,4,style = true,20,player(1)),//6
-        Vector(0,2) -> Cell("RO.","3-6",10,4,style = true,18,player(0)),//6
-        Vector(14,2) -> Cell(".CE","2-7",25,5,style = false,10,player(1)),//8
-        Vector(0,5) -> Cell("AN.","50",250,12,style = false,2,player(0)),//18
-        Vector(14,5) -> Cell(".DE","30-40",200,11,style = false,2,player(1)),//17
-        Vector(0,8) -> Cell("CH.","20-25",100,6,style = false,4,player(0)),//9
-        Vector(14,8) -> Cell(".EF","16-24",90,9,style = false,4,player(1)),//13
-        Vector(0,9) -> Cell("ZE.","10-12",24,5,style = true,6,player(0)),//7
-        Vector(14,9) -> Cell(".PI","13-17",45,5,style = false,6,player(1)),//7
-        Vector(0,10) -> Cell("CR.","7-10",35,4,style = false,8,player(0)),//6
-        Vector(14,10) -> Cell(".HO","7-9",40,4,style = false,8,player(1)))//6
-
-    def obstaclelist(): Map[Vector[Int], Cell] = Map(
-            Vector(6,1) -> obstacle(),
-            Vector(7,2) -> obstacle(),
-            Vector(5,4) -> obstacle(),
-            Vector(6,4) -> obstacle(),
-            Vector(7,8) -> obstacle(),
-            Vector(8,8) -> obstacle(),
-            Vector(6,9) -> obstacle())
-
-    def getCreature(field: Vector[Vector[Cell]],x: Int, y: Int): Cell = field(x)(y)
-
-    def deathcheck (X:Int, Y:Int, field:Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
-        if (field(X)(Y).multiplier <= 0) {
-            field.updated(X, field(X).updated(Y, emptycell()))
-        } else {
-            field
-        }
-    }
-
-    def findbasehp(name: String, player: Vector[Player]): Int = {
-        for (cell <- creatureliststart(player)) {
-            if (cell._2.name.equals(name))
-                return cell._2.hp
-        }
-        0
-    }
-
     def lines(): String = "=" * 7 * 15 + "\n"
-
-    def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
-
-    def nextplayer(current: String, names: Vector[Player]): Player =
-        if (current.equals(names(0).toString)) names(1) else names(0)
 
     def currentPlayerOutput(player: Player) : String = lines() + "Current Player: " + player + "\n" + lines()
 
@@ -142,9 +88,6 @@ object Hero {
 
         top
     }
-
-    def active(board: Board,X : Int, Y: Int) : Boolean =
-        if(getCreature(board.field, X,Y).player.name == board.currentplayer(0).name) true else false
 
     def command(creature: Cell, field:Board) : Boolean = {
         val p = Vector(nextplayer(field.currentplayer(0).toString,field.player))
