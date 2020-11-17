@@ -1,7 +1,8 @@
-package de.htwg.se.Hero.model
+package de.htwg.se.model
 
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ *
  * @author Ronny Klotz & Alina Göttig
  * @since 9.Nov.2020
  */
@@ -24,7 +25,7 @@ case class Creaturefield(field: Vector[Cell], current: Cell, player: Vector[Play
         }
     }
 
-    def hasCreatures(player: Player) : Boolean = {
+    def hasCreatures(player: Player): Boolean = {
         for (y <- field) {
             if (y.player == player) {
                 return true

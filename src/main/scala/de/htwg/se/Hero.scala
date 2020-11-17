@@ -6,13 +6,34 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
+import de.htwg.se.aview.TUI
+import de.htwg.se.controller.Controller
+import de.htwg.se.model.{Board, Cell, Player}
+
 import scala.collection.JavaConverters._
 import scala.io.StdIn
 
 //noinspection ScalaStyle
 object Hero {
 
-    def main(args: Array[String]): Unit = game()
+    val controller = new Controller()
+    val tui = new TUI(controller)
+    controller.notifyObservers
+
+
+    def main(args: Array[String]): Unit = {
+        println("\n ======== Welcome to Hero ======== \n")
+        println("Made by Alina Göttig & Ronny Klotz\n")
+        var input: String = ""
+
+        do {
+            input = StdIn.readLine()
+            tui.inputLine(input)
+        } while (input != "exit")
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     def playerside(player: Vector[Player]): String = {
         val player1 = "│ " + player(0).name + " │"
@@ -22,17 +43,11 @@ object Hero {
         info
     }
 
-    def gameName(): String = "\n ======== Welcome to Hero ======== \n"
-
     def lines(): String = "=" * 7 * 15 + "\n"
 
     def currentPlayerOutput(player: Player) : String = lines() + "Current Player: " + player + "\n" + lines()
 
     def game(): String = {
-
-        // Print of gamelogo and creator mention
-        println(gameName())
-        println("Made by Alina Göttig & Ronny Klotz\n")
 
         println("=============================")
         println("Enter Player 1 (Castle):")

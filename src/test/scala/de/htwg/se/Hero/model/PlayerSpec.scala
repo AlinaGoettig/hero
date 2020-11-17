@@ -1,5 +1,6 @@
 package de.htwg.se.Hero.model
 
+import de.htwg.se.model.Player
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
