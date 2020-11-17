@@ -6,37 +6,37 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
-case class Creaturefield(field: Vector[Cell], current: Vector[Cell], player: Vector[Player]) {
+case class Creaturefield(field: Vector[Cell], current: Cell, player: Vector[Player]) {
 
-    def next(): Cell = {
-        if (field.indexOf(current(0)) + 1 == field.length) {
-            current(0) = field(0)
-        } else {
-            current(0) = field(field.indexOf(current(0)) + 1)
-        }
-        while (current(0).multiplier <= 0) {
-            if (field.indexOf(current(0)) + 1 == field.length) {
-                current(0) = field(0)
+    def next(): Creaturefield = {
+        if (field.indexOf(current) + 1 == field.length) {
+            if (field(0).multiplier <= 0) {
+                next()
             } else {
-                current(0) = field(field.indexOf(current(0)) + 1)
+                Creaturefield(field, field(0), player)
+            }
+        } else {
+            if (field(field.indexOf(current) + 1).multiplier <= 0) {
+                next()
+            } else {
+                Creaturefield(field, field(field.indexOf(current) + 1), player)
             }
         }
-        current(0)
+    }
+
+    def hasCreatures(player: Player) : Boolean = {
+        for (y <- field) {
+            if (y.player == player) {
+                return true
+            }
+        }
+        false
     }
 
     def winner(): Int = {
-        val sides = Array(false,false)
-        for (y <- field) {
-            if (y.player == player(0)) {
-                sides(0) = true
-            }
-            if (y.player == player(1)) {
-                sides(1) = true
-            }
-        }
-        if (sides(0) && !sides(1)) {
+        if (hasCreatures(player(0)) && !hasCreatures(player(1))) {
             1
-        } else if (!sides(0) && sides(1)) {
+        } else if (!hasCreatures(player(0)) && hasCreatures(player(1))) {
             2
         } else {
             0

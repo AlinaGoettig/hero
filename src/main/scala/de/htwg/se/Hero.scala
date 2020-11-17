@@ -47,8 +47,7 @@ object Hero {
 
         // Initialise board and playerlist
         val player = Vector(player1,player2)
-        val board = Board(Array.ofDim[Cell](11,15),player,Vector(player(1)))
-
+        val board = Board(Vector.ofDim[Cell](11,15),player,player(1))
         // Fills the board and create a refernece list
         board.start()
         val field = board.field
