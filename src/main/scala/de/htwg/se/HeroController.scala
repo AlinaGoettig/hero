@@ -97,21 +97,19 @@ object HeroController {
 
     def lines(): String = "=" * 7 * 15 + "\n"
 
+    def fill(player: Vector[Player], field: Vector[Vector[Cell]], nextstart: Nextstart): Vector[Vector[Cell]] = {
+        val info = nextstart.next()
+        fill(player,field.updated(info._1.head,info._2),nextstart)
+    }
+
+    case class Nextstart(player: Vector[Player]) {
+        val iterator = creatureliststart(player).iterator
+        def next(): (Vector[Int], Cell) = iterator.next()
+    }
+
     def start(player: Vector[Player], field: Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
-        fill(field)
-        val list = creatureliststart(player)
-        for (c <- list) {
-            val y = c._1.head
-            val x = c._1.last
-            field(x)(y) = c._2
-        }
-        val obs = obstaclelist()
-        for (o <- obs) {
-            val y = o._1.head
-            val x = o._1.last
-            field(x)(y) = o._2
-        }
-        field
+        val line1 = Vector.fill(11,14)(emptycell())
+        fill(player,field, Nextstart(player))
     }
 
     def move(Y1:Int,X1:Int, X2:Int, Y2:Int, field: Vector[Vector[Cell]]) : Vector[Vector[Cell]] = {
@@ -161,15 +159,6 @@ object HeroController {
                 if(field(j)(i).name.equals(" _ ")) {
                     field(j)(i) = emptycell()
                 }
-            }
-        }
-        field
-    }
-
-    def fill(field: Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
-        for (i <- 0 to 10) {
-            for (j <- 0 to 14) {
-                field(i)(j) = emptycell()
             }
         }
         field
