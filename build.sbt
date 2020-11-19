@@ -1,10 +1,6 @@
 name          := "Hero"
 organization  := "de.htwg.se"
-/*version       := "0.0.1"
-scalaVersion  := "2.13.3"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
-*/
 libraryDependencies += "junit" % "junit" % "4.8" % "test"
 
 version       := "0.2.0"

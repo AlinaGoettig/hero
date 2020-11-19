@@ -15,7 +15,7 @@ class Controller() extends Observable{
     val player: Vector[Player] = Vector(Player("Castle"),Player("Underground"))
     var board: Board = start()
     val creaurelist: Vector[Cell] = createCreatureList();
-    inizPlayerAndCreautre()
+    inizGame()
 
     //
     def obstacle: Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
@@ -92,7 +92,7 @@ class Controller() extends Observable{
         }
     }
 
-    def inizPlayerAndCreautre(): Boolean= {
+    def inizGame(): Boolean= {
         board = board.copy(board.field,board.player,creaurelist(0).player,creaurelist(0))
         prediction()
         true
@@ -234,13 +234,14 @@ class Controller() extends Observable{
     }
 
     def prediction(): Vector[Vector[Cell]] = {
-        val field = board.field
         val creature = postition(board.currentcreature)
-        for (i <- 0 to 14) {
-            for (j <- 0 to 10) {
+        for (i <- 0 to 10) {
+            for (j <- 0 to 14) {
+                val field = board.field
                 val dist = Math.abs(creature(0) - i) + Math.abs(creature(1) - j)
-                if (field(j)(i).name.equals("   ") && dist <= field(creature(1))(creature(0)).speed) {
-                    board = board.copy(field.updated(j, field(j).updated(i, marker)),
+
+                if (field(i)(j).name.equals("   ") && dist <= field(creature(1))(creature(0)).speed) {
+                    board = Board(field.updated(i, field(i).updated(j, marker)),
                         board.player, board.currentplayer, board.currentcreature)
                 }
             }
