@@ -15,9 +15,9 @@ import scala.io.StdIn
 class TUI(controller: Controller) extends Observer{
 
     controller.add(this)
-
     //noinspection ScalaStyle
-    def inputLine(withOutput: Boolean): Boolean = {
+    //
+    def inputLine(withOutput: Boolean): Vector[String] = {
         if (withOutput) {
             println("=============================")
             println("a X Y   = attack")
@@ -26,23 +26,20 @@ class TUI(controller: Controller) extends Observer{
             println("p       = pass")
             println("exit    = exit game")
             println("=============================")
-        }
+        } else
+            println("Ungültige Eingabe")
         print("neue Eingabe: ")
-        val in = StdIn.readLine().split(" ").toList
+        val input = StdIn.readLine().split(" ").toVector
 
-        if (in.size == 3) {
-            if (isinBoard(in) && (in.head.equals("a") || in.head.equals("m") || in.head.equals("i"))
-                true
+        if (input.size == 3) {
+            if (isinBoard(input) && (input.head.equals("a") || input.head.equals("m") || input.head.equals("i")))
+                input
             else {
-                println("Ungültige Eingabe")
                 inputLine(false)
             }
-        } else if (in.head.equals("p")) {
-            true
-        } else if (in.head.equals("exit")) {
-            false
-        } else {
-            println("Ungültige Eingabe")
+        } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit")))
+            input
+        else {
             inputLine(false)
         }
     }
@@ -56,7 +53,7 @@ class TUI(controller: Controller) extends Observer{
         controller.createNewPlayer(input)
     }
 
-    def isinBoard(in : List[String]) : Boolean =
+    def isinBoard(in : Vector[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
 
     override def update: Unit = controller.output

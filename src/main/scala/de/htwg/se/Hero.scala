@@ -21,16 +21,23 @@ object Hero {
     def main(args: Array[String]): Unit = {
         println("\n ======== Welcome to Hero ======== \n")
         println("Made by Alina Göttig & Ronny Klotz\n")
-        var input: String = ""
 
         for (count <- 1 to 2) {
             tui.createPlayer(count)
         }
 
-        do {
-            input = StdIn.readLine()
-            tui.inputLine(input)
-        } while (input != "exit")
+        var input: Vector[String] = tui.inputLine(true)
+
+        while(!input.head.equals("exit")) {
+            if((input.head.equals("m") && !controller.checkmove(input)) ||
+                (input.head.equals("a") && !controller.checkattack(input)))
+                input = tui.inputLine(false)
+            else {
+                if (input.head.equals("i"))
+                    controller.info(input)
+                input = tui.inputLine(true)
+            }
+        }
 
     }
 
@@ -93,7 +100,7 @@ object Hero {
 
         top
     }
-/*
+
     def command(creature: Cell, field:Board) : Boolean = {
         val p = Vector(nextplayer(field.currentplayer(0).toString,field.player))
         val coordinates = field.postition(creature)
@@ -179,31 +186,7 @@ object Hero {
 
     }
 */
-    def checkmove(in:Vector[String], field:Board): Boolean =
-        if (in(0) == "m" && isvalid(in) &&
-            getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) true else false
-
-
-    def checkattack(in:Vector[String], board:Board) : Boolean = {
-        val i = in(2).toInt
-        val j = in(1).toInt
-        val field = board.field
-        if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
-            && !active(board, i, j)) {
-            if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
-                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
-                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                ((i + 1 < 11 && j >= 0) && field(i + 1)(j).name.equals(" _ ")) ||
-                ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
-                ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
-                ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
-                return true
-            }
-        }
-        false
-    }
-
+    /*
     def isvalid(in : Vector[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
 

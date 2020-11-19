@@ -184,13 +184,13 @@ class Controller() extends Observable{
         fill(player, field, Nextstart(player))
     }
 
-    def move(Y1: Int, X1: Int, X2: Int, Y2: Int, field: Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
-        val cret1 = field(Y1)(X1)
-        val cret2 = field(Y2)(X2)
-        field(Y1)(X1) = cret2
-        field(Y2)(X2) = cret1
+    def move(Y1: Int, X1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
+        val cret1 = board(Y1)(X1)
+        val cret2 = board(Y2)(X2)
+        board(Y1)(X1) = cret2
+        board(Y2)(X2) = cret1
 
-        field
+        board
     }
 
     def attack(Y1: Int, X1: Int, X2: Int, Y2: Int, field: Vector[Vector[Cell]], player: Vector[Player]): String = {
@@ -252,5 +252,40 @@ class Controller() extends Observable{
         printfield() + "\n" + board.currentplayer + "\n" + board.currentcreatureinfo(board.currentcreature)
     }
 
+    def checkmove(in:Vector[String]): Boolean = {
+        if (in(0) == "m" &&
+            getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
+            val creature = postition(board.currentcreature)
+            move(creature.head, creature.tail, in(2).toInt, in(1).toInt)
+            true
+        } else false
+    }
+
+
+    def checkattack(in:Vector[String]) : Boolean = {
+        val i = in(2).toInt
+        val j = in(1).toInt
+        val field = board.field
+        if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
+            && !active(board, i, j)) {
+            if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
+                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
+                ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
+                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
+                ((i + 1 < 11 && j >= 0) && field(i + 1)(j).name.equals(" _ ")) ||
+                ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
+                ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
+                ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
+                val creature = postition(board.currentcreature)
+                attack(creature.head, creature.tail, in(2).toInt, in(1).toInt)
+                return true
+            }
+        }
+        false
+    }
+
+    def info(in:Vector[String]) : String = {
+        board.creatureinfo(in(1).toInt, in(2).toInt)
+    }
 
 }
