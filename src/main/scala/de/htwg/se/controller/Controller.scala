@@ -94,6 +94,7 @@ class Controller() extends Observable{
 
     def inizPlayerAndCreautre(): Boolean= {
         board = board.copy(board.field,board.player,creaurelist(0).player,creaurelist(0))
+        prediction()
         true
     }
 
@@ -232,12 +233,13 @@ class Controller() extends Observable{
         dmg.toString
     }
 
-    def prediction(Y: Int, X: Int): Vector[Vector[Cell]] = {
+    def prediction(): Vector[Vector[Cell]] = {
         val field = board.field
+        val creature = postition(board.currentcreature)
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
-                val dist = Math.abs(X - i) + Math.abs(Y - j)
-                if (field(j)(i).name.equals("   ") && dist <= field(Y)(X).speed) {
+                val dist = Math.abs(creature(0) - i) + Math.abs(creature(1) - j)
+                if (field(j)(i).name.equals("   ") && dist <= field(creature(1))(creature(0)).speed) {
                     board = board.copy(field.updated(j, field(j).updated(i, marker)),
                         board.player, board.currentplayer, board.currentcreature)
                 }

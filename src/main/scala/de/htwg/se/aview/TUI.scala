@@ -17,6 +17,7 @@ class TUI(controller: Controller) extends Observer{
     //noinspection ScalaStyle
     //
     def inputLine(withOutput: Boolean): Vector[String] = {
+        controller.notifyObservers
         if (withOutput) {
             println("=============================")
             println("a X Y   = attack")
@@ -47,5 +48,5 @@ class TUI(controller: Controller) extends Observer{
     def isinBoard(in : Vector[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
 
-    override def update: Unit = controller.output
+    override def update: Unit = print(controller.output)
 }
