@@ -1,6 +1,7 @@
 package de.htwg.se
 
 import de.htwg.se.Hero.model.Hero._
+import de.htwg.se.controller.Controller
 import de.htwg.se.model.{Board, Cell, Player}
 import org.scalatest._
 
@@ -23,10 +24,4 @@ class HeroSpec extends WordSpec with Matchers {
         }
     }}
 
-    "A line" when { "shown" should {
-        val line = lines()
-        "be out of ="  in {
-            line should be("=" * 7 * 15 + "\n")
-        }
-    }}
 }

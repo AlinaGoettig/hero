@@ -8,7 +8,6 @@ package de.htwg.se.aview
 
 import de.htwg.se.utill.Observer
 import de.htwg.se.controller.Controller
-
 import scala.io.StdIn
 
 class TUI(controller: Controller) extends Observer{
@@ -43,15 +42,6 @@ class TUI(controller: Controller) extends Observer{
         else {
             inputLine(false)
         }
-    }
-
-    def createPlayer(number: Int): Unit = {
-        val side = if (number == 1) "(Castle)" else "(Underworld)"
-        println("=============================")
-        println("Enter Player" + number + " " + side + ":")
-        println("=============================")
-        val input = StdIn.readLine()
-        controller.addPlayer(input)
     }
 
     def isinBoard(in : Vector[String]) : Boolean =

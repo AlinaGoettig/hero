@@ -8,7 +8,6 @@ package de.htwg.se.Hero.model
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
-import scala.io.StdIn
 
 //noinspection ScalaStyle
 object Hero {
@@ -21,11 +20,6 @@ object Hero {
     def main(args: Array[String]): Unit = {
         println("\n ======== Welcome to Hero ======== \n")
         println("Made by Alina Göttig & Ronny Klotz\n")
-        var input: String = ""
-
-        for (count <- 1 to 2) {
-            tui.createPlayer(count)
-        }
 
         var input: Vector[String] = tui.inputLine(true)
 

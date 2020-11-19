@@ -11,18 +11,18 @@ import de.htwg.se.utill.Observable
 
 class Controller() extends Observable{
 
-    var board: Board = Board(Vector.fill(11, 14)(emptycell()),player,player(0),emptycell())
-    var player: Vector[Player] = Vector(Player("Player1"),Player("Player2"))
-    val creaurelist = createCreatureList()
+    val player: Vector[Player] = Vector(Player("Castle"),Player("Underground"))
+    var board: Board = start()
+    val creaurelist: Vector[Cell] = createCreatureList()
 
     //
-    def obstacle(): Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
+    def obstacle: Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
 
     //
-    def emptycell(): Cell = Cell("   ", "0", 0, 0, false, 0, Player("none"))
+    def emptycell: Cell = Cell("   ", "0", 0, 0, false, 0, Player("none"))
 
     //
-    def marker(): Cell = Cell(" _ ", "0", 0, 0, false, 0, Player("none"))
+    def marker: Cell = Cell(" _ ", "0", 0, 0, false, 0, Player("none"))
 
     //
     def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
@@ -43,19 +43,19 @@ class Controller() extends Observable{
 
     //
     def obstaclelist(): Map[Vector[Int], Cell] = Map(
-        Vector(6, 1) -> obstacle(),
-        Vector(7, 2) -> obstacle(),
-        Vector(5, 4) -> obstacle(),
-        Vector(6, 4) -> obstacle(),
-        Vector(7, 8) -> obstacle(),
-        Vector(8, 8) -> obstacle(),
-        Vector(6, 9) -> obstacle())
+        Vector(6, 1) -> obstacle,
+        Vector(7, 2) -> obstacle,
+        Vector(5, 4) -> obstacle,
+        Vector(6, 4) -> obstacle,
+        Vector(7, 8) -> obstacle,
+        Vector(8, 8) -> obstacle,
+        Vector(6, 9) -> obstacle)
 
     //
     def deathcheck(X: Int, Y: Int): Boolean = {
         val field = board.field
         if (field(X)(Y).multiplier <= 0) {
-            board = board.copy(field.updated(X, field(X).updated(Y, emptycell())),board.player,board.currentplayer,board.currentcreature)
+            board = board.copy(field.updated(X, field(X).updated(Y, emptycell)),board.player,board.currentplayer,board.currentcreature)
             true
         } else {
             false
@@ -100,18 +100,6 @@ class Controller() extends Observable{
             }
         }
         0
-    }
-
-    //
-    def addPlayer(name: String): String =  {
-        val newPlayer = Player(name)
-        if (player(0).name.equals("Player1")) {
-            player = Vector(newPlayer,player.last)
-            "Player1 is " + newPlayer.name
-        } else {
-            player = Vector(player.head,newPlayer)
-            "Player2 is " + newPlayer.name
-        }
     }
 
     //noinspection ScalaStyle
@@ -174,22 +162,7 @@ class Controller() extends Observable{
     //
     def lines(): String = "=" * 7 * 15 + "\n"
 
-    def fill(player: Vector[Player], field: Vector[Vector[Cell]], nextstart: Nextstart): Vector[Vector[Cell]] = {
-        val info = nextstart.next()
-        fill(player, field.updated(info._1.head, info._2), nextstart)
-    }
-
-    case class Nextstart(player: Vector[Player]) {
-        val iterator = creatureliststart(player).iterator
-
-        def next(): (Vector[Int], Cell) = iterator.next()
-    }
-
-    def start(player: Vector[Player], field: Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
-        val line1 = Vector.fill(11, 14)(emptycell())
-        fill(player, field, Nextstart(player))
-    }
-
+    /*
     def move(Y1: Int, X1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
         val field = board.field
         val cret1 = field(Y1)(X1)
@@ -200,6 +173,25 @@ class Controller() extends Observable{
         field
     }
 
+     */
+
+    def start(): Board = {
+        val emptyboard = Board(Vector.fill(11, 14)(emptycell),player,player(0),emptycell)
+        fill(emptyboard,creatureliststart(player))
+    }
+
+    def fill(board: Board, list: Vector[(Vector[Int], Cell)]): Board = {
+        val test = list.head._1
+        //val newfield = board.field.updated(list.head._1.head,board.field(list.head._1.head)
+            //.updated(list.head._1.tail,board.field(list.head._1.head)(list.head._1.tail)))
+        val newboard = board.copy()
+        if(list.size > 1) {
+            fill(board,list)
+        }
+        board
+    }
+
+    /*
     def attack(Y1: Int, X1: Int, X2: Int, Y2: Int): String = {
         val field = board.field
         val attacker = field(Y1)(X1)
@@ -244,6 +236,8 @@ class Controller() extends Observable{
         }
         field
     }
+
+     */
 
     //
     def postition(creature: Cell): Vector[Int] = {
