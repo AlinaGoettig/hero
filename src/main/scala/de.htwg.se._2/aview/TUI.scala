@@ -1,4 +1,4 @@
-package de.htwg.se.aview
+package de.htwg.se._2.aview
 
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
@@ -6,11 +6,12 @@ package de.htwg.se.aview
  * @since 17.Nov.2020
  */
 
-import de.htwg.se.utill.Observer
-import de.htwg.se.controller.Controller
+import de.htwg.se._2.utill.Observer
+import de.htwg.se._2.controller.Controller
 import scala.io.StdIn
 
 class TUI(controller: Controller) extends Observer{
+    val groeße = Vector(4,2)
 
     controller.add(this)
 
@@ -48,7 +49,8 @@ class TUI(controller: Controller) extends Observer{
     }
 
     def isinBoard(in : Vector[String]) : Boolean =
-        if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
+        if ((in(1).toInt >= 0) && (in(1).toInt <= groeße(0)) &&
+            (in(2).toInt >= 0) && (in(2).toInt <= groeße(1))) true else false
 
     override def update: Unit = print(controller.output)
 }
