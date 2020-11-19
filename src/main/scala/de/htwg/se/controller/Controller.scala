@@ -74,19 +74,17 @@ class Controller() extends Observable{
         val field = creaurelist
         val index = field.indexOf(board.currentcreature) + 1
         if (field.indexOf(board.currentcreature) + 1 == field.length) {
+            board = board.copy(board.field,board.player,field(0).player,field(0))
             if (field(0).multiplier <= 0) {
-                board = board.copy(board.field,board.player,field(0).player,field(0))
                 next()
             } else {
-                board = board.copy(board.field,board.player,field(0).player,field(0))
                 field(0)
             }
         } else {
+            board = board.copy(board.field,board.player,field(index).player,field(index))
             if (field(field.indexOf(board.currentcreature) + 1).multiplier <= 0) {
-                board = board.copy(board.field,board.player,field(index).player,field(index))
                 next()
             } else {
-                board = board.copy(board.field,board.player,field(index).player,field(index))
                 field(index)
             }
         }
@@ -162,18 +160,17 @@ class Controller() extends Observable{
     //
     def lines(): String = "=" * 7 * 15 + "\n"
 
-    /*
     def move(Y1: Int, X1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
         val field = board.field
         val cret1 = field(Y1)(X1)
         val cret2 = field(Y2)(X2)
-        field(Y1)(X1) = cret2
-        field(Y2)(X2) = cret1
+        board = board.copy(field.updated(Y1, field(Y1).updated(X1, cret2)).updated(Y2, field(Y2).updated(X2, cret1)),
+            board.player, board.currentplayer, board.currentcreature)
+        /*board = board.copy(field.updated(Y2, field(Y2).updated(X2, cret1)),
+            board.player, board.currentplayer, board.currentcreature)*/
 
-        field
+        board.field
     }
-
-     */
 
     def start(): Board = {
         val emptyboard = Board(Vector.fill(11, 14)(emptycell),player,player(0),emptycell)
@@ -191,7 +188,6 @@ class Controller() extends Observable{
         board
     }
 
-    /*
     def attack(Y1: Int, X1: Int, X2: Int, Y2: Int): String = {
         val field = board.field
         val attacker = field(Y1)(X1)
@@ -204,9 +200,12 @@ class Controller() extends Observable{
         val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt + 1) - dmg else defender.hp - dmg
 
         if (multiplier <= 0) {
-            field(Y2)(X2) = emptycell()
+            board = board.copy(field.updated(Y2, field(Y2).updated(X2, emptycell)),
+                board.player, board.currentplayer, board.currentcreature)
         } else {
-            field(Y2)(X2) = Cell(defender.name, defender.dmg, hp, defender.speed, defender.style, multiplier, defender.player)
+            board = board.copy(field.updated(Y2, field(Y2).
+                updated(X2, Cell(defender.name, defender.dmg, hp, defender.speed, defender.style, multiplier, defender.player))),
+                board.player, board.currentplayer, board.currentcreature)
         }
 
         dmg.toString
@@ -218,11 +217,12 @@ class Controller() extends Observable{
             for (j <- 0 to 10) {
                 val dist = Math.abs(X - i) + Math.abs(Y - j)
                 if (field(j)(i).name.equals("   ") && dist <= field(Y)(X).speed) {
-                    field(j)(i) = marker()
+                    board = board.copy(field.updated(j, field(j).updated(i, marker)),
+                        board.player, board.currentplayer, board.currentcreature)
                 }
             }
         }
-        field
+        board.field
     }
 
 
@@ -230,14 +230,13 @@ class Controller() extends Observable{
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
                 if (field(j)(i).name.equals(" _ ")) {
-                    field(j)(i) = emptycell()
+                    board = board.copy(field.updated(j, field(j).updated(i, emptycell)),
+                        board.player, board.currentplayer, board.currentcreature)
                 }
             }
         }
-        field
+        board.field
     }
-
-     */
 
     //
     def postition(creature: Cell): Vector[Int] = {
@@ -256,14 +255,12 @@ class Controller() extends Observable{
         printfield() + "\n" + board.currentplayer + "\n" + board.currentcreatureinfo(board.currentcreature)
     }
 
-    def checkmove(in:Vector[String]): Boolean = {
-        if (in(0) == "m" &&
-            getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
+    def checkmove(in:Vector[String]): Boolean =
+        if (in(0) == "m" && getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
             val creature = postition(board.currentcreature)
             move(creature(0), creature(1), in(2).toInt, in(1).toInt)
             true
         } else false
-    }
 
 
     def checkattack(in:Vector[String]) : Boolean = {
@@ -271,7 +268,7 @@ class Controller() extends Observable{
         val j = in(1).toInt
         val field = board.field
         if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
-            && !active(board, i, j)) {
+            && !active(i, j)) {
             if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
                 ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
                 ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
@@ -281,7 +278,7 @@ class Controller() extends Observable{
                 ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
                 ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
                 val creature = postition(board.currentcreature)
-                attack(creature.head, creature.tail, in(2).toInt, in(1).toInt)
+                attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
                 return true
             }
         }
