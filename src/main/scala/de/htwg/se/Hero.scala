@@ -60,9 +60,9 @@ object Hero {
         val creatures = Vector(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
             field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
 
-        val creatureTurn = Creaturefield(creatures,Vector(creatures(creatures.length-1)),player)
+        val creatureTurn = Creaturefield(creatures,creatures(creatures.length-1),player)
 
-        while(command(creatureTurn.next(),board)){
+        while(command(creatureTurn.next().current,board)){
             val winner = creatureTurn.winner()
 
             if (winner == 1) {
@@ -93,7 +93,7 @@ object Hero {
 
         top
     }
-
+/*
     def command(creature: Cell, field:Board) : Boolean = {
         val p = Vector(nextplayer(field.currentplayer(0).toString,field.player))
         val coordinates = field.postition(creature)
@@ -178,7 +178,7 @@ object Hero {
         in.toVector
 
     }
-
+*/
     def checkmove(in:Vector[String], field:Board): Boolean =
         if (in(0) == "m" && isvalid(in) &&
             getCreature(field.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) true else false
