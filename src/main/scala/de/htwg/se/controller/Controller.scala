@@ -103,7 +103,8 @@ class Controller() extends Observable{
     }
 
     //
-    def addPlayer(newPlayer: Player): String =  {
+    def addPlayer(name: String): String =  {
+        val newPlayer = Player(name)
         if (player(0).name.equals("Player1")) {
             player = Vector(newPlayer,player.last)
             "Player1 is " + newPlayer.name
@@ -124,7 +125,7 @@ class Controller() extends Observable{
         text += "\n" + lines()
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
-                if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX") && !active(board, i, j)) {
+                if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX") && !active(i, j)) {
                     if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
                         ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
                         ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
@@ -147,19 +148,24 @@ class Controller() extends Observable{
         text
     }
 
+    //
     def winner(): Int = {
-        if (hasCreatures(player(0)) && !hasCreatures(player(1))) {
+        val player1 = creaurelist.filter(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
+        val player2 = creaurelist.filter(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
+        if (player1.nonEmpty && player2.isEmpty) {
             1
-        } else if (!hasCreatures(player(0)) && hasCreatures(player(1))) {
+        } else if (player1.isEmpty && player2.nonEmpty) {
             2
         } else {
             0
         }
     }
 
-    def active(board: Board, X: Int, Y: Int): Boolean =
+    //
+    def active(X: Int, Y: Int): Boolean =
         if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
 
+    //
     def getCreature(field: Vector[Vector[Cell]], x: Int, y: Int): Cell = field(x)(y)
 
     //
@@ -185,15 +191,17 @@ class Controller() extends Observable{
     }
 
     def move(Y1: Int, X1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
-        val cret1 = board(Y1)(X1)
-        val cret2 = board(Y2)(X2)
-        board(Y1)(X1) = cret2
-        board(Y2)(X2) = cret1
+        val field = board.field
+        val cret1 = field(Y1)(X1)
+        val cret2 = field(Y2)(X2)
+        field(Y1)(X1) = cret2
+        field(Y2)(X2) = cret1
 
-        board
+        field
     }
 
-    def attack(Y1: Int, X1: Int, X2: Int, Y2: Int, field: Vector[Vector[Cell]], player: Vector[Player]): String = {
+    def attack(Y1: Int, X1: Int, X2: Int, Y2: Int): String = {
+        val field = board.field
         val attacker = field(Y1)(X1)
         val defender = field(Y2)(X2)
         val dmg = attacker.attackamount() * attacker.multiplier
@@ -212,7 +220,8 @@ class Controller() extends Observable{
         dmg.toString
     }
 
-    def prediction(Y: Int, X: Int, field: Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
+    def prediction(Y: Int, X: Int): Vector[Vector[Cell]] = {
+        val field = board.field
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
                 val dist = Math.abs(X - i) + Math.abs(Y - j)
@@ -236,16 +245,17 @@ class Controller() extends Observable{
         field
     }
 
-    def postition(creature: Cell, field: Vector[Vector[Cell]]): Vector[Int] = {
-        val posi = Array(Vector(0, 0))
+    //
+    def postition(creature: Cell): Vector[Int] = {
+        val field = board.field
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
                 if (field(i)(j).equals(creature)) {
-                    posi(0) = Vector(i, j)
+                    return Vector(i, j)
                 }
             }
         }
-        posi(0)
+        Vector(-1,-1)
     }
 
     def output: String = {

@@ -15,6 +15,7 @@ import scala.io.StdIn
 class TUI(controller: Controller) extends Observer{
 
     controller.add(this)
+
     //noinspection ScalaStyle
     //
     def inputLine(withOutput: Boolean): Vector[String] = {
@@ -35,6 +36,7 @@ class TUI(controller: Controller) extends Observer{
             if (isinBoard(input) && (input.head.equals("a") || input.head.equals("m") || input.head.equals("i")))
                 input
             else {
+                println("Ungültige Eingabe")
                 inputLine(false)
             }
         } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit")))
@@ -50,7 +52,7 @@ class TUI(controller: Controller) extends Observer{
         println("Enter Player" + number + " " + side + ":")
         println("=============================")
         val input = StdIn.readLine()
-        controller.createNewPlayer(input)
+        controller.addPlayer(input)
     }
 
     def isinBoard(in : Vector[String]) : Boolean =
