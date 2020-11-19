@@ -17,8 +17,8 @@ class TUI(controller: Controller) extends Observer{
     //noinspection ScalaStyle
     //
     def inputLine(withOutput: Boolean): Vector[String] = {
-        controller.notifyObservers
         if (withOutput) {
+            controller.notifyObservers
             println("=============================")
             println("a X Y   = attack")
             println("m X Y   = move")

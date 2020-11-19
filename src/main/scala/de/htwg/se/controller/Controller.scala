@@ -168,14 +168,14 @@ class Controller() extends Observable{
     //
     def lines(): String = "=" * 7 * 15 + "\n"
 
-    def move(Y1: Int, X1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
+    def move(X1: Int, Y1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
         val field = board.field
-        val cret1 = field(Y1)(X1)
-        val cret2 = field(Y2)(X2)
-        board = board.copy(field.updated(Y1, field(Y1).updated(X1, cret2)).updated(Y2, field(Y2).updated(X2, cret1)),
+        val cret1 = field(X1)(Y1)
+        val cret2 = field(X2)(Y2)
+        board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)),
             board.player, board.currentplayer, board.currentcreature)
-        /*board = board.copy(field.updated(Y2, field(Y2).updated(X2, cret1)),
-            board.player, board.currentplayer, board.currentcreature)*/
+        board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)),
+            board.player, board.currentplayer, board.currentcreature)
 
         board.field
     }
