@@ -94,7 +94,6 @@ class Controller() extends Observable{
 
     def inizGame(): Boolean= {
         board = board.copy(board.field,board.player,creaurelist(0).player,creaurelist(0))
-        prediction()
         true
     }
 
@@ -239,8 +238,7 @@ class Controller() extends Observable{
             for (j <- 0 to 14) {
                 val field = board.field
                 val dist = Math.abs(creature(0) - i) + Math.abs(creature(1) - j)
-
-                if (field(i)(j).name.equals("   ") && dist <= field(creature(1))(creature(0)).speed) {
+                if (field(i)(j).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
                     board = Board(field.updated(i, field(i).updated(j, marker)),
                         board.player, board.currentplayer, board.currentcreature)
                 }

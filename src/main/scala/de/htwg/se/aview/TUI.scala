@@ -18,6 +18,7 @@ class TUI(controller: Controller) extends Observer{
     //
     def inputLine(withOutput: Boolean): Vector[String] = {
         if (withOutput) {
+            controller.prediction()
             controller.notifyObservers
             println("=============================")
             println("a X Y   = attack")
