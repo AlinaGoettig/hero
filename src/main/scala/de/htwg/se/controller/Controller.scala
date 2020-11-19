@@ -30,9 +30,9 @@ class Controller() extends Observable{
     def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
         Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = false, 28, player(0)), //5
         Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)), //7
-        Vector(0, 1) -> Cell("MA.", "4-6", 10, 3, style = false, 28, player(0)), //5
+        Vector(0, 1) -> Cell("MA.", "4-6", 10, 3, style = true, 28, player(0)), //5
         Vector(14, 1) -> Cell("MAG", "2-4", 13, 4, style = true, 20, player(1)), //6
-        Vector(0, 2) -> Cell("RO.", "3-6", 10, 4, style = true, 18, player(0)), //6
+        Vector(0, 2) -> Cell("RO.", "3-6", 10, 4, style = false, 18, player(0)), //6
         Vector(14, 2) -> Cell(".CE", "2-7", 25, 5, style = false, 10, player(1)), //8
         Vector(0, 5) -> Cell("AN.", "50", 250, 12, style = false, 2, player(0)), //18
         Vector(14, 5) -> Cell(".DE", "30-40", 200, 11, style = false, 2, player(1)), //17
@@ -97,6 +97,14 @@ class Controller() extends Observable{
         board = board.copy(board.field,board.player,creaurelist(creaurelist.length-1).player,creaurelist(creaurelist.length-1))
         notifyObservers
         true
+    }
+
+    def printSidesStart(): String = {
+        val player1 = "| " + player(0).name + " |"
+        val player2 = "| " + player(1).name + " |"
+        val middle = player1 + " " * (105 - player1.length - player2.length) + player2
+
+        lines() + middle + "\n" + lines()
     }
 
     //
@@ -212,7 +220,7 @@ class Controller() extends Observable{
         }
     }
 
-    def attack(Y1: Int, X1: Int, X2: Int, Y2: Int): String = {
+    def attack(Y1: Int, X1: Int, Y2: Int, X2: Int): String = {
         val field = board.field
         val attacker = field(Y1)(X1)
         val defender = field(Y2)(X2)
@@ -278,7 +286,7 @@ class Controller() extends Observable{
     }
 
     def output: String = {
-        printfield() + "\n" + board.currentplayer + "\n" + board.currentcreatureinfo(board.currentcreature)
+        printfield() + "\n" + board.currentplayerinfo() + "\n" + board.currentcreatureinfo()
     }
 
     def checkmove(in:Vector[String]): Boolean =
@@ -295,7 +303,11 @@ class Controller() extends Observable{
         val field = board.field
         if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
             && !active(i, j)) {
-            if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
+            val creature = postition(board.currentcreature)
+            if (board.currentcreature.style) {
+                attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
+                return true;
+            } else if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
                 ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
                 ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
                 ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
@@ -303,7 +315,6 @@ class Controller() extends Observable{
                 ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
                 ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
                 ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
-                val creature = postition(board.currentcreature)
                 attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
                 return true
             }

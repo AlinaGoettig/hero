@@ -39,9 +39,9 @@ class TUI(controller: Controller) extends Observer{
                 println("Ungültige Eingabe")
                 inputLine(false)
             }
-        } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit")))
+        } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit"))) {
             input
-        else {
+        } else {
             inputLine(false)
         }
     }

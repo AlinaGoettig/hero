@@ -9,11 +9,11 @@ package de.htwg.se.model
 //noinspection ScalaStyle
 case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player, currentcreature: Cell) {
 
-    def currentcreatureinfo(creature: Cell): String = {
-        val attackstyle = if (creature.style) "Ranged" else "Melee"
+    def currentcreatureinfo(): String = {
+        val attackstyle = if (currentcreature.style) "Ranged" else "Melee"
         val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
-            creature.name + "\t\t\t\t\t\t\t" + creature.multiplier + "\t\t\t\t\t\t" + creature.hp + "\t\t\t\t" +
-            creature.dmg + " " * (20 - creature.dmg.length) + attackstyle + "\n" + lines()
+            currentcreature.name + "\t\t\t\t\t\t\t" + currentcreature.multiplier + "\t\t\t\t\t\t" + currentcreature.hp + "\t\t\t\t" +
+            currentcreature.dmg + " " * (20 - currentcreature.dmg.length) + attackstyle + "\n" + lines()
         info
     }
 
@@ -21,6 +21,12 @@ case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentpla
         val shortline = "=" * 33 + "\n"
         val info = "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
             field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
+        info
+    }
+
+    def currentplayerinfo(): String = {
+        val shortline = "=" * 2 + " Current Player: " + "=" * 86
+        val info = shortline + "\n" + currentplayer.name + "\n" + lines()
         info
     }
 
