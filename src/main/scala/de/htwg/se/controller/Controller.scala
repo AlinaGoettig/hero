@@ -9,11 +9,13 @@ package de.htwg.se.controller
 import de.htwg.se.model.{Board, Cell, Player}
 import de.htwg.se.utill.Observable
 
+//noinspection ScalaStyle
 class Controller() extends Observable{
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Underground"))
     var board: Board = start()
-    val creaurelist: Vector[Cell] = createCreatureList()
+    val creaurelist: Vector[Cell] = createCreatureList();
+    inizPlayerAndCreautre()
 
     //
     def obstacle: Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
@@ -42,7 +44,7 @@ class Controller() extends Observable{
         Vector(14, 10) -> Cell(".HO", "7-9", 40, 4, style = false, 8, player(1))) //6
 
     //
-    def obstaclelist(): Map[Vector[Int], Cell] = Map(
+    def obstaclelist(): Vector[(Vector[Int], Cell)] = Vector(
         Vector(6, 1) -> obstacle,
         Vector(7, 2) -> obstacle,
         Vector(5, 4) -> obstacle,
@@ -88,6 +90,11 @@ class Controller() extends Observable{
                 field(index)
             }
         }
+    }
+
+    def inizPlayerAndCreautre(): Boolean= {
+        board = board.copy(board.field,board.player,creaurelist(0).player,creaurelist(0))
+        true
     }
 
     //
@@ -173,19 +180,33 @@ class Controller() extends Observable{
     }
 
     def start(): Board = {
-        val emptyboard = Board(Vector.fill(11, 14)(emptycell),player,player(0),emptycell)
-        fill(emptyboard,creatureliststart(player))
+        val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell)
+        placeCreatures(emptyboard,creatureliststart(player),obstaclelist())
     }
 
-    def fill(board: Board, list: Vector[(Vector[Int], Cell)]): Board = {
-        val test = list.head._1
-        //val newfield = board.field.updated(list.head._1.head,board.field(list.head._1.head)
-            //.updated(list.head._1.tail,board.field(list.head._1.head)(list.head._1.tail)))
-        val newboard = board.copy()
+    def placeCreatures(board: Board, list: Vector[(Vector[Int], Cell)], obstacles: Vector[(Vector[Int], Cell)]): Board = {
+
+        val coor = list.head._1
+
+        val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),list.head._2))
+            ,board.player,board.currentplayer,board.currentcreature)
+
         if(list.size > 1) {
-            fill(board,list)
+            placeCreatures(creatureadd,list.slice(1,list.length),obstacles)
+        } else {
+            placeObstacles(board,obstacles)
         }
-        board
+    }
+
+    def placeObstacles(board: Board, obstacles: Vector[(Vector[Int], Cell)]): Board = {
+        val cooro = obstacles.head._1
+        val obstacleadd = board.copy(board.field.updated(cooro(1),board.field(cooro(1)).updated(cooro(0),obstacles.head._2))
+            ,board.player,board.currentplayer,board.currentcreature)
+        if(obstacles.size > 1) {
+            placeObstacles(obstacleadd,obstacles.slice(1,obstacles.length))
+        } else {
+            obstacleadd
+        }
     }
 
     def attack(Y1: Int, X1: Int, X2: Int, Y2: Int): String = {

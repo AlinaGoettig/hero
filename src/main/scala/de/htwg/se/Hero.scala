@@ -23,6 +23,7 @@ object Hero {
 
         var input: Vector[String] = tui.inputLine(true)
 
+        /*
         while(!input.head.equals("exit")) {
             if((input.head.equals("m") && !controller.checkmove(input)) ||
                 (input.head.equals("a") && !controller.checkattack(input)))
@@ -33,6 +34,8 @@ object Hero {
                 input = tui.inputLine(true)
             }
         }
+
+         */
 
     }
 
