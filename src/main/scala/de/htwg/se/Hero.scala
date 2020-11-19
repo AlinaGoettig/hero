@@ -8,8 +8,6 @@ package de.htwg.se.Hero.model
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
-import de.htwg.se.model.{Board, Cell, Player}
-
 import scala.io.StdIn
 
 //noinspection ScalaStyle
@@ -38,6 +36,7 @@ object Hero {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /*
     def playerside(player: Vector[Player]): String = {
         val player1 = "│ " + player(0).name + " │"
         val player2 = "│ " + player(1).name + " │"
@@ -207,4 +206,6 @@ object Hero {
 
     def isvalid(in : Vector[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
+
+     */
 }

@@ -1,6 +1,12 @@
 package de.htwg.se.controller
 
-import de.htwg.se.model.{Board, Cell, Creaturefield, Player}
+/**
+ * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ * @author Ronny Klotz & Alina Göttig
+ * @since 17.Nov.2020
+ */
+
+import de.htwg.se.model.{Board, Cell, Player}
 import de.htwg.se.utill.Observable
 
 class Controller() extends Observable{
@@ -139,6 +145,16 @@ class Controller() extends Observable{
             text += " " + i.toString + "\n" + lines()
         }
         text
+    }
+
+    def winner(): Int = {
+        if (hasCreatures(player(0)) && !hasCreatures(player(1))) {
+            1
+        } else if (!hasCreatures(player(0)) && hasCreatures(player(1))) {
+            2
+        } else {
+            0
+        }
     }
 
     def active(board: Board, X: Int, Y: Int): Boolean =
