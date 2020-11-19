@@ -312,6 +312,7 @@ class Controller() extends Observable{
     }
 
     def info(in:Vector[String]) : String = {
+        print(board.creatureinfo(in(1).toInt, in(2).toInt))
         board.creatureinfo(in(1).toInt, in(2).toInt)
     }
 

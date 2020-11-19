@@ -27,12 +27,12 @@ object Hero {
             if((input.head.equals("m") && !controller.checkmove(input)) ||
                 (input.head.equals("a") && !controller.checkattack(input))) {
                 input = tui.inputLine(false)
+            } else if (input.head.equals("i")) {
+                controller.info(input)
+                input = tui.inputLine(false)
             } else {
-                if (input.head.equals("i"))
-                    controller.info(input)
                 input = tui.inputLine(true)
             }
         }
-
     }
 }
