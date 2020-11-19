@@ -266,7 +266,7 @@ class Controller() extends Observable{
         if (in(0) == "m" &&
             getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
             val creature = postition(board.currentcreature)
-            move(creature.head, creature.tail, in(2).toInt, in(1).toInt)
+            move(creature(0), creature(1), in(2).toInt, in(1).toInt)
             true
         } else false
     }

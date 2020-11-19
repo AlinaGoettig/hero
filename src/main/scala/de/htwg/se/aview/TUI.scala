@@ -6,7 +6,6 @@ package de.htwg.se.aview
  * @since 17.Nov.2020
  */
 
-import de.htwg.se.Hero.model.Hero.{currentPlayerOutput, lines, validInput}
 import de.htwg.se.utill.Observer
 import de.htwg.se.controller.Controller
 
