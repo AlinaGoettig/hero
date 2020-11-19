@@ -87,13 +87,15 @@ class Controller() extends Observable{
             if (field(field.indexOf(board.currentcreature) + 1).multiplier <= 0) {
                 next()
             } else {
+                clear()
                 field(index)
             }
         }
     }
 
     def inizGame(): Boolean= {
-        board = board.copy(board.field,board.player,creaurelist(0).player,creaurelist(0))
+        board = board.copy(board.field,board.player,creaurelist(creaurelist.length-1).player,creaurelist(creaurelist.length-1))
+        notifyObservers
         true
     }
 
@@ -181,7 +183,8 @@ class Controller() extends Observable{
 
     def start(): Board = {
         val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell)
-        placeCreatures(emptyboard,creatureliststart(player),obstaclelist())
+        val board = placeCreatures(emptyboard,creatureliststart(player),obstaclelist())
+        board
     }
 
     def placeCreatures(board: Board, list: Vector[(Vector[Int], Cell)], obstacles: Vector[(Vector[Int], Cell)]): Board = {
@@ -234,12 +237,12 @@ class Controller() extends Observable{
 
     def prediction(): Vector[Vector[Cell]] = {
         val creature = postition(board.currentcreature)
-        for (i <- 0 to 10) {
-            for (j <- 0 to 14) {
+        for (j <- 0 to 10) {
+            for (i <- 0 to 14) {
                 val field = board.field
-                val dist = Math.abs(creature(0) - i) + Math.abs(creature(1) - j)
-                if (field(i)(j).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
-                    board = Board(field.updated(i, field(i).updated(j, marker)),
+                val dist = Math.abs(creature(0) - j) + Math.abs(creature(1) - i)
+                if (field(j)(i).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
+                    board = Board(field.updated(j, field(j).updated(i, marker)),
                         board.player, board.currentplayer, board.currentcreature)
                 }
             }
@@ -248,9 +251,10 @@ class Controller() extends Observable{
     }
 
 
-    def clear(field: Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
+    def clear(): Vector[Vector[Cell]] = {
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
+                val field = board.field
                 if (field(j)(i).name.equals(" _ ")) {
                     board = board.copy(field.updated(j, field(j).updated(i, emptycell)),
                         board.player, board.currentplayer, board.currentcreature)

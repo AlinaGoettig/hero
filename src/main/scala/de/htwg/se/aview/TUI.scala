@@ -18,6 +18,7 @@ class TUI(controller: Controller) extends Observer{
     //
     def inputLine(withOutput: Boolean): Vector[String] = {
         if (withOutput) {
+            controller.next()
             controller.prediction()
             controller.notifyObservers
             println("=============================")
@@ -33,9 +34,9 @@ class TUI(controller: Controller) extends Observer{
         val input = StdIn.readLine().split(" ").toVector
 
         if (input.size == 3) {
-            if (isinBoard(input) && (input.head.equals("a") || input.head.equals("m") || input.head.equals("i")))
+            if (isinBoard(input) && (input.head.equals("a") || input.head.equals("m") || input.head.equals("i"))) {
                 input
-            else {
+            } else {
                 println("Ungültige Eingabe")
                 inputLine(false)
             }
@@ -44,6 +45,7 @@ class TUI(controller: Controller) extends Observer{
         else {
             inputLine(false)
         }
+        input
     }
 
     def isinBoard(in : Vector[String]) : Boolean =

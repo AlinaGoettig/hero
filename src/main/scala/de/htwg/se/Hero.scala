@@ -25,9 +25,9 @@ object Hero {
 
         while(!input.head.equals("exit")) {
             if((input.head.equals("m") && !controller.checkmove(input)) ||
-                (input.head.equals("a") && !controller.checkattack(input)))
+                (input.head.equals("a") && !controller.checkattack(input))) {
                 input = tui.inputLine(false)
-            else {
+            } else {
                 if (input.head.equals("i"))
                     controller.info(input)
                 input = tui.inputLine(true)
