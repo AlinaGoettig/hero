@@ -5,17 +5,21 @@ import de.htwg.se.utill.Observable
 
 class Controller() extends Observable{
 
-    var field: Vector[Vector[Cell]] = Vector.fill(11, 14)(emptycell())
+    var board: Board = Board(Vector.fill(11, 14)(emptycell()),player,player(0),emptycell())
     var player: Vector[Player] = Vector(Player("Player1"),Player("Player2"))
-    var board: Board = Board(field,player,player(0))
+    val creaurelist = createCreatureList()
 
+    //
     def obstacle(): Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
 
+    //
     def emptycell(): Cell = Cell("   ", "0", 0, 0, false, 0, Player("none"))
 
+    //
     def marker(): Cell = Cell(" _ ", "0", 0, 0, false, 0, Player("none"))
 
-    def creatureliststart(player: Vector[Player]): Map[Vector[Int], Cell] = Map(
+    //
+    def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
         Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = false, 28, player(0)), //5
         Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)), //7
         Vector(0, 1) -> Cell("MA.", "4-6", 10, 3, style = false, 28, player(0)), //5
@@ -31,6 +35,7 @@ class Controller() extends Observable{
         Vector(0, 10) -> Cell("CR.", "7-10", 35, 4, style = false, 8, player(0)), //6
         Vector(14, 10) -> Cell(".HO", "7-9", 40, 4, style = false, 8, player(1))) //6
 
+    //
     def obstaclelist(): Map[Vector[Int], Cell] = Map(
         Vector(6, 1) -> obstacle(),
         Vector(7, 2) -> obstacle(),
@@ -40,15 +45,49 @@ class Controller() extends Observable{
         Vector(8, 8) -> obstacle(),
         Vector(6, 9) -> obstacle())
 
-    def deathcheck(X: Int, Y: Int, field: Vector[Vector[Cell]]): Vector[Vector[Cell]] = {
+    //
+    def deathcheck(X: Int, Y: Int): Boolean = {
+        val field = board.field
         if (field(X)(Y).multiplier <= 0) {
-            field.updated(X, field(X).updated(Y, emptycell()))
+            board = board.copy(field.updated(X, field(X).updated(Y, emptycell())),board.player,board.currentplayer,board.currentcreature)
+            true
         } else {
-            field
+            false
         }
     }
 
-    def findbasehp(name: String, player: Vector[Player]): Int = {
+    //
+    def createCreatureList(): Vector[Cell] = {
+        val field = board.field
+        Vector(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
+            field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
+    }
+
+    //
+    def next(): Cell = {
+        val field = creaurelist
+        val index = field.indexOf(board.currentcreature) + 1
+        if (field.indexOf(board.currentcreature) + 1 == field.length) {
+            if (field(0).multiplier <= 0) {
+                board = board.copy(board.field,board.player,field(0).player,field(0))
+                next()
+            } else {
+                board = board.copy(board.field,board.player,field(0).player,field(0))
+                field(0)
+            }
+        } else {
+            if (field(field.indexOf(board.currentcreature) + 1).multiplier <= 0) {
+                board = board.copy(board.field,board.player,field(index).player,field(index))
+                next()
+            } else {
+                board = board.copy(board.field,board.player,field(index).player,field(index))
+                field(index)
+            }
+        }
+    }
+
+    //
+    def findbasehp(name: String): Int = {
         for (cell <- creatureliststart(player)) {
             if (cell._2.name.equals(name)) {
                 return cell._2.hp
@@ -57,13 +96,20 @@ class Controller() extends Observable{
         0
     }
 
-    def createNewPlayer(name: String): Player = Player(name)
-
-    def nextplayer(current: String, names: Vector[Player]): Player =
-        if (current.equals(names(0).toString)) names(1) else names(0)
+    //
+    def addPlayer(newPlayer: Player): String =  {
+        if (player(0).name.equals("Player1")) {
+            player = Vector(newPlayer,player.last)
+            "Player1 is " + newPlayer.name
+        } else {
+            player = Vector(player.head,newPlayer)
+            "Player2 is " + newPlayer.name
+        }
+    }
 
     //noinspection ScalaStyle
-    def printfield(field: Vector[Vector[Cell]], board: Board): String = {
+    def printfield(): String = {
+        val field = board.field
         var text = ""
         for (x <- 0 to 14) {
             text += fieldnumber(x.toString)
@@ -100,8 +146,10 @@ class Controller() extends Observable{
 
     def getCreature(field: Vector[Vector[Cell]], x: Int, y: Int): Cell = field(x)(y)
 
+    //
     def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
 
+    //
     def lines(): String = "=" * 7 * 15 + "\n"
 
     def fill(player: Vector[Player], field: Vector[Vector[Cell]], nextstart: Nextstart): Vector[Vector[Cell]] = {
@@ -135,7 +183,7 @@ class Controller() extends Observable{
         val dmg = attacker.attackamount() * attacker.multiplier
         val multicheck = defender.hp - dmg
         val multidif = dmg.toFloat / defender.hp
-        val basehp = findbasehp(defender.name, player)
+        val basehp = findbasehp(defender.name)
         val multiplier = if (multicheck < 0) defender.multiplier - multidif.toInt else defender.multiplier
         val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt + 1) - dmg else defender.hp - dmg
 
@@ -185,21 +233,8 @@ class Controller() extends Observable{
     }
 
     def output: String = {
-        printfield() + "\n" +
+        printfield() + "\n" + board.currentplayer + "\n" + board.currentcreatureinfo(board.currentcreature)
     }
 
-    def currentcreatureinfo(X: Int, Y: Int): String = {
-        val attackstyle = if (field(X)(Y).style) "Ranged" else "Melee"
-        val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
-            field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t" +
-            field(X)(Y).dmg + " " * (20 - field(X)(Y).dmg.length) + attackstyle + "\n" + lines()
-        info
-    }
 
-    def creatureinfo(Y: Int, X: Int): String = {
-        val shortline = "=" * 33 + "\n"
-        val info = "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
-            field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
-        info
-    }
 }

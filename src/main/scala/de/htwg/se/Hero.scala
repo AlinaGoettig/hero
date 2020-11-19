@@ -10,7 +10,6 @@ import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
 import de.htwg.se.model.{Board, Cell, Player}
 
-import scala.collection.JavaConverters._
 import scala.io.StdIn
 
 //noinspection ScalaStyle
@@ -25,6 +24,10 @@ object Hero {
         println("\n ======== Welcome to Hero ======== \n")
         println("Made by Alina Göttig & Ronny Klotz\n")
         var input: String = ""
+
+        for (count <- 1 to 2) {
+            tui.createPlayer(count)
+        }
 
         do {
             input = StdIn.readLine()
@@ -48,17 +51,6 @@ object Hero {
     def currentPlayerOutput(player: Player) : String = lines() + "Current Player: " + player + "\n" + lines()
 
     def game(): String = {
-
-        println("=============================")
-        println("Enter Player 1 (Castle):")
-        println("=============================")
-        val player1 = Player(StdIn.readLine())
-
-        println("=============================")
-        println("Enter Player 2 (Underworld):")
-        println("=============================")
-        val player2 = Player(StdIn.readLine())
-        println()
 
         // Initialise board and playerlist
         val player = Vector(player1,player2)

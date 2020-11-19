@@ -1,13 +1,13 @@
 package de.htwg.se.model
 
 //noinspection ScalaStyle
-case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player) {
+case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player, currentcreature: Cell) {
 
-    def currentcreatureinfo(X: Int, Y: Int): String = {
-        val attackstyle = if (field(X)(Y).style) "Ranged" else "Melee"
+    def currentcreatureinfo(creature: Cell): String = {
+        val attackstyle = if (creature.style) "Ranged" else "Melee"
         val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
-            field(X)(Y).name + "\t\t\t\t\t\t\t" + field(X)(Y).multiplier + "\t\t\t\t\t\t" + field(X)(Y).hp + "\t\t\t\t" +
-            field(X)(Y).dmg + " " * (20 - field(X)(Y).dmg.length) + attackstyle + "\n" + lines()
+            creature.name + "\t\t\t\t\t\t\t" + creature.multiplier + "\t\t\t\t\t\t" + creature.hp + "\t\t\t\t" +
+            creature.dmg + " " * (20 - creature.dmg.length) + attackstyle + "\n" + lines()
         info
     }
 

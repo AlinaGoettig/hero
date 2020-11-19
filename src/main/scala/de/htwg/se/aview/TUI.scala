@@ -3,6 +3,8 @@ package de.htwg.se.aview
 import de.htwg.se.utill.Observer
 import de.htwg.se.controller.Controller
 
+import scala.io.StdIn
+
 class TUI(controller: Controller) extends Observer{
 
     controller.add(this)
@@ -29,6 +31,15 @@ class TUI(controller: Controller) extends Observer{
             println("Ungültige Eingabe")
             println("neue Eingabe: ")
         }
+    }
+
+    def createPlayer(number: Int): Unit = {
+        val side = if (number == 1) "(Castle)" else "(Underworld)"
+        println("=============================")
+        println("Enter Player" + number + " " + side + ":")
+        println("=============================")
+        val input = StdIn.readLine()
+        controller.createNewPlayer(input)
     }
 
     def isvalid(in : List[String]) : Boolean =
