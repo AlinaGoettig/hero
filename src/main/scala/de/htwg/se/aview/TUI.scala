@@ -28,8 +28,7 @@ class TUI(controller: Controller) extends Observer{
             println("p       = pass")
             println("exit    = exit game")
             println("=============================")
-        } else
-            println("Ungültige Eingabe")
+        }
         print("neue Eingabe: ")
         val input = StdIn.readLine().split(" ").toVector
 
@@ -45,7 +44,6 @@ class TUI(controller: Controller) extends Observer{
         else {
             inputLine(false)
         }
-        input
     }
 
     def isinBoard(in : Vector[String]) : Boolean =
