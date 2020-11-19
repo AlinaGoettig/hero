@@ -6,10 +6,8 @@ package de.htwg.se.aview
  * @since 17.Nov.2020
  */
 
-import de.htwg.se.Hero.model.Hero.{currentPlayerOutput, lines, validInput}
 import de.htwg.se.utill.Observer
 import de.htwg.se.controller.Controller
-
 import scala.io.StdIn
 
 class TUI(controller: Controller) extends Observer{
@@ -31,7 +29,7 @@ class TUI(controller: Controller) extends Observer{
         val in = StdIn.readLine().split(" ").toList
 
         if (in.size == 3) {
-            if (isinBoard(in) && (in.head.equals("a") || in.head.equals("m") || in.head.equals("i"))
+            if (isinBoard(in) && (in.head.equals("a") || in.head.equals("m") || in.head.equals("i")))
                 true
             else {
                 println("Ungültige Eingabe")
@@ -53,7 +51,7 @@ class TUI(controller: Controller) extends Observer{
         println("Enter Player" + number + " " + side + ":")
         println("=============================")
         val input = StdIn.readLine()
-        controller.createNewPlayer(input)
+        controller.addPlayer(input)
     }
 
     def isinBoard(in : List[String]) : Boolean =

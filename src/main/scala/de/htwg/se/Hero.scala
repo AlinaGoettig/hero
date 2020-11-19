@@ -8,7 +8,6 @@ package de.htwg.se.Hero.model
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
-import scala.io.StdIn
 
 //noinspection ScalaStyle
 object Hero {
@@ -28,8 +27,7 @@ object Hero {
         }
 
         do {
-            input = StdIn.readLine()
-            tui.inputLine(input)
+            tui.inputLine(true)
         } while (input != "exit")
 
     }
