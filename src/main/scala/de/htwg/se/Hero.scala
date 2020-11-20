@@ -19,6 +19,7 @@ object Hero {
     def main(args: Array[String]): Unit = {
         println -> "\n ======== Welcome to Hero ======== \n"
         println -> "Made by Alina Göttig & Ronny Klotz\n"
+        println -> "Version 1.0 MVC Structur"
         print(controller.printSidesStart())
 
         var input: Vector[String] = tui.inputLine(true)
@@ -29,6 +30,8 @@ object Hero {
                 input = tui.inputLine(false)
             } else if (input.head.equals("i")) {
                 controller.info(input)
+                input = tui.inputLine(false)
+            } else if (input.head.equals("CHEAT")) {
                 input = tui.inputLine(false)
             } else {
                 input = tui.inputLine(true)

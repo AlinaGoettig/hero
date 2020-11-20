@@ -97,7 +97,7 @@ class Controller() extends Observable{
     // --------------------------------------------------- Start -------------------------------------------------------
 
     def start(): Board = {
-        val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell,List.empty)
+        val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell,List.empty,List.empty)
         val board = placeCreatures(emptyboard,creatureliststart(player),obstaclelist(), true)
         board
     }
@@ -187,20 +187,25 @@ class Controller() extends Observable{
 
         val newCell = Cell(defender.name, defender.dmg, hp, defender.speed, defender.style, multiplier, defender.player)
 
-        val tmp = board.list
-        val index = tmp.indexOf(defender)
-        val (left, _ :: right) = tmp.splitAt(index)
-        val newList = left ++ List(newCell) ++ right
-        board = board.copy(board.field,board.player,board.currentplayer,board.currentcreature,newList)
+        replaceCreatureInList(defender,newCell)
 
         if (multiplier <= 0) {
             board = board.copy(field.updated(Y2, field(Y2).updated(X2, emptycell)))
         } else {
-            board = board.copy(field.updated(Y2, field(Y2).
-                updated(X2, newCell)))
+            board = board.copy(field.updated(Y2, field(Y2).updated(X2, newCell)))
         }
-
+        val loginfo = List(attacker.name + " dealt " + dmg + " points to " + defender.name)
+        board = board.copy(log = board.log ++ loginfo)
         dmg.toString
+    }
+
+    def replaceCreatureInList(oldC: Cell, newC: Cell): Cell = {
+        val tmp = board.list
+        val index = tmp.indexOf(oldC)
+        val (left, _ :: right) = tmp.splitAt(index)
+        val newList = left ++ List(newC) ++ right
+        board = board.copy(board.field,board.player,board.currentplayer,board.currentcreature,newList)
+        newC
     }
 
     def deathcheck(X: Int, Y: Int): Boolean = {
@@ -242,7 +247,7 @@ class Controller() extends Observable{
                 val dist = Math.abs(creature(0) - j) + Math.abs(creature(1) - i)
                 if (field(j)(i).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
                     board = Board(field.updated(j, field(j).updated(i, marker)),
-                        board.player, board.currentplayer, board.currentcreature,board.list)
+                        board.player, board.currentplayer, board.currentcreature,board.list,board.log)
                 }
             }
         }
@@ -271,6 +276,50 @@ class Controller() extends Observable{
             }
         }
         Vector(-1,-1)
+    }
+
+    def cheatCode(code: Vector[String]): String = {
+         code(1) match {
+             case "hcoconuts" =>
+                 val newC = board.currentcreature.copy(speed = 20)
+                 changeStats(newC)
+                 prediction()
+                 val info = List(board.currentplayer + " cheated! Activated infinity movment speed for " + board.currentcreature.name)
+                 board = board.copy(log = board.log ++ info)
+                 info.last
+             case "hgodunit" =>
+                 val newC = board.currentcreature.copy(dmg = "1000", hp = 1000, multiplier = 1000, speed = 20)
+                 changeStats(newC)
+                 prediction()
+                 val info = List(board.currentplayer + " cheated! Activated god mode for " + board.currentcreature.name)
+                 board = board.copy(log = board.log ++ info)
+                 info.last
+             case "hfeedcreature" =>
+                 val basestats = baseStats()
+                 if (basestats.nonEmpty) {
+                     val newC = board.currentcreature.copy(multiplier = basestats(0), hp = basestats(1))
+                     changeStats(newC)
+                 }
+                 val info = List(board.currentplayer + " cheated! Set " + board.currentcreature.name + " values back to beginning")
+                 board = board.copy(log = board.log ++ info)
+                 info.last
+         }
+    }
+
+    def changeStats(newC: Cell): Boolean = {
+        replaceCreatureInList(board.currentcreature,newC)
+        val coor = postition(board.currentcreature)
+        board = board.copy(board.field.updated(coor(1), board.field(coor(1)).updated(coor(0), newC)), currentcreature = newC)
+        true
+    }
+
+    def baseStats(): Vector[Int] = {
+        for (cell <- creatureliststart(player)) {
+            if (cell._2.name.equals(board.currentcreature.name)) {
+                return Vector(cell._2.multiplier,cell._2.hp)
+            }
+        }
+        Vector.empty
     }
 
     // ---------------------------------------------- Input checks -----------------------------------------------------
@@ -344,7 +393,7 @@ class Controller() extends Observable{
     }
 
     def output: String = {
-        printfield() + "\n" + board.currentplayerinfo() + "\n" + board.currentcreatureinfo()
+        printfield() + "\n" + board.currentplayerinfo() + "\n" + board.currentcreatureinfo() + "\n" + board.lastlog()
     }
 
     def info(in:Vector[String]) : String = {

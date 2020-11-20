@@ -7,27 +7,30 @@ package de.htwg.se.model
  */
 
 //noinspection ScalaStyle
-case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player, currentcreature: Cell, list: List[Cell]) {
+case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player, currentcreature: Cell, list: List[Cell], log: List[String]) {
 
     def currentcreatureinfo(): String = {
         val attackstyle = if (currentcreature.style) "Ranged" else "Melee"
-        val info = "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
-            currentcreature.name + "\t\t\t\t\t\t\t" + currentcreature.multiplier + "\t\t\t\t\t\t" + currentcreature.hp + "\t\t\t\t" +
-            currentcreature.dmg + " " * (20 - currentcreature.dmg.length) + attackstyle + "\n" + lines()
-        info
+        "=" * 2 + " Info " + "=" * 97 + "\n" + "Current Unit:\t\t\t\tMultiplier:\t\t\t\tHP:\t\t\t\tDamage:\t\t\t\tAttackstyle:" + "\n" +
+            currentcreature.name + " " * 25 + currentcreature.multiplier + " " * (24 - currentcreature.multiplier.toString.length) +
+            currentcreature.hp + " " * (16 - currentcreature.hp.toString.length) + currentcreature.dmg +
+            " " * (20 - currentcreature.dmg.length) + attackstyle + "\n" + lines()
     }
 
     def creatureinfo(Y: Int, X: Int): String = {
         val shortline = "=" * 33 + "\n"
-        val info = "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
+        "=" * 2 + " Info " + "=" * 25 + "\n" + "Unit:\t\tMultiplier:\t\tHP:" + "\n" + field(X)(Y).name + "\t\t\t" +
             field(X)(Y).multiplier + "\t\t\t\t" + field(X)(Y).hp + "\n" + shortline
-        info
     }
 
     def currentplayerinfo(): String = {
         val shortline = "=" * 2 + " Current Player: " + "=" * 86
-        val info = shortline + "\n" + currentplayer.name + "\n" + lines()
-        info
+        shortline + "\n" + currentplayer.name + "\n" + lines()
+    }
+
+    def lastlog(): String = {
+        val info = if(log.nonEmpty) log.last + "\n" else "\n"
+        "==" + " Log: " + "=" * 97 + "\n" + info + lines()
     }
 
     def lines(): String = "=" * 7 * 15 + "\n"

@@ -26,13 +26,7 @@ class TUI(controller: Controller) extends Observer{
             controller.prediction()
             controller.notifyObservers
 
-            println("=============================")
-            println("a X Y   = attack")
-            println("m X Y   = move")
-            println("i X Y   = info")
-            println("p       = pass")
-            println("exit    = exit game")
-            println("=============================")
+            print(commands())
 
         }
         print("neue Eingabe: ")
@@ -45,9 +39,13 @@ class TUI(controller: Controller) extends Observer{
                 println("Ungültige Eingabe")
                 inputLine(false)
             }
-        } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit")))
+        } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit"))) {
             input
-        else {
+        } else if (input.size == 2 && input.head.equals("CHEAT")) {
+            controller.cheatCode(input)
+            controller.notifyObservers
+            inputLine(false)
+        } else {
             println("Ungültige Eingabe")
             inputLine(false)
         }
@@ -58,7 +56,18 @@ class TUI(controller: Controller) extends Observer{
 
     def endSequence(side: Int): Unit = {
         print(controller.endInfo(side))
-        System.exit(1)
+        System.exit(0)
+    }
+
+    def commands(): String = {
+        val line = "=" * 105
+
+        "\n" + "| a X Y | Attack an creature in range of the current one\n" +
+            "| m X Y | Move the current creature to board point X,Y\n" +
+            "| i X Y | Returns the multiplier and health of the creature at X,Y\n" +
+            "| p     | Skip the current round\n" +
+            "| exit  | Exit the game\n" + line + "\n"
+
     }
 
     override def update: Unit = print(controller.output)
