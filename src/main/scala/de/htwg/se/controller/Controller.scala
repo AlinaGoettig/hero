@@ -22,6 +22,24 @@ class Controller() extends Observable{
 
     def marker: Cell = Cell(" _ ", "0", 0, 0, false, 0, Player("none"))
 
+    /* Cheat list
+    def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
+        Vector(0, 0) -> Cell("HA.", "200-300", 10, 30, style = true, 28, player(0)), //5
+        Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)), //7
+        Vector(0, 1) -> Cell("MA.", "400-600", 10, 30, style = true, 28, player(0)), //5
+        Vector(14, 1) -> Cell("MAG", "2-4", 13, 4, style = true, 20, player(1)), //6
+        Vector(0, 2) -> Cell("RO.", "300-600", 10, 40, style = false, 18, player(0)), //6
+        Vector(14, 2) -> Cell(".CE", "2-7", 25, 5, style = false, 10, player(1)), //8
+        Vector(0, 5) -> Cell("AN.", "500", 250, 120, style = false, 2, player(0)), //18
+        Vector(14, 5) -> Cell(".DE", "30-40", 200, 11, style = false, 2, player(1)), //17
+        Vector(0, 8) -> Cell("CH.", "200-250", 100, 60, style = false, 4, player(0)), //9
+        Vector(14, 8) -> Cell(".EF", "16-24", 90, 9, style = false, 4, player(1)), //13
+        Vector(0, 9) -> Cell("ZE.", "100-120", 24, 50, style = true, 6, player(0)), //7
+        Vector(14, 9) -> Cell(".PI", "13-17", 45, 5, style = false, 6, player(1)), //7
+        Vector(0, 10) -> Cell("CR.", "700-1000", 35, 40, style = false, 8, player(0)), //6
+        Vector(14, 10) -> Cell(".HO", "7-9", 40, 4, style = false, 8, player(1))) //6
+     */
+
     def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
         Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = true, 28, player(0)), //5
         Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)), //7
@@ -144,11 +162,11 @@ class Controller() extends Observable{
     }
 
     def winner(): Int = {
-        val player1 = board.list.filter(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
-        val player2 = board.list.filter(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
-        if (player1.nonEmpty && player2.isEmpty) {
+        val player1 = board.list.exists(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
+        val player2 = board.list.exists(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
+        if (player1 && !player2) {
             1
-        } else if (player1.isEmpty && player2.nonEmpty) {
+        } else if (!player1 && player2) {
             2
         } else {
             0

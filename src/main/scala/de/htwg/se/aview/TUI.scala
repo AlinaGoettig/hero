@@ -17,6 +17,10 @@ class TUI(controller: Controller) extends Observer{
     //noinspection ScalaStyle
     //
     def inputLine(withOutput: Boolean): Vector[String] = {
+        val number = controller.winner()
+        if (number != 0) {
+            endSequence(number)
+        }
         if (withOutput) {
             controller.next()
             controller.prediction()
@@ -49,6 +53,11 @@ class TUI(controller: Controller) extends Observer{
 
     def isinBoard(in : Vector[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
+
+    def endSequence(side: Int): Unit = {
+        print(controller.endInfo(side))
+        System.exit(1)
+    }
 
     override def update: Unit = print(controller.output)
 }
