@@ -13,7 +13,7 @@ class CellSpec extends WordSpec with Matchers {
             cell.style should be(false)
             cell.multiplier should be(10)
             cell.player should be(Player("Test"))
-            cell should be(Cell)
+
         }
         "have a nice String representation" in {
             cell.toString should be("│ Test │")
@@ -27,10 +27,10 @@ class CellSpec extends WordSpec with Matchers {
         }
     }}
 
-    "A instance of a Player" when { "new" should {
-        val player = Player
+    "A instance of a Cell" when { "new" should {
+        val cell = Cell
         "have the typ"  in {
-            player should be(Player)
+            cell should be(Cell)
         }
     }}
 
