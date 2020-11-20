@@ -1,7 +1,5 @@
 package de.htwg.se.model
 
-
-import de.htwg.se.model.Player
 import org.scalatest._
 
 class PlayerSpec extends WordSpec with Matchers {
