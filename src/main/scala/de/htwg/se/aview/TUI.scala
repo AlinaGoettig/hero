@@ -10,21 +10,22 @@ import de.htwg.se.utill.Observer
 import de.htwg.se.controller.Controller
 import scala.io.StdIn
 
+//noinspection ScalaStyle
 class TUI(controller: Controller) extends Observer{
 
     controller.add(this)
 
-    //noinspection ScalaStyle
-    //
     def inputLine(withOutput: Boolean): Vector[String] = {
         val number = controller.winner()
         if (number != 0) {
             endSequence(number)
         }
         if (withOutput) {
+
             controller.next()
             controller.prediction()
             controller.notifyObservers
+
             println("=============================")
             println("a X Y   = attack")
             println("m X Y   = move")
@@ -32,6 +33,7 @@ class TUI(controller: Controller) extends Observer{
             println("p       = pass")
             println("exit    = exit game")
             println("=============================")
+
         }
         print("neue Eingabe: ")
         val input = StdIn.readLine().split(" ").toVector

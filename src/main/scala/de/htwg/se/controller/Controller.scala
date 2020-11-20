@@ -16,13 +16,42 @@ class Controller() extends Observable{
     var board: Board = start()
     inizGame()
 
+    // ----------------------------------------------- Inizial Game ----------------------------------------------------
+
+    def inizGame(): Boolean= {
+        board = board.copy(board.field,player,player(0),emptycell,createCreatureList())
+        board = board.copy(board.field,board.player,board.list(board.list.indexOf(board.list.last))
+            .player,board.list(board.list.indexOf(board.list.last)),board.list)
+        notifyObservers
+        true
+    }
+
+    def createCreatureList(): List[Cell] = {
+        val field = board.field
+        List(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
+            field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
+    }
+
+    // ----------------------------------------------- Short liner -----------------------------------------------------
+
     def obstacle: Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
 
     def emptycell: Cell = Cell("   ", "0", 0, 0, false, 0, Player("none"))
 
     def marker: Cell = Cell(" _ ", "0", 0, 0, false, 0, Player("none"))
 
-    /* Cheat list
+    def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
+
+    def lines(): String = "=" * 7 * 15 + "\n"
+
+    def getCreature(field: Vector[Vector[Cell]], x: Int, y: Int): Cell = field(x)(y)
+
+    def active(X: Int, Y: Int): Boolean =
+        if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
+
+    // ----------------------------------------------- Cell Vectors ----------------------------------------------------
+
+    /* Cheat Setup for Castle side
     def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
         Vector(0, 0) -> Cell("HA.", "200-300", 10, 30, style = true, 28, player(0)), //5
         Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)), //7
@@ -65,132 +94,7 @@ class Controller() extends Observable{
         Vector(8, 8) -> obstacle,
         Vector(6, 9) -> obstacle)
 
-    def deathcheck(X: Int, Y: Int): Boolean = {
-        val field = board.field
-        if (field(X)(Y).multiplier <= 0) {
-            board = board.copy(field.updated(X, field(X).updated(Y, emptycell)))
-            true
-        } else {
-            false
-        }
-    }
-
-    //
-    def createCreatureList(): List[Cell] = {
-        val field = board.field
-        List(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
-            field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
-    }
-
-    def next(): Cell = {
-        val field = board.list
-        val index = field.indexOf(board.currentcreature) + 1
-        if (index == field.length) {
-            board = board.copy(board.field,board.player,field(0).player,field(0))
-            if (field(0).multiplier <= 0) {
-                next()
-            } else {
-                field(0)
-            }
-        } else {
-            board = board.copy(board.field,board.player,field(index).player,field(index))
-            if (field(index).multiplier <= 0) {
-                next()
-            } else {
-                clear()
-                field(index)
-            }
-        }
-    }
-
-    def inizGame(): Boolean= {
-        board = board.copy(board.field,player,player(0),emptycell,createCreatureList())
-        board = board.copy(board.field,board.player,board.list(board.list.indexOf(board.list.last))
-            .player,board.list(board.list.indexOf(board.list.last)),board.list)
-        notifyObservers
-        true
-    }
-
-    def printSidesStart(): String = {
-        val player1 = "| " + player(0).name + " |"
-        val player2 = "| " + player(1).name + " |"
-        val middle = player1 + " " * (105 - player1.length - player2.length) + player2
-
-        lines() + middle + "\n" + lines()
-    }
-
-    def findbasehp(name: String): Int = {
-        for (cell <- creatureliststart(player)) {
-            if (cell._2.name.equals(name)) {
-                return cell._2.hp
-            }
-        }
-        0
-    }
-
-    def printfield(): String = {
-        val field = board.field
-        var text = ""
-        for (x <- 0 to 14) {
-            text += fieldnumber(x.toString)
-        }
-
-        text += "\n" + lines()
-        for (i <- 0 to 10) {
-            for (j <- 0 to 14) {
-                if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX") && !active(i, j)) {
-                    if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
-                        ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                        ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
-                        ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                        ((i + 1 < 11 && j >= 0) && field(i + 1)(j).name.equals(" _ ")) ||
-                        ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
-                        ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
-                        ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
-                        text += field(i)(j).attackable()
-                    } else {
-                        text += field(i)(j).toString()
-                    }
-                } else {
-                    text += field(i)(j).toString()
-                }
-
-            }
-            text += " " + i.toString + "\n" + lines()
-        }
-        text
-    }
-
-    def winner(): Int = {
-        val player1 = board.list.exists(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
-        val player2 = board.list.exists(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
-        if (player1 && !player2) {
-            1
-        } else if (!player1 && player2) {
-            2
-        } else {
-            0
-        }
-    }
-
-    def active(X: Int, Y: Int): Boolean =
-        if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
-
-    def getCreature(field: Vector[Vector[Cell]], x: Int, y: Int): Cell = field(x)(y)
-
-    def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
-
-    def lines(): String = "=" * 7 * 15 + "\n"
-
-    def move(X1: Int, Y1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
-        val field = board.field
-        val cret1 = field(X1)(Y1)
-        val cret2 = field(X2)(Y2)
-        board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)))
-        board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)))
-
-        board.field
-    }
+    // --------------------------------------------------- Start -------------------------------------------------------
 
     def start(): Board = {
         val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell,List.empty)
@@ -225,6 +129,51 @@ class Controller() extends Observable{
         }
     }
 
+    def printSidesStart(): String = {
+        val player1 = "| " + player(0).name + " |"
+        val player2 = "| " + player(1).name + " |"
+        val middle = player1 + " " * (105 - player1.length - player2.length) + player2
+
+        lines() + middle + "\n" + lines()
+    }
+
+    // ---------------------------------------- State of game Change ---------------------------------------------------
+
+    def next(): Cell = {
+        val field = board.list
+        val index = field.indexOf(board.currentcreature) + 1
+        if (index == field.length) {
+            board = board.copy(board.field,board.player,field.head.player,field.head)
+            if (field.head.multiplier <= 0) {
+                next()
+            } else {
+                field.head
+            }
+        } else {
+            board = board.copy(board.field,board.player,field(index).player,field(index))
+            if (field(index).multiplier <= 0) {
+                next()
+            } else {
+                clear()
+                field(index)
+            }
+        }
+    }
+
+    def winner(): Int = {
+        val player1 = board.list.exists(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
+        val player2 = board.list.exists(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
+        if (player1 && !player2) {
+            1
+        } else if (!player1 && player2) {
+            2
+        } else {
+            0
+        }
+    }
+
+    // --------------------------------------------------- Attack ------------------------------------------------------
+
     def attack(Y1: Int, X1: Int, Y2: Int, X2: Int): String = {
         val field = board.field
         val attacker = field(Y1)(X1)
@@ -254,6 +203,37 @@ class Controller() extends Observable{
         dmg.toString
     }
 
+    def deathcheck(X: Int, Y: Int): Boolean = {
+        val field = board.field
+        if (field(X)(Y).multiplier <= 0) {
+            board = board.copy(field.updated(X, field(X).updated(Y, emptycell)))
+            true
+        } else {
+            false
+        }
+    }
+
+    def findbasehp(name: String): Int = {
+        for (cell <- creatureliststart(player)) {
+            if (cell._2.name.equals(name)) {
+                return cell._2.hp
+            }
+        }
+        0
+    }
+
+    // ---------------------------------------------- Board interaction ------------------------------------------------
+
+    def move(X1: Int, Y1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
+        val field = board.field
+        val cret1 = field(X1)(Y1)
+        val cret2 = field(X2)(Y2)
+        board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)))
+        board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)))
+
+        board.field
+    }
+
     def prediction(): Vector[Vector[Cell]] = {
         val creature = postition(board.currentcreature)
         for (j <- 0 to 10) {
@@ -281,20 +261,6 @@ class Controller() extends Observable{
         board.field
     }
 
-    def endInfo(playernumber: Int): String = {
-        val player = if (playernumber == 1) "Castle" else "Underworld"
-        val top = "=" * 2 + " Result for the game: " + "=" * 81 + "\n" + player + " won the game !" + "\n" +
-            "=" * 2 + " Creatures alive: " + "=" * 85 + "\n"
-        val listofliving = board.list.filter(Cell => Cell.multiplier > 0)
-        val title = "Name:\t\tMultiplier:\t\tHealth:\n"
-        var middle = ""
-        for (cell <- listofliving) {
-            middle += cell.name.replace(".","") + "\t\t\t" + cell.multiplier + "\t\t\t\t" + cell.hp + "\n"
-        }
-        top + title + middle + lines()
-    }
-
-    //
     def postition(creature: Cell): Vector[Int] = {
         val field = board.field
         for (i <- 0 to 10) {
@@ -307,9 +273,7 @@ class Controller() extends Observable{
         Vector(-1,-1)
     }
 
-    def output: String = {
-        printfield() + "\n" + board.currentplayerinfo() + "\n" + board.currentcreatureinfo()
-    }
+    // ---------------------------------------------- Input checks -----------------------------------------------------
 
     def checkmove(in:Vector[String]): Boolean =
         if (in(0) == "m" && getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
@@ -344,9 +308,61 @@ class Controller() extends Observable{
         false
     }
 
+    // ---------------------------------------------- Output Strings ---------------------------------------------------
+
+    def printfield(): String = {
+        val field = board.field
+        var text = ""
+        for (x <- 0 to 14) {
+            text += fieldnumber(x.toString)
+        }
+
+        text += "\n" + lines()
+        for (i <- 0 to 10) {
+            for (j <- 0 to 14) {
+                if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX") && !active(i, j)) {
+                    if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
+                        ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
+                        ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
+                        ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
+                        ((i + 1 < 11 && j >= 0) && field(i + 1)(j).name.equals(" _ ")) ||
+                        ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
+                        ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
+                        ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
+                        text += field(i)(j).attackable()
+                    } else {
+                        text += field(i)(j).toString()
+                    }
+                } else {
+                    text += field(i)(j).toString()
+                }
+
+            }
+            text += " " + i.toString + "\n" + lines()
+        }
+        text
+    }
+
+    def output: String = {
+        printfield() + "\n" + board.currentplayerinfo() + "\n" + board.currentcreatureinfo()
+    }
+
     def info(in:Vector[String]) : String = {
         print(board.creatureinfo(in(1).toInt, in(2).toInt))
         board.creatureinfo(in(1).toInt, in(2).toInt)
+    }
+
+    def endInfo(playernumber: Int): String = {
+        val player = if (playernumber == 1) "Castle" else "Underworld"
+        val top = "=" * 2 + " Result for the game: " + "=" * 81 + "\n" + player + " won the game !" + "\n" +
+            "=" * 2 + " Creatures alive: " + "=" * 85 + "\n"
+        val listofliving = board.list.filter(Cell => Cell.multiplier > 0)
+        val title = "Name:\t\tMultiplier:\t\tHealth:\n"
+        var middle = ""
+        for (cell <- listofliving) {
+            middle += cell.name.replace(".","") + "\t\t\t" + cell.multiplier + "\t\t\t\t" + cell.hp + "\n"
+        }
+        top + title + middle + lines()
     }
 
 }
