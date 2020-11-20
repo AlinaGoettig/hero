@@ -17,18 +17,14 @@ class Controller() extends Observable{
     val creaurelist: Vector[Cell] = createCreatureList();
     inizGame()
 
-    //
     def obstacle: Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
 
-    //
     def emptycell: Cell = Cell("   ", "0", 0, 0, false, 0, Player("none"))
 
-    //
     def marker: Cell = Cell(" _ ", "0", 0, 0, false, 0, Player("none"))
 
-    //
     def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
-        Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = false, 28, player(0)), //5
+        Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = true, 28, player(0)), //5
         Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)), //7
         Vector(0, 1) -> Cell("MA.", "4-6", 10, 3, style = true, 28, player(0)), //5
         Vector(14, 1) -> Cell("MAG", "2-4", 13, 4, style = true, 20, player(1)), //6
@@ -43,7 +39,6 @@ class Controller() extends Observable{
         Vector(0, 10) -> Cell("CR.", "7-10", 35, 4, style = false, 8, player(0)), //6
         Vector(14, 10) -> Cell(".HO", "7-9", 40, 4, style = false, 8, player(1))) //6
 
-    //
     def obstaclelist(): Vector[(Vector[Int], Cell)] = Vector(
         Vector(6, 1) -> obstacle,
         Vector(7, 2) -> obstacle,
@@ -53,7 +48,6 @@ class Controller() extends Observable{
         Vector(8, 8) -> obstacle,
         Vector(6, 9) -> obstacle)
 
-    //
     def deathcheck(X: Int, Y: Int): Boolean = {
         val field = board.field
         if (field(X)(Y).multiplier <= 0) {
@@ -71,11 +65,10 @@ class Controller() extends Observable{
             field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
     }
 
-    //
     def next(): Cell = {
         val field = creaurelist
         val index = field.indexOf(board.currentcreature) + 1
-        if (field.indexOf(board.currentcreature) + 1 == field.length) {
+        if (index == field.length) {
             board = board.copy(board.field,board.player,field(0).player,field(0))
             if (field(0).multiplier <= 0) {
                 next()
@@ -84,7 +77,7 @@ class Controller() extends Observable{
             }
         } else {
             board = board.copy(board.field,board.player,field(index).player,field(index))
-            if (field(field.indexOf(board.currentcreature) + 1).multiplier <= 0) {
+            if (field(index).multiplier <= 0) {
                 next()
             } else {
                 clear()
@@ -107,7 +100,6 @@ class Controller() extends Observable{
         lines() + middle + "\n" + lines()
     }
 
-    //
     def findbasehp(name: String): Int = {
         for (cell <- creatureliststart(player)) {
             if (cell._2.name.equals(name)) {
@@ -117,7 +109,6 @@ class Controller() extends Observable{
         0
     }
 
-    //noinspection ScalaStyle
     def printfield(): String = {
         val field = board.field
         var text = ""
@@ -151,7 +142,6 @@ class Controller() extends Observable{
         text
     }
 
-    //
     def winner(): Int = {
         val player1 = creaurelist.filter(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
         val player2 = creaurelist.filter(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
@@ -164,17 +154,13 @@ class Controller() extends Observable{
         }
     }
 
-    //
     def active(X: Int, Y: Int): Boolean =
         if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
 
-    //
     def getCreature(field: Vector[Vector[Cell]], x: Int, y: Int): Cell = field(x)(y)
 
-    //
     def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
 
-    //
     def lines(): String = "=" * 7 * 15 + "\n"
 
     def move(X1: Int, Y1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
@@ -270,6 +256,19 @@ class Controller() extends Observable{
             }
         }
         board.field
+    }
+
+    def endInfo(playernumber: Int): String = {
+        val player = if (playernumber == 1) "Castle" else "Underworld"
+        val top = "=" * 2 + " Result for the game: " + "=" * 81 + "\n" + player + " won the game !" + "\n" +
+            "=" * 2 + " Creatures alive: " + "=" * 85 + "\n"
+        val listofliving = creaurelist.filter(Cell => Cell.multiplier > 0)
+        val title = "Name:\t\tMultiplier:\t\tHealth:\n"
+        var middle = ""
+        for (cell <- listofliving) {
+            middle += cell.name.replace(".","") + "\t\t\t" + cell.multiplier + "\t\t\t\t" + cell.hp + "\n"
+        }
+        top + title + middle + lines()
     }
 
     //
