@@ -59,8 +59,8 @@ class Controller() extends Observable{
         Vector(14, 1) -> Cell("MAG", "2-4", 13, 4, style = true, 20, player(1)), //6
         Vector(0, 2) -> Cell("RO.", "300-600", 10, 40, style = false, 18, player(0)), //6
         Vector(14, 2) -> Cell(".CE", "2-7", 25, 5, style = false, 10, player(1)), //8
-        Vector(0, 5) -> Cell("AN.", "500", 250, 120, style = false, 2, player(0)), //18
-        Vector(14, 5) -> Cell(".DE", "30-40", 200, 11, style = false, 2, player(1)), //17
+        Vector(0, 5) -> Cell("AA.", "500", 250, 120, style = false, 2, player(0)), //18
+        Vector(14, 5) -> Cell(".AD", "30-40", 200, 11, style = false, 2, player(1)), //17
         Vector(0, 8) -> Cell("CH.", "200-250", 100, 60, style = false, 4, player(0)), //9
         Vector(14, 8) -> Cell(".EF", "16-24", 90, 9, style = false, 4, player(1)), //13
         Vector(0, 9) -> Cell("ZE.", "100-120", 24, 50, style = true, 6, player(0)), //7
@@ -70,6 +70,7 @@ class Controller() extends Observable{
      */
 
     def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
+        // Name, Damage(between), Health, Speed, Style, Multiplier, Player
         Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = true, 28, player(0)), //5
         Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)), //7
         Vector(0, 1) -> Cell("MA.", "4-6", 10, 3, style = true, 28, player(0)), //5
@@ -194,7 +195,7 @@ class Controller() extends Observable{
         } else {
             board = board.copy(field.updated(Y2, field(Y2).updated(X2, newCell)))
         }
-        val loginfo = List(attacker.name + " dealt " + dmg + " points to " + defender.name)
+        val loginfo = List(board.realname(attacker.name) + " dealt " + dmg + " points to " + board.realname(defender.name))
         board = board.copy(log = board.log ++ loginfo)
         dmg.toString
     }
@@ -270,7 +271,7 @@ class Controller() extends Observable{
         val field = board.field
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
-                if (field(i)(j).equals(creature)) {
+                if (field(i)(j).name.equals(creature.name)) {
                     return Vector(i, j)
                 }
             }
@@ -284,14 +285,14 @@ class Controller() extends Observable{
                  val newC = board.currentcreature.copy(speed = 20)
                  changeStats(newC)
                  prediction()
-                 val info = List(board.currentplayer + " cheated! Activated infinity movment speed for " + board.currentcreature.name)
+                 val info = List(board.currentplayer + " cheated! Activated infinity movment speed for " + board.realname(board.currentcreature.name))
                  board = board.copy(log = board.log ++ info)
                  info.last
              case "hgodunit" =>
                  val newC = board.currentcreature.copy(dmg = "1000", hp = 1000, multiplier = 1000, speed = 20)
                  changeStats(newC)
                  prediction()
-                 val info = List(board.currentplayer + " cheated! Activated god mode for " + board.currentcreature.name)
+                 val info = List(board.currentplayer + " cheated! Activated god mode for " + board.realname(board.currentcreature.name))
                  board = board.copy(log = board.log ++ info)
                  info.last
              case "hfeedcreature" =>
@@ -300,7 +301,18 @@ class Controller() extends Observable{
                      val newC = board.currentcreature.copy(multiplier = basestats(0), hp = basestats(1))
                      changeStats(newC)
                  }
-                 val info = List(board.currentplayer + " cheated! Set " + board.currentcreature.name + " values back to beginning")
+                 val info = List(board.currentplayer + " cheated! Set " + board.realname(board.currentcreature.name) + " values back to beginning")
+                 board = board.copy(log = board.log ++ info)
+                 info.last
+             case "hhandofjustice" =>
+                 val enemy = board.list.filter(Cell => !Cell.player.equals(board.currentplayer))
+                 for (cell <- enemy) {
+                     val newC = cell.copy(multiplier = 0, hp = 0)
+                     replaceCreatureInList(cell,newC)
+                     val coor = postition(cell)
+                     board = board.copy(board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), emptycell)), currentcreature = newC)
+                 }
+                 val info = List(board.currentplayer + " cheated! Killed all enemy creatures")
                  board = board.copy(log = board.log ++ info)
                  info.last
          }
@@ -309,7 +321,7 @@ class Controller() extends Observable{
     def changeStats(newC: Cell): Boolean = {
         replaceCreatureInList(board.currentcreature,newC)
         val coor = postition(board.currentcreature)
-        board = board.copy(board.field.updated(coor(1), board.field(coor(1)).updated(coor(0), newC)), currentcreature = newC)
+        board = board.copy(board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), newC)), currentcreature = newC)
         true
     }
 
@@ -403,13 +415,16 @@ class Controller() extends Observable{
 
     def endInfo(playernumber: Int): String = {
         val player = if (playernumber == 1) "Castle" else "Underworld"
-        val top = "=" * 2 + " Result for the game: " + "=" * 81 + "\n" + player + " won the game !" + "\n" +
+        val top = "\n" + "=" * 2 + " Result for the game: " + "=" * 81 + "\n" + player + " won the game !" + "\n" +
             "=" * 2 + " Creatures alive: " + "=" * 85 + "\n"
         val listofliving = board.list.filter(Cell => Cell.multiplier > 0)
-        val title = "Name:\t\tMultiplier:\t\tHealth:\n"
+        val title = "Name:\t\t\tMultiplier:\t\t\tHealth:\n"
         var middle = ""
         for (cell <- listofliving) {
-            middle += cell.name.replace(".","") + "\t\t\t" + cell.multiplier + "\t\t\t\t" + cell.hp + "\n"
+            val name = board.realname(cell.name)
+            val multi = cell.multiplier
+            val hp = cell.hp
+            middle += name + " " * (16 - name.length) + multi + " " * (20 - multi.toString.length) + hp + "\n"
         }
         top + title + middle + lines()
     }

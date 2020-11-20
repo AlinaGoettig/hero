@@ -62,7 +62,7 @@ class TUI(controller: Controller) extends Observer{
     def commands(): String = {
         val line = "=" * 105
 
-        "\n" + "| a X Y | Attack an creature in range of the current one\n" +
+        "| a X Y | Attack an creature in range of the current one\n" +
             "| m X Y | Move the current creature to board point X,Y\n" +
             "| i X Y | Returns the multiplier and health of the creature at X,Y\n" +
             "| p     | Skip the current round\n" +
