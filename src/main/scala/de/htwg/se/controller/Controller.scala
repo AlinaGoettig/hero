@@ -14,7 +14,6 @@ class Controller() extends Observable{
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Underground"))
     var board: Board = start()
-    val creaurelist: Vector[Cell] = createCreatureList();
     inizGame()
 
     def obstacle: Cell = Cell("XXX", "0", 0, 0, false, 0, Player("none"))
@@ -51,7 +50,7 @@ class Controller() extends Observable{
     def deathcheck(X: Int, Y: Int): Boolean = {
         val field = board.field
         if (field(X)(Y).multiplier <= 0) {
-            board = board.copy(field.updated(X, field(X).updated(Y, emptycell)),board.player,board.currentplayer,board.currentcreature)
+            board = board.copy(field.updated(X, field(X).updated(Y, emptycell)))
             true
         } else {
             false
@@ -59,14 +58,14 @@ class Controller() extends Observable{
     }
 
     //
-    def createCreatureList(): Vector[Cell] = {
+    def createCreatureList(): List[Cell] = {
         val field = board.field
-        Vector(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
+        List(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
             field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
     }
 
     def next(): Cell = {
-        val field = creaurelist
+        val field = board.list
         val index = field.indexOf(board.currentcreature) + 1
         if (index == field.length) {
             board = board.copy(board.field,board.player,field(0).player,field(0))
@@ -87,7 +86,9 @@ class Controller() extends Observable{
     }
 
     def inizGame(): Boolean= {
-        board = board.copy(board.field,board.player,creaurelist(creaurelist.length-1).player,creaurelist(creaurelist.length-1))
+        board = board.copy(board.field,player,player(0),emptycell,createCreatureList())
+        board = board.copy(board.field,board.player,board.list(board.list.indexOf(board.list.last))
+            .player,board.list(board.list.indexOf(board.list.last)),board.list)
         notifyObservers
         true
     }
@@ -143,8 +144,8 @@ class Controller() extends Observable{
     }
 
     def winner(): Int = {
-        val player1 = creaurelist.filter(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
-        val player2 = creaurelist.filter(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
+        val player1 = board.list.filter(Cell => if(Cell.player.equals(player.head) && Cell.multiplier > 0) true else false)
+        val player2 = board.list.filter(Cell => if(Cell.player.equals(player.last) && Cell.multiplier > 0) true else false)
         if (player1.nonEmpty && player2.isEmpty) {
             1
         } else if (player1.isEmpty && player2.nonEmpty) {
@@ -167,40 +168,40 @@ class Controller() extends Observable{
         val field = board.field
         val cret1 = field(X1)(Y1)
         val cret2 = field(X2)(Y2)
-        board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)),
-            board.player, board.currentplayer, board.currentcreature)
-        board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)),
-            board.player, board.currentplayer, board.currentcreature)
+        board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)))
+        board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)))
 
         board.field
     }
 
     def start(): Board = {
-        val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell)
-        val board = placeCreatures(emptyboard,creatureliststart(player),obstaclelist())
+        val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell,List.empty)
+        val board = placeCreatures(emptyboard,creatureliststart(player),obstaclelist(), true)
         board
     }
 
-    def placeCreatures(board: Board, list: Vector[(Vector[Int], Cell)], obstacles: Vector[(Vector[Int], Cell)]): Board = {
+    def placeCreatures(board: Board, list: Vector[(Vector[Int], Cell)], obstacles: Vector[(Vector[Int], Cell)], scenario: Boolean): Board = {
 
         val coor = list.head._1
 
-        val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),list.head._2))
-            ,board.player,board.currentplayer,board.currentcreature)
+        val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),list.head._2)))
 
         if(list.size > 1) {
-            placeCreatures(creatureadd,list.slice(1,list.length),obstacles)
+            placeCreatures(creatureadd,list.slice(1,list.length),obstacles, true)
+        } else if (list.size == 1 && scenario) {
+            placeCreatures(creatureadd,list,obstacles, false)
         } else {
-            placeObstacles(board,obstacles)
+            placeObstacles(board,obstacles,true)
         }
     }
 
-    def placeObstacles(board: Board, obstacles: Vector[(Vector[Int], Cell)]): Board = {
+    def placeObstacles(board: Board, obstacles: Vector[(Vector[Int], Cell)], scenario: Boolean): Board = {
         val cooro = obstacles.head._1
-        val obstacleadd = board.copy(board.field.updated(cooro(1),board.field(cooro(1)).updated(cooro(0),obstacles.head._2))
-            ,board.player,board.currentplayer,board.currentcreature)
+        val obstacleadd = board.copy(board.field.updated(cooro(1),board.field(cooro(1)).updated(cooro(0),obstacles.head._2)))
         if(obstacles.size > 1) {
-            placeObstacles(obstacleadd,obstacles.slice(1,obstacles.length))
+            placeObstacles(obstacleadd,obstacles.slice(1,obstacles.length),true)
+        } else if (obstacles.size == 1 && scenario) {
+            placeObstacles(obstacleadd,obstacles,false)
         } else {
             obstacleadd
         }
@@ -217,13 +218,19 @@ class Controller() extends Observable{
         val multiplier = if (multicheck < 0) defender.multiplier - multidif.toInt else defender.multiplier
         val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt + 1) - dmg else defender.hp - dmg
 
+        val newCell = Cell(defender.name, defender.dmg, hp, defender.speed, defender.style, multiplier, defender.player)
+
+        val tmp = board.list
+        val index = tmp.indexOf(defender)
+        val (left, _ :: right) = tmp.splitAt(index)
+        val newList = left ++ List(newCell) ++ right
+        board = board.copy(board.field,board.player,board.currentplayer,board.currentcreature,newList)
+
         if (multiplier <= 0) {
-            board = board.copy(field.updated(Y2, field(Y2).updated(X2, emptycell)),
-                board.player, board.currentplayer, board.currentcreature)
+            board = board.copy(field.updated(Y2, field(Y2).updated(X2, emptycell)))
         } else {
             board = board.copy(field.updated(Y2, field(Y2).
-                updated(X2, Cell(defender.name, defender.dmg, hp, defender.speed, defender.style, multiplier, defender.player))),
-                board.player, board.currentplayer, board.currentcreature)
+                updated(X2, newCell)))
         }
 
         dmg.toString
@@ -237,21 +244,19 @@ class Controller() extends Observable{
                 val dist = Math.abs(creature(0) - j) + Math.abs(creature(1) - i)
                 if (field(j)(i).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
                     board = Board(field.updated(j, field(j).updated(i, marker)),
-                        board.player, board.currentplayer, board.currentcreature)
+                        board.player, board.currentplayer, board.currentcreature,board.list)
                 }
             }
         }
         board.field
     }
 
-
     def clear(): Vector[Vector[Cell]] = {
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
                 val field = board.field
                 if (field(j)(i).name.equals(" _ ")) {
-                    board = board.copy(field.updated(j, field(j).updated(i, emptycell)),
-                        board.player, board.currentplayer, board.currentcreature)
+                    board = board.copy(field.updated(j, field(j).updated(i, emptycell)))
                 }
             }
         }
@@ -262,7 +267,7 @@ class Controller() extends Observable{
         val player = if (playernumber == 1) "Castle" else "Underworld"
         val top = "=" * 2 + " Result for the game: " + "=" * 81 + "\n" + player + " won the game !" + "\n" +
             "=" * 2 + " Creatures alive: " + "=" * 85 + "\n"
-        val listofliving = creaurelist.filter(Cell => Cell.multiplier > 0)
+        val listofliving = board.list.filter(Cell => Cell.multiplier > 0)
         val title = "Name:\t\tMultiplier:\t\tHealth:\n"
         var middle = ""
         for (cell <- listofliving) {

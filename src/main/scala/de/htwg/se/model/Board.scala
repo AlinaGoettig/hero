@@ -7,7 +7,7 @@ package de.htwg.se.model
  */
 
 //noinspection ScalaStyle
-case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player, currentcreature: Cell) {
+case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player, currentcreature: Cell, list: List[Cell]) {
 
     def currentcreatureinfo(): String = {
         val attackstyle = if (currentcreature.style) "Ranged" else "Melee"
