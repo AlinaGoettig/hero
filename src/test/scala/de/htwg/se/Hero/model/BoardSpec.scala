@@ -31,7 +31,7 @@ class BoardSpec extends WordSpec with Matchers {
             board.currentcreatureinfo() should include("10")
             board.currentcreatureinfo() should include("Ranged")
             val boardchange = board.copy(currentcreature = creature2)
-            board.currentplayerinfo() should include("Melee")
+            boardchange.currentcreatureinfo() should include("Melee")
         }
 
         ", a X Y coordinate controlled creature information" in {
@@ -57,7 +57,7 @@ class BoardSpec extends WordSpec with Matchers {
         "and an illustration of the full name" in {
             board.realname(creature1.name) should be("Ha_lbinger")
             board.realname("MA.") should be("Ma_rksman")
-            board.realname("MA.") should be("Mag_og")
+            board.realname("MAG") should be("Mag_og")
             board.realname("RO.") should be("Ro_yal Griffin")
             board.realname(".CE") should be("Ce_rberus")
             board.realname("AN.") should be("Arch An_gle")
