@@ -36,7 +36,7 @@ class TUI(controller: Controller) extends Observer{
             if (isinBoard(input) && (input.head.equals("a") || input.head.equals("m") || input.head.equals("i"))) {
                 input
             } else {
-                println("Ungültige Eingabe")
+                print("Ungültige Eingabe")
                 inputLine(false)
             }
         } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit"))) {
@@ -46,7 +46,7 @@ class TUI(controller: Controller) extends Observer{
             controller.notifyObservers
             inputLine(false)
         } else {
-            println("Ungültige Eingabe")
+            print("Ungültige Eingabe")
             inputLine(false)
         }
     }

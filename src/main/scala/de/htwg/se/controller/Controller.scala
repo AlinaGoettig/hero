@@ -230,14 +230,14 @@ class Controller() extends Observable{
 
     // ---------------------------------------------- Board interaction ------------------------------------------------
 
-    def move(X1: Int, Y1: Int, X2: Int, Y2: Int): Vector[Vector[Cell]] = {
+    def move(X1: Int, Y1: Int, X2: Int, Y2: Int): Vector[Int] = {
         val field = board.field
         val cret1 = field(X1)(Y1)
         val cret2 = field(X2)(Y2)
         board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)))
         board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)))
 
-        board.field
+        Vector(X2,Y2)
     }
 
     def prediction(): Vector[Vector[Cell]] = {
