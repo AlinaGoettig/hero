@@ -6,6 +6,7 @@ class CellSpec extends WordSpec with Matchers {
 
     "A Cell " when { "new" should {
         val cell = Cell("Test","10-20", 100,10,false,10,Player("Test"))
+        val celleven = Cell("Test","10", 100,10,false,10,Player("Test"))
         "have informations"  in {
             cell.name should be("Test")
             cell.dmg should be("10-20")
@@ -18,12 +19,13 @@ class CellSpec extends WordSpec with Matchers {
         "have a nice String representation" in {
             cell.toString should be("│ Test │")
         }
-        ", a marker for attackable" in {
+        "have a marker for attackable" in {
             cell.attackable() should be("│>Test<│")
         }
-        "and a damage calculation" in {
+        "and have a damage calculation" in {
             cell.attackamount() should be >= 10
             cell.attackamount() should be <= 20
+            celleven.attackamount() should be(10)
         }
     }}
 
