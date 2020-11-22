@@ -1,14 +1,10 @@
 package de.htwg.se.Hero.aView
 
-import java.io.ByteArrayInputStream
-
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
 import org.scalatest._
 
-import scala.io.StdIn
-
-class CellSpec extends WordSpec with Matchers {
+class TuiSpec extends WordSpec with Matchers {
 
     "A TUI" when { "new" should {
         val controller = new Controller()
@@ -23,6 +19,9 @@ class CellSpec extends WordSpec with Matchers {
             tui.commands() should include("i X Y")
             tui.commands() should include("p")
             tui.commands() should include("exit")
+        }
+        "have a end sequence" in {
+            tui.endSequence(1) should be(Vector("exit"))
         }
     }}
 

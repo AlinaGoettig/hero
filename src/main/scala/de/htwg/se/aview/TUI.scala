@@ -18,7 +18,7 @@ class TUI(controller: Controller) extends Observer{
     def inputLine(withOutput: Boolean): Vector[String] = {
         val number = controller.winner()
         if (number != 0) {
-            endSequence(number)
+            return endSequence(number)
         }
         if (withOutput) {
 
@@ -54,9 +54,9 @@ class TUI(controller: Controller) extends Observer{
     def isinBoard(in : Vector[String]) : Boolean =
         if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
 
-    def endSequence(side: Int): Unit = {
+    def endSequence(side: Int): Vector[String] = {
         print(controller.endInfo(side))
-        System.exit(0)
+        Vector("exit")
     }
 
     def commands(): String = {
