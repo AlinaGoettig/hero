@@ -227,7 +227,7 @@ class Controller() extends Observable{
     }
 
     def prediction(): Vector[Vector[Cell]] = {
-        val creature = postition(board.currentcreature)
+        val creature = position(board.currentcreature)
         for (j <- 0 to 10) {
             for (i <- 0 to 14) {
                 val field = board.field
@@ -252,7 +252,7 @@ class Controller() extends Observable{
         board.field
     }
 
-    def postition(creature: Cell): Vector[Int] = {
+    def position(creature: Cell): Vector[Int] = {
         val field = board.field
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
@@ -297,7 +297,7 @@ class Controller() extends Observable{
                  for (cell <- enemy) {
                      val newC = cell.copy(multiplier = 0, hp = 0)
                      replaceCreatureInList(cell,newC)
-                     val coor = postition(cell)
+                     val coor = position(cell)
                      board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), emptycell)), currentcreature = newC)
                  }
                  val info = List(board.currentplayer + " cheated! Killed all enemy creatures")
@@ -308,7 +308,7 @@ class Controller() extends Observable{
 
     def changeStats(newC: Cell): Boolean = {
         replaceCreatureInList(board.currentcreature,newC)
-        val coor = postition(board.currentcreature)
+        val coor = position(board.currentcreature)
         board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), newC)), currentcreature = newC)
         true
     }
@@ -326,7 +326,7 @@ class Controller() extends Observable{
 
     def checkmove(in:Vector[String]): Boolean =
         if (in(0) == "m" && getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
-            val creature = postition(board.currentcreature)
+            val creature = position(board.currentcreature)
             move(creature(0), creature(1), in(2).toInt, in(1).toInt)
             true
         } else false
@@ -338,7 +338,7 @@ class Controller() extends Observable{
         val field = board.field
         if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
             && !active(i, j)) {
-            val creature = postition(board.currentcreature)
+            val creature = position(board.currentcreature)
             if (board.currentcreature.style) {
                 attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
                 return true
