@@ -87,16 +87,20 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.checkmove(Vector("m", "9", "3")) should be(true)
                 controller.prediction()
                 controller.checkattack(Vector("a", "9", "2")) should be(true)
+
+                controller.checkattack(Vector("a", "9", "2"))
+                controller.deathcheck(9, 2)
+                controller.checkattack(Vector("a", "9", "2"))
+                controller.deathcheck(9, 2)
             }
+
             "when cheating" in {
+                controller.board = controller.start()
+                controller.inizGame()
                 assert(controller.cheatCode(Vector("CHEAT", "coconuts")).isInstanceOf[String])
                 assert(controller.cheatCode(Vector("CHEAT", "godunit")).isInstanceOf[String])
                 assert(controller.cheatCode(Vector("CHEAT", "feedcreature")).isInstanceOf[String])
                 assert(controller.cheatCode(Vector("CHEAT", "handofjustice")).isInstanceOf[String])
-                controller.checkattack(Vector("a", "9", "2"))
-                controller.deathcheck(9, 2)
-                controller.checkattack(Vector("a", "9", "2"))
-                controller.deathcheck(9, 2)
             }
 
             "when creature dying" in{
@@ -104,7 +108,7 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.prediction()
                 controller.notifyObservers
                 assert(controller.changeStats(controller.emptycell).isInstanceOf[Boolean])
-                controller.position(controller.creatureliststart(controller.player)(0)._2) should be(Vector(-1,-1))
+                controller.position(controller.creatureliststart(controller.player)(4)._2) should be(Vector(-1,-1))
                 assert(controller.endInfo(1).isInstanceOf[String])
                 controller.next()
                 controller.next()
@@ -116,17 +120,16 @@ class ControllerSpec extends WordSpec with Matchers {
             }
 
             "to win" in {
-                controller.winner() should  be(1)
                 controller.board = controller.start()
                 controller.inizGame()
-                controller.replaceCreatureInList(controller.board.list(0), controller.emptycell)
-                controller.replaceCreatureInList(controller.board.list(2), controller.emptycell)
-                controller.replaceCreatureInList(controller.board.list(4), controller.emptycell)
-                controller.replaceCreatureInList(controller.board.list(6), controller.emptycell)
-                controller.replaceCreatureInList(controller.board.list(8), controller.emptycell)
-                controller.replaceCreatureInList(controller.board.list(10), controller.emptycell)
-                controller.replaceCreatureInList(controller.board.list(12), controller.emptycell)
-                controller.winner() should be(2)
+                controller.cheatCode(Vector("CHEAT", "handofjustice"))
+                controller.winner() should  be(2)
+
+                controller.board = controller.start()
+                controller.inizGame()
+                controller.next()
+                controller.cheatCode(Vector("CHEAT", "handofjustice"))
+                controller.winner() should be(1)
             }
         }
     }
