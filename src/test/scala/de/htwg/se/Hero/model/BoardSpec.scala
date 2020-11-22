@@ -47,6 +47,10 @@ class BoardSpec extends WordSpec with Matchers {
 
         "has an last log output" in {
             board.lastlog() should include("Castle cheated!")
+            val boardnolog = board.copy(log = List.empty)
+            boardnolog.lastlog() shouldNot include("Castle cheated!")
+            boardnolog.lastlog() shouldNot include("Inferno cheated!")
+            boardnolog.lastlog() shouldNot include("dealt")
         }
 
         "has a help function" in {
