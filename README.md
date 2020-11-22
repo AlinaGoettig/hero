@@ -3,7 +3,7 @@
 ## The journey of our first Scala based video game
 
 Hero is based on the classic strategy video game series "Heroes of Might and Magic". 
-The goal is to make a stand alone out of the combat system, in which both main factions, Castle and Underground fight each other.
+Our goal is to make a stand alone out of the combat system, in which both main factions, Castle and Inferno fight each other.
 This fight represents the epic battle between angels and demons
 
 The player will controll one of the choisen sides on a tile-like battleground. Each player get 7 unique creatures with

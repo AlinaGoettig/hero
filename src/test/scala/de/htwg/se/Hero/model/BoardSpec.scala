@@ -25,7 +25,7 @@ class BoardSpec extends WordSpec with Matchers {
             board.log shouldNot be(List.empty)
         }
 
-        "have a current creature information" in {
+        "has a current creature information" in {
             board.currentcreatureinfo() should include("Ha_lbinger")
             board.currentcreatureinfo() should include("2-3")
             board.currentcreatureinfo() should include("10")
@@ -34,27 +34,27 @@ class BoardSpec extends WordSpec with Matchers {
             boardchange.currentcreatureinfo() should include("Melee")
         }
 
-        ", a X Y coordinate controlled creature information" in {
+        "has a X Y coordinate controlled creature information" in {
             board.creatureinfo(1,1) should include("Fa_miliar")
             board.creatureinfo(1,1) should include("4")
             board.creatureinfo(1,1) should include("44")
         }
 
-        ", a current player information" in {
+        "has a current player information" in {
             board.currentplayerinfo() should include("Current Player:")
             board.currentplayerinfo() should include(player(0).name)
         }
 
-        ", an last log output" in {
+        "has an last log output" in {
             board.lastlog() should include("Castle cheated!")
         }
 
-        ", a help function" in {
+        "has a help function" in {
             board.lines().length should be(7*15+1)
 
             board.lines() should include regex """=+"""
         }
-        "and an illustration of the full name" in {
+        "and has an illustration of the full name" in {
             board.realname(creature1.name) should be("Ha_lbinger")
             board.realname("MA.") should be("Ma_rksman")
             board.realname("MAG") should be("Mag_og")
