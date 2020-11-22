@@ -9,6 +9,7 @@ class TuiSpec extends WordSpec with Matchers {
     "A TUI" when { "new" should {
         val controller = new Controller()
         val tui = new TUI(controller)
+
         "have a input check" in {
             tui.isinBoard(Vector("a","5","6")) should be(true)
             tui.isinBoard(Vector("a","20","28")) should be(false)
@@ -22,6 +23,12 @@ class TuiSpec extends WordSpec with Matchers {
         }
         "have a end sequence" in {
             tui.endSequence(1) should be(Vector("exit"))
+        }
+        "be of Type" in {
+            assert(tui.isinBoard(Vector("m", "3", "0")).isInstanceOf[Boolean])
+            assert(tui.endSequence(0).isInstanceOf[Vector[String]])
+            assert(tui.commands().isInstanceOf[String])
+            assert(tui.update.isInstanceOf[Unit])
         }
     }}
 
