@@ -17,9 +17,10 @@ object Hero {
 
 
     def main(args: Array[String]): Unit = {
-        println -> "\n ======== Welcome to Hero ======== \n"
-        println -> "Made by Alina Göttig & Ronny Klotz\n"
-        println -> "Version 1.0 MVC Structur"
+        println("\n" + "=" * 44 + " Welcome to Hero " + "=" * 44)
+        println(" " * 35 + "Made by Alina Göttig & Ronny Klotz")
+        println(" " * 40 + "Version 1.0 MVC Structur")
+        println("=" * 105 + "\n")
         print(controller.printSidesStart())
 
         var input: Vector[String] = tui.inputLine(true)
