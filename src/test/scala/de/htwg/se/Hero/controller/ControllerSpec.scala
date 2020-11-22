@@ -54,6 +54,7 @@ class ControllerSpec extends WordSpec with Matchers {
                 assert(controller.info(Vector("i", "0", "0")).isInstanceOf[String])
                 assert(controller.output.isInstanceOf[String])
                 controller.prediction()
+                controller.checkattack(Vector("a", "14", "5")) should be(false)
                 assert(controller.checkmove(Vector("m", "3", "0")).isInstanceOf[Boolean])
                 controller.next()
                 controller.prediction()
