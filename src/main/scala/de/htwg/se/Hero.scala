@@ -15,7 +15,6 @@ object Hero {
     val controller = new Controller()
     val tui = new TUI(controller)
 
-
     def main(args: Array[String]): Unit = {
         println("\n" + "=" * 44 + " Welcome to Hero " + "=" * 44)
         println(" " * 35 + "Made by Alina Göttig & Ronny Klotz")
