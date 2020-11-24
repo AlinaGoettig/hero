@@ -20,7 +20,7 @@ class ObservableSpec extends WordSpec with Matchers {
                 obserable.subscribers should be(Vector.empty)
             }
             "notify an Observer" in {
-                obserable.notifyObservers should be(theSameInstanceAs:Unit)
+                obserable.notifyObservers should be(true)
             }
         }
     }
