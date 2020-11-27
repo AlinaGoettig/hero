@@ -316,7 +316,7 @@ class Controller() extends Observable{
     def baseStats(): Vector[Int] = {
         for (cell <- creatureliststart(player)) {
             if (cell._2.name.equals(board.currentcreature.name)) {
-                Vector(cell._2.multiplier,cell._2.hp)
+                return Vector(cell._2.multiplier,cell._2.hp)
             }
         }
         Vector.empty
