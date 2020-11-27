@@ -20,6 +20,7 @@ class ObservableSpec extends WordSpec with Matchers {
                 obserable.subscribers should be(Vector.empty)
             }
             "notify an Observer" in {
+                obserable.add(tui)
                 obserable.notifyObservers should be(true)
             }
         }
