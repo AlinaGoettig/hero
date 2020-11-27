@@ -284,10 +284,8 @@ class Controller() extends Observable{
                  info.last
              case "feedcreature" =>
                  val basestats = baseStats()
-                 if (basestats.nonEmpty) {
-                     val newC = board.currentcreature.copy(multiplier = basestats(0), hp = basestats(1))
-                     changeStats(newC)
-                 }
+                 val newC = board.currentcreature.copy(multiplier = basestats(0), hp = basestats(1))
+                 changeStats(newC)
                  val info = List(board.currentplayer + " cheated! Set " + board.realname(board.currentcreature.name)
                      + " values back to beginning")
                  board = board.copy(log = board.log ++ info)
@@ -314,12 +312,9 @@ class Controller() extends Observable{
     }
 
     def baseStats(): Vector[Int] = {
-        for (cell <- creatureliststart(player)) {
-            if (cell._2.name.equals(board.currentcreature.name)) {
-                return Vector(cell._2.multiplier,cell._2.hp)
-            }
-        }
-        Vector.empty
+        val list = creatureliststart(player)
+        val creature = list.filter(cell => cell._2.name.equals(board.currentcreature.name))
+        Vector(creature(0)._2.multiplier,creature(0)._2.hp)
     }
 
     // ---------------------------------------------- Input checks -----------------------------------------------------

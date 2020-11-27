@@ -6,6 +6,8 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
+import java.util.concurrent.ThreadLocalRandom
+
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
 
@@ -17,6 +19,7 @@ object Hero {
 
     def main(args: Array[String]): Unit = {
         println(startinfo())
+
         print(controller.printSidesStart())
 
         var input: Vector[String] = tui.inputLine(true)
