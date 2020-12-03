@@ -62,8 +62,8 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.notifyObservers
                 controller.printfield()
 
-                controller.areacheck(14, 5) should be(true)
-                controller.areacheck(1, 1) should be(false)
+                controller.areacheck(5, 14) should be(false)
+                controller.areacheck(1, 1) should be(true)
 
                 controller.checkattack(Vector("a", "14", "5")) should be(true)
                 controller.checkmove(Vector("m", "3", "1")) should be(true)
