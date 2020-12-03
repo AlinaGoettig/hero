@@ -7,7 +7,7 @@ package de.htwg.se.controller
  */
 
 import de.htwg.se.model.{Board, Cell, Player}
-import de.htwg.se.utill.Observable
+import de.htwg.se.utill._
 
 //noinspection ScalaStyle
 class Controller() extends Observable{
@@ -19,7 +19,7 @@ class Controller() extends Observable{
     // ----------------------------------------------- Inizial Game ----------------------------------------------------
 
     def inizGame(): Boolean= {
-        board = board.copy(board.field,player,player(0),emptycell,createCreatureList())
+        board = board.copy(board.field,player,player(0),CellFactory(""),createCreatureList())
         val creature = board.list(board.list.indexOf(board.list.last))
         board = board.copy(currentplayer = creature.player, currentcreature = creature)
         notifyObservers
@@ -34,12 +34,6 @@ class Controller() extends Observable{
 
     // ----------------------------------------------- Short liner -----------------------------------------------------
 
-    def obstacle: Cell = Cell("XXX", "0", 0, 0, style = false, 0, Player("none"))
-
-    def emptycell: Cell = Cell("   ", "0", 0, 0, style = false, 0, Player("none"))
-
-    def marker: Cell = Cell(" _ ", "0", 0, 0, style = false, 0, Player("none"))
-
     def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
 
     def lines(): String = "=" * 7 * 15 + "\n"
@@ -49,64 +43,41 @@ class Controller() extends Observable{
     def active(X: Int, Y: Int): Boolean =
         if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
 
-    // ----------------------------------------------- Cell Vectors ----------------------------------------------------
-
-    def creatureliststart(player: Vector[Player]): Vector[(Vector[Int], Cell)] = Vector(
-        // Start Position -> Name, Damage, Health, Speed, Style, Multiplier, Player  //Old Speed values
-        Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = false, 28, player(0)),     //  5
-        Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)),     //  7
-        Vector(0, 1) -> Cell("MA.", "4-6", 10, 3, style = true, 28, player(0)),      //  5
-        Vector(14, 1) -> Cell("MAG", "2-4", 13, 4, style = true, 20, player(1)),     //  6
-        Vector(0, 2) -> Cell("RO.", "3-6", 10, 4, style = false, 18, player(0)),     //  6
-        Vector(14, 2) -> Cell(".CE", "2-7", 25, 5, style = false, 10, player(1)),    //  8
-        Vector(0, 5) -> Cell("AN.", "50", 250, 12, style = false, 2, player(0)),     // 18
-        Vector(14, 5) -> Cell(".DE", "30-40", 200, 11, style = false, 2, player(1)), // 17
-        Vector(0, 8) -> Cell("CH.", "20-25", 100, 6, style = false, 4, player(0)),   //  9
-        Vector(14, 8) -> Cell(".EF", "16-24", 90, 9, style = false, 4, player(1)),   // 13
-        Vector(0, 9) -> Cell("ZE.", "10-12", 24, 5, style = true, 6, player(0)),     //  7
-        Vector(14, 9) -> Cell(".PI", "13-17", 45, 5, style = false, 6, player(1)),   //  7
-        Vector(0, 10) -> Cell("CR.", "7-10", 35, 4, style = false, 8, player(0)),    //  6
-        Vector(14, 10) -> Cell(".HO", "7-9", 40, 4, style = false, 8, player(1)))    //  6
-
-    def obstaclelist(): Vector[(Vector[Int], Cell)] = Vector(
-        Vector(6, 1) -> obstacle,
-        Vector(7, 2) -> obstacle,
-        Vector(5, 4) -> obstacle,
-        Vector(6, 4) -> obstacle,
-        Vector(7, 8) -> obstacle,
-        Vector(8, 8) -> obstacle,
-        Vector(6, 9) -> obstacle)
-
     // --------------------------------------------------- Start -------------------------------------------------------
 
     def start(): Board = {
-        val emptyboard = Board(Vector.fill(11, 15)(emptycell),player,player(0),emptycell,List.empty,List.empty)
-        val board = placeCreatures(emptyboard,creatureliststart(player),obstaclelist(), scenario = true)
+        val iterator = new CreaturelistIterator
+        val emptyboard = Board(Vector.fill(11, 15)(CellFactory("")),player,player(0),CellFactory(""),List.empty,List.empty)
+        val board = placeCreatures(emptyboard,iterator)
         board
     }
 
-    def placeCreatures(board: Board, list: Vector[(Vector[Int], Cell)], obstacles: Vector[(Vector[Int], Cell)], scenario: Boolean): Board = {
+    def placeCreatures(board: Board, iterator: CreaturelistIterator): Board = {
 
-        val coor = list.head._1
+        val info = iterator.next()
+        val creature = info._2
+        val coor = info._1
 
-        val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),list.head._2)))
+        val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),creature)))
 
-        if(list.size > 1) {
-            placeCreatures(creatureadd,list.slice(1,list.length),obstacles, scenario = true)
-        } else if (list.size == 1 && scenario) {
-            placeCreatures(creatureadd,list,obstacles, scenario = false)
+        if(iterator.hasNext()) {
+            placeCreatures(creatureadd,iterator)
         } else {
-            placeObstacles(board,obstacles,scenario = true)
+            val iterator = new ObstacleListIterator
+            placeObstacles(creatureadd, iterator)
         }
     }
 
-    def placeObstacles(board: Board, obstacles: Vector[(Vector[Int], Cell)], scenario: Boolean): Board = {
-        val cooro = obstacles.head._1
-        val obstacleadd = board.copy(board.field.updated(cooro(1),board.field(cooro(1)).updated(cooro(0),obstacles.head._2)))
-        if(obstacles.size > 1) {
-            placeObstacles(obstacleadd,obstacles.slice(1,obstacles.length),scenario = true)
-        } else if (obstacles.size == 1 && scenario) {
-            placeObstacles(obstacleadd,obstacles,scenario = false)
+    def placeObstacles(board: Board, iterator: ObstacleListIterator): Board = {
+
+        val info = iterator.next()
+        val obstacle = info._2
+        val coor = info._1
+
+        val obstacleadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),obstacle)))
+
+        if(iterator.hasNext()) {
+            placeObstacles(obstacleadd,iterator)
         } else {
             obstacleadd
         }
@@ -174,7 +145,7 @@ class Controller() extends Observable{
         replaceCreatureInList(defender,newCell)
 
         if (multiplier <= 0) {
-            board = board.copy(field.updated(Y2, field(Y2).updated(X2, emptycell)))
+            board = board.copy(field.updated(Y2, field(Y2).updated(X2, CellFactory(""))))
         } else {
             board = board.copy(field.updated(Y2, field(Y2).updated(X2, newCell)))
         }
@@ -198,7 +169,7 @@ class Controller() extends Observable{
     def deathcheck(X: Int, Y: Int): Boolean = {
         val field = board.field
         if (field(X)(Y).multiplier <= 0) {
-            board = board.copy(field.updated(X, field(X).updated(Y, emptycell)))
+            board = board.copy(field.updated(X, field(X).updated(Y, CellFactory(""))))
             true
         } else {
             false
@@ -206,12 +177,9 @@ class Controller() extends Observable{
     }
 
     def findbasehp(name: String): Int = {
-        for (cell <- creatureliststart(player)) {
-            if (cell._2.name.equals(name)) {
-                return cell._2.hp
-            }
-        }
-        0
+        val iterator = new CreaturelistIterator
+        val creature = iterator.list.filter(cell => cell._2.name.equals(board.currentcreature.name))
+        creature(0)._2.hp
     }
 
     // ---------------------------------------------- Board interaction ------------------------------------------------
@@ -233,7 +201,7 @@ class Controller() extends Observable{
                 val field = board.field
                 val dist = Math.abs(creature(0) - j) + Math.abs(creature(1) - i)
                 if (field(j)(i).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
-                    board = board.copy(field = field.updated(j, field(j).updated(i, marker)))
+                    board = board.copy(field = field.updated(j, field(j).updated(i, CellFactory("marker"))))
                 }
             }
         }
@@ -245,7 +213,7 @@ class Controller() extends Observable{
             for (j <- 0 to 10) {
                 val field = board.field
                 if (field(j)(i).name.equals(" _ ")) {
-                    board = board.copy(field = field.updated(j, field(j).updated(i, emptycell)))
+                    board = board.copy(field = field.updated(j, field(j).updated(i, CellFactory(""))))
                 }
             }
         }
@@ -296,7 +264,7 @@ class Controller() extends Observable{
                      val newC = cell.copy(multiplier = 0, hp = 0)
                      replaceCreatureInList(cell,newC)
                      val coor = position(cell)
-                     board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), emptycell)), currentcreature = newC)
+                     board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), CellFactory(""))), currentcreature = newC)
                  }
                  val info = List(board.currentplayer + " cheated! Killed all enemy creatures")
                  board = board.copy(log = board.log ++ info)
@@ -312,8 +280,8 @@ class Controller() extends Observable{
     }
 
     def baseStats(): Vector[Int] = {
-        val list = creatureliststart(player)
-        val creature = list.filter(cell => cell._2.name.equals(board.currentcreature.name))
+        val iterator = new CreaturelistIterator
+        val creature = iterator.list.filter(cell => cell._2.name.equals(board.currentcreature.name))
         Vector(creature(0)._2.multiplier,creature(0)._2.hp)
     }
 

@@ -39,7 +39,6 @@ class ControllerSpec extends WordSpec with Matchers {
                 assert(controller.clear().isInstanceOf[Vector[Vector[Cell]]])
                 assert(controller.position(controller.board.field(0)(0)).isInstanceOf[Vector[Int]])
                 assert(controller.baseStats().isInstanceOf[Vector[Int]])
-                //controller.baseStats()
                 assert(controller.printfield().isInstanceOf[String])
             }
 

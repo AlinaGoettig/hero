@@ -1,5 +1,11 @@
 package de.htwg.se.utill
 
+/**
+ * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ * @author Ronny Klotz & Alina Göttig
+ * @since 03.Dez.2020
+ */
+
 trait Expression {
     def interpret(): Boolean
 }
