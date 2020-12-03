@@ -37,7 +37,7 @@ object Hero {
     }
 
     def startinfo(): String = {
-        val version = "Version 1.0 MVC Structur"
+        val version = "Version 1.1 Design Pattern"
         val top = "\n" + "=" * 44 + " Welcome to Hero " + "=" * 44
         val middle = "\n" + " " * 35 + "Made by Alina Göttig & Ronny Klotz" + "\n"
         val bottom = " " * ((105 - version.length) / 2) + version + "\n"

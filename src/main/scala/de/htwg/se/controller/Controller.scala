@@ -144,16 +144,15 @@ class Controller() extends Observable{
 
         replaceCreatureInList(defender,newCell)
 
-        if (multiplier <= 0) {
-            board = board.copy(field.updated(Y2, field(Y2).updated(X2, CellFactory(""))))
-        } else {
-            board = board.copy(field.updated(Y2, field(Y2).updated(X2, newCell)))
-        }
-
+        board = board.copy(field.updated(Y2, field(Y2).updated(X2, newCell)))
         val loginfo = List(board.realname(attacker.name) + " dealt " + dmg + " points to "
             + board.realname(defender.name))
-        board = board.copy(log = board.log ++ loginfo)
-
+        if (deathcheck(Y2,X2)) {
+            val renwed = List(loginfo(0) + ". The creature got killed!")
+            board = board.copy(log = board.log ++ renwed)
+        } else {
+            board = board.copy(log = board.log ++ loginfo)
+        }
         dmg.toString
     }
 
@@ -178,7 +177,7 @@ class Controller() extends Observable{
 
     def findbasehp(name: String): Int = {
         val iterator = new CreaturelistIterator
-        val creature = iterator.list.filter(cell => cell._2.name.equals(board.currentcreature.name))
+        val creature = iterator.list.filter(cell => cell._2.name.equals(name))
         creature(0)._2.hp
     }
 

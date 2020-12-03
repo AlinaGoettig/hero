@@ -16,13 +16,6 @@ trait CustomIterator {
 }
 
 
-class Aggregator() {
-    def iterator(): CreaturelistIterator=
-    {
-        new CreaturelistIterator()
-    }
-}
-
 //noinspection ScalaStyle
 class CreaturelistIterator() extends CustomIterator {
     val player = Vector(Player("Castle"),Player("Inferno"))
