@@ -7,7 +7,7 @@ package de.htwg.se.controller
  */
 
 import de.htwg.se.model.{Board, Cell, Player}
-import de.htwg.se.utill._
+import de.htwg.se.util._
 
 //noinspection ScalaStyle
 class Controller() extends Observable{
@@ -220,16 +220,20 @@ class Controller() extends Observable{
         board.field
     }
 
-    def position(creature: Cell): Vector[Int] = {
+    def intpos(creature: String): Vector[Int] = {
         val field = board.field
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
-                if (field(i)(j).name.equals(creature.name)) {
+                if (field(i)(j).name.equals(creature)) {
                     return Vector(i, j)
                 }
             }
         }
-        Vector(-1,-1)
+        Vector(-1, -1)
+    }
+
+    def position(creature: Cell): Vector[Int] = {
+        intpos(creature.name)
     }
 
     def cheatCode(code: Vector[String]): String = {

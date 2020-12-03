@@ -6,7 +6,7 @@ package de.htwg.se.aview
  * @since 17.Nov.2020
  */
 
-import de.htwg.se.utill.Observer
+import de.htwg.se.util.Observer
 import de.htwg.se.controller.Controller
 import scala.io.StdIn
 

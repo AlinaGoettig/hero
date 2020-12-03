@@ -8,7 +8,7 @@ package de.htwg.se.Hero.model
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
-import de.htwg.se.utill.Interpreter
+import de.htwg.se.util.Interpreter
 
 import scala.io.StdIn
 

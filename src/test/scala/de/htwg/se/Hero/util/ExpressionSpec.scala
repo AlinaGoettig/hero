@@ -1,6 +1,6 @@
-package de.htwg.se.Hero.utill
+package de.htwg.se.Hero.util
 
-import de.htwg.se.utill.Interpreter
+import de.htwg.se.util.Interpreter
 import org.scalatest._
 
 class ExpressionSpec extends WordSpec with Matchers {

@@ -1,8 +1,8 @@
 package de.htwg.se.controller
 
 import de.htwg.se.model.{Board, Cell, Player}
-import de.htwg.se.utill._
-//import de.htwg.se.utill.Observable
+import de.htwg.se.util._
+//import de.htwg.se.util.Observable
 import org.scalatest._
 
 class ControllerSpec extends WordSpec with Matchers {
@@ -34,6 +34,8 @@ class ControllerSpec extends WordSpec with Matchers {
                 assert(controller.prediction().isInstanceOf[Vector[Vector[Cell]]])
                 assert(controller.clear().isInstanceOf[Vector[Vector[Cell]]])
                 assert(controller.position(controller.board.field(0)(0)).isInstanceOf[Vector[Int]])
+                assert(controller.intpos("FALSCH").isInstanceOf[Vector[Int]])
+                controller.intpos("FALSCH") should be(Vector(-1, -1))
                 assert(controller.baseStats().isInstanceOf[Vector[Int]])
                 assert(controller.printfield().isInstanceOf[String])
             }

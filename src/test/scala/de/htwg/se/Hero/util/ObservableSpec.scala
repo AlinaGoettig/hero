@@ -1,8 +1,8 @@
-package de.htwg.se.Hero.utill
+package de.htwg.se.Hero.util
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
-import de.htwg.se.utill.Observable
+import de.htwg.se.util.Observable
 import org.scalatest._
 
 class ObservableSpec extends WordSpec with Matchers {

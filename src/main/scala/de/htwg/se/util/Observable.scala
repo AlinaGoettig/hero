@@ -1,4 +1,4 @@
-package de.htwg.se.utill
+package de.htwg.se.util
 
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
