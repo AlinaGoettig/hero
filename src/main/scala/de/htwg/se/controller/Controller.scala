@@ -46,9 +46,8 @@ class Controller() extends Observable{
     // --------------------------------------------------- Start -------------------------------------------------------
 
     def start(): Board = {
-        val iterator = new CreaturelistIterator
         val emptyboard = Board(Vector.fill(11, 15)(CellFactory("")),player,player(0),CellFactory(""),List.empty,List.empty)
-        val board = placeCreatures(emptyboard,iterator)
+        val board = placeCreatures(emptyboard, new CreaturelistIterator)
         board
     }
 
@@ -63,8 +62,7 @@ class Controller() extends Observable{
         if(iterator.hasNext()) {
             placeCreatures(creatureadd,iterator)
         } else {
-            val iterator = new ObstacleListIterator
-            placeObstacles(creatureadd, iterator)
+            placeObstacles(creatureadd, new ObstacleListIterator)
         }
     }
 
@@ -147,12 +145,14 @@ class Controller() extends Observable{
         board = board.copy(field.updated(Y2, field(Y2).updated(X2, newCell)))
         val loginfo = List(board.realname(attacker.name) + " dealt " + dmg + " points to "
             + board.realname(defender.name))
+
         if (deathcheck(Y2,X2)) {
-            val renwed = List(loginfo(0) + ". The creature got killed!")
+            val renwed = List(loginfo.head + ". The creature got killed!")
             board = board.copy(log = board.log ++ renwed)
         } else {
             board = board.copy(log = board.log ++ loginfo)
         }
+
         dmg.toString
     }
 
@@ -308,19 +308,25 @@ class Controller() extends Observable{
             if (board.currentcreature.style) {
                 attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
                 return true
-            } else if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
-                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
-                ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                ((i + 1 < 11 && j >= 0) && field(i + 1)(j).name.equals(" _ ")) ||
-                ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
-                ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
-                ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
+            } else if (areacheck(i,j)) {
                 attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
                 return true
             }
         }
         false
+    }
+
+    def areacheck (i: Int, j: Int) : Boolean = {
+        val field = board.field
+        val list : List[Any] = List(if(i - 1 >= 0 && j - 1 >= 0) field(i - 1)(j - 1).name,
+                        if(i - 1 >= 0 && j >= 0) field(i - 1)(j).name,
+                        if(i - 1 >= 0 && j + 1 < 14) field(i - 1)(j + 1).name,
+                        if(i - 1 >= 0 && j >= 0) field(i - 1)(j).name,
+                        if(i + 1 < 11 && j >= 0) field(i + 1)(j).name,
+                        if(i + 1 < 11 && j - 1 >= 0) field(i + 1)(j - 1).name,
+                        if(i >= 0 && j + 1 < 14) field(i)(j + 1).name,
+                        if(i + 1 < 11 && j + 1 < 14) field(i + 1)(j + 1).name)
+        list.exists(name => name.equals(" _ "))
     }
 
     // ---------------------------------------------- Output Strings ---------------------------------------------------
@@ -335,14 +341,7 @@ class Controller() extends Observable{
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
                 if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX") && !active(i, j)) {
-                    if (((i - 1 >= 0 && j - 1 >= 0) && field(i - 1)(j - 1).name.equals(" _ ")) ||
-                        ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                        ((i - 1 >= 0 && j + 1 < 14) && field(i - 1)(j + 1).name.equals(" _ ")) ||
-                        ((i - 1 >= 0 && j >= 0) && field(i - 1)(j).name.equals(" _ ")) ||
-                        ((i + 1 < 11 && j >= 0) && field(i + 1)(j).name.equals(" _ ")) ||
-                        ((i + 1 < 11 && j - 1 >= 0) && field(i + 1)(j - 1).name.equals(" _ ")) ||
-                        ((i >= 0 && j + 1 < 14) && field(i)(j + 1).name.equals(" _ ")) ||
-                        ((i + 1 < 11 && j + 1 < 14) && field(i + 1)(j + 1).name.equals(" _ "))) {
+                    if (areacheck(i,j)) {
                         text += field(i)(j).attackable()
                     } else if (board.currentcreature.style) {
                         text += field(i)(j).attackable()
