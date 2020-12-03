@@ -1,4 +1,4 @@
-package de.htwg.se.Hero.util
+package de.htwg.se.Hero.utill
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller

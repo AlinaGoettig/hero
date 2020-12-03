@@ -14,7 +14,7 @@ trait Expression {
 class Interpreter(input: Vector[String]) extends Expression {
     override def interpret(): Boolean = {
         if(input.length == 3) {
-            new LetterAM(input(0)).interpret && new XVector(input(1)).interpret && new YVector(input(2)).interpret
+            new LetterAMI(input(0)).interpret && new XVector(input(1)).interpret && new YVector(input(2)).interpret
         } else if(input.length == 2) {
             new Cheat(input(0)).interpret && new CheatCode(input(1)).interpret
         } else if(input.length == 1) {
@@ -26,9 +26,9 @@ class Interpreter(input: Vector[String]) extends Expression {
 }
 
 //TERMINAL EXPRESSIONS
-class LetterAM(input: String) extends Expression {
+class LetterAMI(input: String) extends Expression {
     override def interpret: Boolean = {
-        if(input.equals("a") || input.equals("m")) {
+        if(input.equals("a") || input.equals("m") || input.equals("i")) {
             true
         } else {
             false
@@ -38,7 +38,7 @@ class LetterAM(input: String) extends Expression {
 
 class OneWord(input: String) extends Expression {
     override def interpret: Boolean = {
-        if(input.equals("i") || input.equals("p") || input.equals("exit")) {
+        if(input.equals("p") || input.equals("exit")) {
             true
         } else {
             false

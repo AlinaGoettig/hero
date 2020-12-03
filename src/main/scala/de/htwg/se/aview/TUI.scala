@@ -15,21 +15,26 @@ class TUI(controller: Controller) extends Observer{
 
     controller.add(this)
 
-    def inputLine(input: Vector[String]): Unit = {
+    def inputLine(input: Vector[String]): Boolean = {
         val number = controller.winner()
         if (number != 0) {
-            return endSequence(number)
+            print(controller.endInfo(number))
+            return false
         }
 
         if((input.head.equals("m") && !controller.checkmove(input)) ||
-            (input.head.equals("a") && !controller.checkattack(input)))
-        {} else if (input.head.equals("i")) {
+            (input.head.equals("a") && !controller.checkattack(input))) {
+            true
+        } else if (input.head.equals("i")) {
             controller.info(input)
+            true
         } else if (input.head.equals("CHEAT")) {
             controller.cheatCode(input)
             controller.notifyObservers
+            true
         } else {
             nextRound()
+            true
         }
     }
 
@@ -41,10 +46,6 @@ class TUI(controller: Controller) extends Observer{
         print(commands())
     }
 
-    def endSequence(side: Int): Vector[String] = {
-        print(controller.endInfo(side))
-        Vector("exit")
-    }
 
     def commands(): String = {
         val line = "=" * 105

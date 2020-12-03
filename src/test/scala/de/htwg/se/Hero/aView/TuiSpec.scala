@@ -17,11 +17,7 @@ class TuiSpec extends WordSpec with Matchers {
             tui.commands() should include("p")
             tui.commands() should include("exit")
         }
-        "have a end sequence" in {
-            tui.endSequence(1) should be(Vector("exit"))
-        }
         "be of Type" in {
-            assert(tui.endSequence(0).isInstanceOf[Vector[String]])
             assert(tui.commands().isInstanceOf[String])
             assert(tui.update.isInstanceOf[Unit])
         }

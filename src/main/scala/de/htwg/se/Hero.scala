@@ -27,9 +27,8 @@ object Hero {
         while(true) {
             val input = StdIn.readLine().split(" ").toVector
             if(new Interpreter(input).interpret()) {
-                if (input(0).equals("exit"))
+                if (input(0).equals("exit") || !tui.inputLine(input))
                     return
-                tui.inputLine(input)
             } else {
                 print("Ungültige Eingabe. ")
             }

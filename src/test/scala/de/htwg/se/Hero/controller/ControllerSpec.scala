@@ -1,6 +1,7 @@
 package de.htwg.se.controller
 
 import de.htwg.se.model.{Board, Cell, Player}
+import de.htwg.se.utill._
 //import de.htwg.se.utill.Observable
 import org.scalatest._
 
@@ -17,13 +18,9 @@ class ControllerSpec extends WordSpec with Matchers {
             "when game starts" in {
                 assert(controller.inizGame())
                 assert(controller.createCreatureList().isInstanceOf[List[Cell]])
-                assert(controller.obstacle.equals(Cell("XXX", "0", 0, 0, false, 0, Player("none"))))
-                assert(controller.emptycell.equals(Cell("   ", "0", 0, 0, false, 0, Player("none"))))
-                assert(controller.marker.equals(Cell(" _ ", "0", 0, 0, false, 0, Player("none"))))
                 assert(controller.start().isInstanceOf[Board])
-                assert(controller.placeCreatures(controller.board, controller.creatureliststart(controller.player), controller.obstaclelist(),
-                    true).isInstanceOf[Board])
-                assert(controller.placeObstacles(controller.board, controller.obstaclelist(), true).isInstanceOf[Board])
+                assert(controller.placeCreatures(controller.board, new CreaturelistIterator).isInstanceOf[Board])
+                assert(controller.placeObstacles(controller.board, new ObstacleListIterator).isInstanceOf[Board])
                 assert(controller.printSidesStart().isInstanceOf[String])
 
             }
@@ -34,7 +31,6 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.winner() should (be >= 0 and be <= 2)
                 assert(controller.deathcheck(0, 0).isInstanceOf[Boolean])
                 assert(controller.findbasehp(controller.board.field(0)(0).name).isInstanceOf[Int])
-                controller.findbasehp("   ") should be(0)
                 assert(controller.prediction().isInstanceOf[Vector[Vector[Cell]]])
                 assert(controller.clear().isInstanceOf[Vector[Vector[Cell]]])
                 assert(controller.position(controller.board.field(0)(0)).isInstanceOf[Vector[Int]])
@@ -47,8 +43,8 @@ class ControllerSpec extends WordSpec with Matchers {
                 assert(controller.lines().equals("=" * 7 * 15 + "\n"))
                 assert(controller.getCreature(controller.board.field, 0, 0).isInstanceOf[Cell])
                 assert(controller.active(0, 0).isInstanceOf[Boolean])
-                assert(controller.obstaclelist().isInstanceOf[Vector[(Vector[Int], Cell)]])
             }
+
             "for entered commands" in {
                 assert(controller.info(Vector("i", "0", "0")).isInstanceOf[String])
                 assert(controller.output.isInstanceOf[String])
@@ -107,8 +103,7 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.next()
                 controller.prediction()
                 controller.notifyObservers
-                assert(controller.changeStats(controller.emptycell).isInstanceOf[Boolean])
-                controller.position(controller.creatureliststart(controller.player)(4)._2) should be(Vector(-1,-1))
+                assert(controller.changeStats(CellFactory("")).isInstanceOf[Boolean])
                 assert(controller.endInfo(1).isInstanceOf[String])
                 controller.next()
                 controller.next()
