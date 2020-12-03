@@ -10,6 +10,9 @@ import java.util.concurrent.ThreadLocalRandom
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
+import de.htwg.se.utill.Interpreter
+
+import scala.io.StdIn
 
 //noinspection ScalaStyle
 object Hero {
@@ -22,20 +25,17 @@ object Hero {
 
         print(controller.printSidesStart())
 
-        var input: Vector[String] = tui.inputLine(true)
-
-        while(!input.head.equals("exit")) {
-            if((input.head.equals("m") && !controller.checkmove(input)) ||
-                (input.head.equals("a") && !controller.checkattack(input))) {
-                input = tui.inputLine(false)
-            } else if (input.head.equals("i")) {
-                controller.info(input)
-                input = tui.inputLine(false)
-            } else if (input.head.equals("CHEAT")) {
-                input = tui.inputLine(false)
+        tui.nextRound()
+        while(true) {
+            val input = StdIn.readLine().split(" ").toVector
+            if(new Interpreter(input).interpret()) {
+                if (input(0).equals("exit"))
+                    return
+                tui.inputLine(input)
             } else {
-                input = tui.inputLine(true)
+                print("Ungültige Eingabe. ")
             }
+            print("Neue Eingabe: ")
         }
     }
 

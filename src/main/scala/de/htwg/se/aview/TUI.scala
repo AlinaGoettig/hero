@@ -15,44 +15,31 @@ class TUI(controller: Controller) extends Observer{
 
     controller.add(this)
 
-    def inputLine(withOutput: Boolean): Vector[String] = {
+    def inputLine(input: Vector[String]): Unit = {
         val number = controller.winner()
         if (number != 0) {
             return endSequence(number)
         }
-        if (withOutput) {
 
-            controller.next()
-            controller.prediction()
-            controller.notifyObservers
-
-            print(commands())
-
-        }
-        print("neue Eingabe: ")
-        val input = StdIn.readLine().split(" ").toVector
-
-        if (input.size == 3) {
-            if (isinBoard(input) && (input.head.equals("a") || input.head.equals("m") || input.head.equals("i"))) {
-                input
-            } else {
-                print("Ungültige Eingabe")
-                inputLine(false)
-            }
-        } else if (input.size == 1 && (input.head.equals("p") || input.head.equals("exit"))) {
-            input
-        } else if (input.size == 2 && input.head.equals("CHEAT")) {
+        if((input.head.equals("m") && !controller.checkmove(input)) ||
+            (input.head.equals("a") && !controller.checkattack(input)))
+        {} else if (input.head.equals("i")) {
+            controller.info(input)
+        } else if (input.head.equals("CHEAT")) {
             controller.cheatCode(input)
             controller.notifyObservers
-            inputLine(false)
         } else {
-            print("Ungültige Eingabe")
-            inputLine(false)
+            nextRound()
         }
     }
 
-    def isinBoard(in : Vector[String]) : Boolean =
-        if ((in(1).toInt >= 0) && (in(1).toInt <= 14) && (in(2).toInt >= 0) && (in(2).toInt <= 11)) true else false
+    def nextRound(): Unit = {
+        controller.next()
+        controller.prediction()
+        controller.notifyObservers
+
+        print(commands())
+    }
 
     def endSequence(side: Int): Vector[String] = {
         print(controller.endInfo(side))
