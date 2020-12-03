@@ -21,6 +21,14 @@ class TuiSpec extends WordSpec with Matchers {
             assert(tui.commands().isInstanceOf[String])
             assert(tui.update.isInstanceOf[Unit])
         }
+
+        "accept input" in {
+            tui.nextRound()
+            tui.inputLine("i 0 0".split(" ").toVector) should be(true)
+            tui.inputLine("m 0 3".split(" ").toVector) should be(true)
+            tui.inputLine("a 1 1".split(" ").toVector) should be(true)
+            tui.inputLine("CHEAT handofjustice".split(" ").toVector) should be(false)
+        }
     }}
 
 }
