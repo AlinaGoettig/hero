@@ -19,19 +19,13 @@ object Hero {
     val tui = new TUI(controller)
 
     def main(args: Array[String]): Unit = {
-        println(startinfo())
 
-        print(controller.printSidesStart())
+        println(startinfo() + controller.printSidesStart())
 
         tui.nextRound()
-        while(true) {
-            val input = StdIn.readLine().split(" ").toVector
-            if(new Interpreter(input).interpret()) {
-                if (input(0).equals("exit") || !tui.inputLine(input))
-                    return
-            } else {
-                print("Ungültige Eingabe. ")
-            }
+        while(true) { val input = StdIn.readLine().split(" ").toVector
+            if(new Interpreter(input).interpret()) { if (input(0).equals("exit") || !tui.inputLine(input)) return
+            } else { print("Ungültige Eingabe. ") }
             print("Neue Eingabe: ")
         }
     }

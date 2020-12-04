@@ -81,14 +81,6 @@ class Controller() extends Observable{
         }
     }
 
-    def printSidesStart(): String = {
-        val player1 = "| " + player(0).name + " |"
-        val player2 = "| " + player(1).name + " |"
-        val middle = player1 + " " * (105 - player1.length - player2.length) + player2
-
-        lines() + middle + "\n" + lines()
-    }
-
     // ---------------------------------------- State of game Change ---------------------------------------------------
 
     def next(): Cell = {
@@ -356,6 +348,14 @@ class Controller() extends Observable{
             text += " " + i.toString + "\n" + lines()
         }
         text
+    }
+
+    def printSidesStart(): String = {
+        val player1 = "| " + player(0).name + " |"
+        val player2 = "| " + player(1).name + " |"
+        val middle = player1 + " " * (105 - player1.length - player2.length) + player2
+
+        "\n" + lines() + middle + "\n" + lines()
     }
 
     def output: String = {
