@@ -23,44 +23,37 @@ class SetCommand(Command: Vector[String], controller: Controller) extends Comman
 //noinspection ScalaStyle
 class UndoManager {
 
-    private var boarddo: List[Board] = Nil
-    private var boardre: List[Board] = Nil
-    private var undoStack: List[Command]= Nil
-    private var redoStack: List[Command]= Nil
+    private var boarddo: List[(Board,Command)] = Nil
+    private var boardre: List[(Board,Command)] = Nil
 
     def doStep(command: Command, board : Board): Unit = {
-        boarddo = boarddo :+ board
-        undoStack = command::undoStack
+        boarddo = boarddo :+ (board,command)
         command.doStep
     }
 
     def undoStep(controller: Controller): Unit = {
-        undoStack match {
+        boarddo match {
             case  Nil =>
-            case head::stack => {
+            case head:: _ => {
                 val board = boarddo.last
-                boardre = boardre :+ controller.board
+                boardre = boardre :+ (controller.board,head._2)
                 boarddo = boarddo.dropRight(1)
-                controller.board = board
-                head.changeStep(board)
-                undoStack=stack
-                redoStack= head::redoStack
+                controller.board = board._1
+                head._2.changeStep(board._1)
             }
         }
 
     }
 
     def redoStep(controller: Controller): Unit = {
-        redoStack match {
+        boardre match {
             case  Nil =>
-            case head::stack => {
+            case head:: _ => {
                 val board = boardre.last
-                boarddo = boarddo :+ controller.board
+                boarddo = boarddo :+ (controller.board,head._2)
                 boardre = boardre.dropRight(1)
-                controller.board = board
-                head.changeStep(board)
-                redoStack=stack
-                undoStack= head::undoStack
+                controller.board = board._1
+                head._2.changeStep(board._1)
             }
         }
 
