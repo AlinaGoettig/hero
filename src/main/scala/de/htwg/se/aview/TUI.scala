@@ -26,6 +26,9 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer{
         } else if (input.head.equals("undo")) {
             executer.undoStep(controller)
             nextRound(false)
+        } else if (input.head.equals("redo")) {
+            executer.redoStep(controller)
+            nextRound(false)
         } else if (input.head.equals("CHEAT")) {
             controller.cheatCode(input)
             controller.notifyObservers
@@ -53,6 +56,8 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer{
             "| m X Y | Move the current creature to board point X,Y\n" +
             "| i X Y | Returns the multiplier and health of the creature at X,Y\n" +
             "| p     | Skip the current round\n" +
+            "| undo  | Restores last move\n" +
+            "| redo  | Resets undo\n" +
             "| exit  | Exit the game\n" + line + "\n"
     }
 

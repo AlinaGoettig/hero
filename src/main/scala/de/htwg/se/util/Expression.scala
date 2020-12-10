@@ -39,7 +39,7 @@ class LetterAMI(input: String) extends Expression {
 
 class OneWord(input: String) extends Expression {
     override def interpret: Boolean = {
-        if(input.equals("p") || input.equals("exit") || input.equals("undo")) {
+        if(input.equals("p") || input.equals("exit") || input.equals("undo") || input.equals("redo")) {
             true
         } else {
             false
