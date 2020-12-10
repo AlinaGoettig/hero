@@ -16,6 +16,8 @@ class TuiSpec extends WordSpec with Matchers {
             tui.commands() should include("a X Y")
             tui.commands() should include("m X Y")
             tui.commands() should include("i X Y")
+            tui.commands() should include("undo")
+            tui.commands() should include("redo")
             tui.commands() should include("p")
             tui.commands() should include("exit")
         }
@@ -29,6 +31,8 @@ class TuiSpec extends WordSpec with Matchers {
             tui.inputLine("i 0 0".split(" ").toVector) should be(true)
             tui.inputLine("m 0 3".split(" ").toVector) should be(true)
             tui.inputLine("a 1 1".split(" ").toVector) should be(true)
+            tui.inputLine("undo".split(" ").toVector) should be(true)
+            tui.inputLine("redo".split(" ").toVector) should be(true)
             tui.inputLine("CHEAT handofjustice".split(" ").toVector) should be(false)
         }
     }}
