@@ -1,5 +1,7 @@
 package de.htwg.se.util
 
+import scala.util.Try
+
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
  * @author Ronny Klotz & Alina Göttig
@@ -69,30 +71,26 @@ class CheatCode(input: String) extends Expression {
 
 class XVector(input: String) extends Expression {
     override def interpret: Boolean = {
-        try {
+        if (Try(input.toInt).isSuccess) {
             val intInput = input.toInt
             if(0 <= intInput && intInput <= 14) {
                 true
             } else {
                 false
             }
-        } catch {
-            case e: Exception => false
-        }
+        } else {false}
     }
 }
 
 class YVector(input: String) extends Expression {
     override def interpret: Boolean = {
-        try {
+        if (Try(input.toInt).isSuccess) {
             val intInput = input.toInt
             if(0 <= intInput && intInput <= 10) {
                 true
             } else {
                 false
             }
-        } catch {
-            case e: Exception => false
-        }
+        } else {false}
     }
 }
