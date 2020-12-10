@@ -1,7 +1,6 @@
 package de.htwg.se.util
 
 import scala.util.Try
-
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
  * @author Ronny Klotz & Alina Göttig
@@ -40,7 +39,7 @@ class LetterAMI(input: String) extends Expression {
 
 class OneWord(input: String) extends Expression {
     override def interpret: Boolean = {
-        if(input.equals("p") || input.equals("exit")) {
+        if(input.equals("p") || input.equals("exit") || input.equals("undo")) {
             true
         } else {
             false

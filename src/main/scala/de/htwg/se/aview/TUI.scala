@@ -20,6 +20,8 @@ class TUI(controller: Controller) extends Observer{
             (input.head.equals("a") && !controller.checkattack(input))) {
         } else if (input.head.equals("i")) {
             controller.info(input)
+        } else if (input.equals("undo")) {
+
         } else if (input.head.equals("CHEAT")) {
             controller.cheatCode(input)
             controller.notifyObservers
