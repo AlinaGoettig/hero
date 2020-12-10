@@ -32,7 +32,7 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer{
         } else if (input.head.equals("CHEAT")) {
             controller.cheatCode(input)
             controller.notifyObservers
-        } else nextRound(true)
+        }
 
         val number = controller.winner()
         if (number != 0) {
