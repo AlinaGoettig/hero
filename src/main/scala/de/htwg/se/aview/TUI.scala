@@ -6,26 +6,30 @@ package de.htwg.se.aview
  * @since 17.Nov.2020
  */
 
-import de.htwg.se.util.Observer
+import de.htwg.se.util.{Observer, SetCommand, UndoManager}
 import de.htwg.se.controller.Controller
+
 import scala.io.StdIn
 
 //noinspection ScalaStyle
-class TUI(controller: Controller) extends Observer{
+class TUI(controller: Controller, executer : UndoManager) extends Observer{
 
     controller.add(this)
 
     def inputLine(input: Vector[String]): Boolean = {
-        if((input.head.equals("m") && !controller.checkmove(input)) ||
-            (input.head.equals("a") && !controller.checkattack(input))) {
+        if((input.head.equals("m") && controller.checkmove(input)) ||
+            (input.head.equals("a") && controller.checkattack(input))) {
+            executer.doStep(new SetCommand(input,controller), controller.board)
+            nextRound(true)
         } else if (input.head.equals("i")) {
             controller.info(input)
-        } else if (input.equals("undo")) {
-
+        } else if (input.head.equals("undo")) {
+            executer.undoStep(controller)
+            nextRound(false)
         } else if (input.head.equals("CHEAT")) {
             controller.cheatCode(input)
             controller.notifyObservers
-        } else nextRound()
+        } else nextRound(true)
 
         val number = controller.winner()
         if (number != 0) {
@@ -34,8 +38,8 @@ class TUI(controller: Controller) extends Observer{
         } else true
     }
 
-    def nextRound(): Unit = {
-        controller.next()
+    def nextRound(check: Boolean): Unit = {
+        if (check) controller.next()
         controller.prediction()
         controller.notifyObservers
 

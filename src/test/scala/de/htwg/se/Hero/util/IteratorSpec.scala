@@ -18,14 +18,14 @@ class Iterator extends WordSpec with Matchers {
             obstacle._1 should be(Vector(6, 1))
         }
         "and tell if there is a next cell" in {
-            creaturelist.hasNext() should be(true)
-            obstaclelist.hasNext() should be(true)
+            creaturelist.hasNext should be(true)
+            obstaclelist.hasNext should be(true)
         }
         "and change at the end" in {
-            while (creaturelist.hasNext()) { creaturelist.next() }
-            while (obstaclelist.hasNext()) { obstaclelist.next() }
-            creaturelist.hasNext() should be(false)
-            obstaclelist.hasNext() should be(false)
+            while (creaturelist.hasNext) { creaturelist.next() }
+            while (obstaclelist.hasNext) { obstaclelist.next() }
+            creaturelist.hasNext should be(false)
+            obstaclelist.hasNext should be(false)
         }
     }
     }

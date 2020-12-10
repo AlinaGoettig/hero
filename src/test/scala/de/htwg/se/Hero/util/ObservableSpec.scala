@@ -2,7 +2,7 @@ package de.htwg.se.Hero.util
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
-import de.htwg.se.util.Observable
+import de.htwg.se.util.{Observable, UndoManager}
 import org.scalatest._
 
 class ObservableSpec extends WordSpec with Matchers {
@@ -10,7 +10,8 @@ class ObservableSpec extends WordSpec with Matchers {
     "An Observer" when { "new" should {
             val obserable = new Observable
             val controller = new Controller
-            val tui = new TUI(controller)
+            val executer = new UndoManager
+            val tui = new TUI(controller, executer)
             "add an Observer" in {
                 obserable.add(tui)
                 obserable.subscribers should not be(Vector.empty)

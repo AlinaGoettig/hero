@@ -8,7 +8,7 @@ package de.htwg.se.Hero.model
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
-import de.htwg.se.util.Interpreter
+import de.htwg.se.util.{Interpreter, UndoManager}
 
 import scala.io.StdIn
 
@@ -16,13 +16,14 @@ import scala.io.StdIn
 object Hero {
 
     val controller = new Controller()
-    val tui = new TUI(controller)
+    val executer = new UndoManager
+    val tui = new TUI(controller, executer)
 
     def main(args: Array[String]): Unit = {
 
         println(startinfo() + controller.printSidesStart())
 
-        tui.nextRound()
+        tui.nextRound(true)
         while(true) { val input = StdIn.readLine().split(" ").toVector
             if(new Interpreter(input).interpret()) { if (input(0).equals("exit") || !tui.inputLine(input)) return
             } else { print("Ungültige Eingabe. ") }
@@ -37,4 +38,5 @@ object Hero {
         val bottom = " " * ((105 - version.length) / 2) + version + "\n"
         top + middle + bottom + "=" * 105 + "\n"
     }
+
 }

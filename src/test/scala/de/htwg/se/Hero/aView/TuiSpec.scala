@@ -2,13 +2,15 @@ package de.htwg.se.Hero.aView
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.Controller
+import de.htwg.se.util.UndoManager
 import org.scalatest._
 
 class TuiSpec extends WordSpec with Matchers {
 
     "A TUI" when { "new" should {
         val controller = new Controller()
-        val tui = new TUI(controller)
+        val executer = new UndoManager
+        val tui = new TUI(controller, executer)
 
         "have commando represent"  in {
             tui.commands() should include("a X Y")
@@ -23,7 +25,7 @@ class TuiSpec extends WordSpec with Matchers {
         }
 
         "accept input" in {
-            tui.nextRound()
+            tui.nextRound(true)
             tui.inputLine("i 0 0".split(" ").toVector) should be(true)
             tui.inputLine("m 0 3".split(" ").toVector) should be(true)
             tui.inputLine("a 1 1".split(" ").toVector) should be(true)

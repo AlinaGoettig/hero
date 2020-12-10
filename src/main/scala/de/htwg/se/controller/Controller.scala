@@ -59,7 +59,7 @@ class Controller() extends Observable{
 
         val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),creature)))
 
-        if(iterator.hasNext()) {
+        if(iterator.hasNext) {
             placeCreatures(creatureadd,iterator)
         } else {
             placeObstacles(creatureadd, new ObstacleListIterator)
@@ -74,7 +74,7 @@ class Controller() extends Observable{
 
         val obstacleadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),obstacle)))
 
-        if(iterator.hasNext()) {
+        if(iterator.hasNext) {
             placeObstacles(obstacleadd,iterator)
         } else {
             obstacleadd
@@ -284,8 +284,6 @@ class Controller() extends Observable{
 
     def checkmove(in:Vector[String]): Boolean =
         if (in(0) == "m" && getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
-            val creature = position(board.currentcreature)
-            move(creature(0), creature(1), in(2).toInt, in(1).toInt)
             true
         } else false
 
@@ -296,12 +294,9 @@ class Controller() extends Observable{
         val field = board.field
         if (!field(i)(j).name.equals("   ") && !field(i)(j).name.equals(" _ ") && !field(i)(j).name.equals("XXX")
             && !active(i, j)) {
-            val creature = position(board.currentcreature)
             if (board.currentcreature.style) {
-                attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
                 return true
             } else if (areacheck(i,j)) {
-                attack(creature(0), creature(1), in(2).toInt, in(1).toInt)
                 return true
             }
         }

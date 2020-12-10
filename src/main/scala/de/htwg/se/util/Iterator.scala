@@ -10,7 +10,7 @@ import de.htwg.se.model.{Cell, Player}
 
 trait CustomIterator {
 
-    def hasNext(): Boolean
+    def hasNext: Boolean
     def next():(Vector[Int], Cell)
 
 }
@@ -36,7 +36,7 @@ class CreaturelistIterator() extends CustomIterator {
 
     var position: Int = 0;
 
-    def hasNext(): Boolean = {
+    def hasNext: Boolean = {
         if (position >= list.size) {
             false;
         } else {
@@ -65,7 +65,7 @@ class ObstacleListIterator() extends CustomIterator {
 
     var position: Int = 0;
 
-    def hasNext(): Boolean = {
+    def hasNext: Boolean = {
         if (position >= list.size) {
             false;
         } else {
