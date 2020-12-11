@@ -23,8 +23,8 @@ class SetCommand(Command: Vector[String], controller: Controller) extends Comman
 //noinspection ScalaStyle
 class UndoManager {
 
-    private var boarddo: List[(Board,Command)] = Nil
-    private var boardre: List[(Board,Command)] = Nil
+    private var boarddo: List[(Board,Command)] = List()
+    private var boardre: List[(Board,Command)] = List()
 
     def doStep(command: Command, board : Board): Unit = {
         boarddo = boarddo :+ (board,command)

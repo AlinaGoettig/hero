@@ -34,11 +34,13 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer{
             controller.notifyObservers
         } else nextRound(true)
 
-        val number = controller.winner()
-        if (number != 0) {
-            print(controller.endInfo(number))
-            false
-        } else true
+        controller.winner() match {
+            case Some(value) => {
+                print(controller.endInfo(value))
+                false
+            }
+            case None => true
+        }
     }
 
     def nextRound(check: Boolean): Unit = {

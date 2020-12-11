@@ -27,8 +27,8 @@ class ControllerSpec extends WordSpec with Matchers {
 
             "call several times" in {
                 assert(controller.next().isInstanceOf[Cell])
-                assert(controller.winner().isInstanceOf[Int])
-                controller.winner() should (be >= 0 and be <= 2)
+                assert(controller.winner().isInstanceOf[Option[Int]])
+                controller.winner().get should (be >= 1 and be <= 2)
                 assert(controller.deathcheck(0, 0).isInstanceOf[Boolean])
                 assert(controller.findbasehp(controller.board.field(0)(0).name).isInstanceOf[Int])
                 assert(controller.prediction().isInstanceOf[Vector[Vector[Cell]]])

@@ -104,15 +104,15 @@ class Controller() extends Observable{
         }
     }
 
-    def winner(): Int = {
+    def winner(): Option[Int] = {
         val player1 = board.list.exists(Cell => Cell.player.equals(player.head) && Cell.multiplier > 0)
         val player2 = board.list.exists(Cell => Cell.player.equals(player.last) && Cell.multiplier > 0)
         if (player1 && !player2) {
-            1
+            Some(1)
         } else if (!player1 && player2) {
-            2
+            Some(2)
         } else {
-            0
+            None
         }
     }
 
