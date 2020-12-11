@@ -2,7 +2,6 @@ package de.htwg.se.controller
 
 import de.htwg.se.model.{Board, Cell, Player}
 import de.htwg.se.util._
-//import de.htwg.se.util.Observable
 import org.scalatest._
 
 class ControllerSpec extends WordSpec with Matchers {
@@ -28,7 +27,7 @@ class ControllerSpec extends WordSpec with Matchers {
             "call several times" in {
                 assert(controller.next().isInstanceOf[Cell])
                 assert(controller.winner().isInstanceOf[Option[Int]])
-                controller.winner().get should (be >= 1 and be <= 2)
+                controller.winner() should be (None)
                 assert(controller.deathcheck(0, 0).isInstanceOf[Boolean])
                 assert(controller.findbasehp(controller.board.field(0)(0).name).isInstanceOf[Int])
                 assert(controller.prediction().isInstanceOf[Vector[Vector[Cell]]])
@@ -131,13 +130,13 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.board = controller.start()
                 controller.inizGame()
                 controller.cheatCode(Vector("CHEAT", "handofjustice"))
-                controller.winner() should  be(2)
+                controller.winner().get should  be(2)
 
                 controller.board = controller.start()
                 controller.inizGame()
                 controller.next()
                 controller.cheatCode(Vector("CHEAT", "handofjustice"))
-                controller.winner() should be(1)
+                controller.winner().get should be(1)
             }
         }
     }
