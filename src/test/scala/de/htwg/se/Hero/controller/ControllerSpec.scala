@@ -97,11 +97,10 @@ class ControllerSpec extends WordSpec with Matchers {
                 new SetCommand(Vector("m","9","3"),controller).doStep
                 controller.prediction()
                 controller.checkattack(Vector("a", "9", "2")) should be(true)
+                new SetCommand(Vector("a","9","2"),controller).doStep
 
                 controller.checkattack(Vector("a", "9", "2"))
-                controller.deathcheck(9, 2)
-                controller.checkattack(Vector("a", "9", "2"))
-                controller.deathcheck(9, 2)
+                new SetCommand(Vector("a","9","2"),controller).doStep
             }
 
             "when cheating" in {
