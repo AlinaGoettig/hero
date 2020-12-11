@@ -57,4 +57,5 @@ case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentpla
     }
 
     def lines(): String = "=" * 7 * 15 + "\n"
+
 }
