@@ -53,6 +53,9 @@ case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentpla
             case ".PI" => "Pi_t Lord"
             case "CR." => "Cr_usader"
             case ".HO" => "Ho_rned Demon"
+            case "   " => "   "
+            case " _ " => " _ "
+            case "XXX" => "XXX"
         }
     }
 
