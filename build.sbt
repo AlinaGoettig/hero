@@ -10,11 +10,12 @@ libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
 //libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.144-R12"
+//libraryDependencies += "org.scalafx" %% "scalafx" % "15.0.1-R20"
 
 //Libraries that we will use in later lectures compatible with this scala version
 // uncomment to use!!
 
-//libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.0.1"
+libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.0.1"
 
 //libraryDependencies += "com.google.inject" % "guice" % "4.1.0"
 
