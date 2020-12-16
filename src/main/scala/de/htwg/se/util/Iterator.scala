@@ -55,13 +55,23 @@ class CreaturelistIterator() extends CustomIterator {
 class ObstacleListIterator() extends CustomIterator {
     val obstacle: Cell = Cell("XXX", "0", 0, 0, style = false, 0, Player("none"))
     val list: Vector[(Vector[Int],Cell)] = Vector(
-        Vector(6, 1) -> obstacle,
-        Vector(7, 2) -> obstacle,
-        Vector(5, 4) -> obstacle,
-        Vector(6, 4) -> obstacle,
+        Vector(4, 7) -> obstacle,
+        Vector(4, 6) -> obstacle,
+        Vector(5, 6) -> obstacle,
+        Vector(5, 5) -> obstacle,
+        Vector(6, 5) -> obstacle,
+        Vector(7, 5) -> obstacle,
+        Vector(8, 5) -> obstacle,
+        Vector(9, 5) -> obstacle,
+        Vector(10, 5) -> obstacle,
+        Vector(11, 4) -> obstacle,
+        Vector(5, 8) -> obstacle,
+        Vector(6, 8) -> obstacle,
+        Vector(7, 5) -> obstacle,
         Vector(7, 8) -> obstacle,
-        Vector(8, 8) -> obstacle,
+        Vector(6, 5) -> obstacle,
         Vector(6, 9) -> obstacle)
+
 
     var position: Int = 0;
 

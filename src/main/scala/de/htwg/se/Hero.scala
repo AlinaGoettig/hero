@@ -6,7 +6,7 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
-import de.htwg.se.aview.TUI
+import de.htwg.se.aview.{SwingGui, TUI}
 import de.htwg.se.controller.Controller
 import de.htwg.se.util.{Interpreter, UndoManager}
 
@@ -18,12 +18,15 @@ object Hero {
     val controller = new Controller()
     val executer = new UndoManager
     val tui = new TUI(controller, executer)
+    val gui = new SwingGui(controller)
 
     def main(args: Array[String]): Unit = {
 
         println(startinfo() + controller.printSidesStart())
 
         tui.nextRound(true)
+        gui.visible = true
+
         while(true) { val input = StdIn.readLine().split(" ").toVector
             if(new Interpreter(input).interpret()) { if (input(0).equals("exit") || !tui.inputLine(input)) return
             } else { print("Ungültige Eingabe. ") }
