@@ -64,4 +64,5 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer{
     }
 
     override def update: Unit = print(controller.output)
+
 }

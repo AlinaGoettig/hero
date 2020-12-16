@@ -9,8 +9,10 @@ package de.htwg.se.controller
 import de.htwg.se.model.{Board, Cell, Player}
 import de.htwg.se.util._
 
+import scala.swing.Publisher
+
 //noinspection ScalaStyle
-class Controller() extends Observable{
+class Controller() extends Observable {
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Inferno"))
     var board: Board = start()
@@ -144,7 +146,6 @@ class Controller() extends Observable{
         } else {
             board = board.copy(log = board.log ++ loginfo)
         }
-
         dmg.toString
     }
 
