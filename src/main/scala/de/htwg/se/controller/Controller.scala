@@ -9,8 +9,6 @@ package de.htwg.se.controller
 import de.htwg.se.model.{Board, Cell, Player}
 import de.htwg.se.util._
 
-import scala.swing.Publisher
-
 //noinspection ScalaStyle
 class Controller() extends Observable {
 
