@@ -117,88 +117,89 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
         contents = new ImagePanel {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/Background.png"
-        contents = new BoxPanel(Orientation.Vertical) {
-            background = Color.BLACK
             contents += new BoxPanel(Orientation.Vertical) {
-                border = new EmptyBorder(225,54,0,50)
                 opaque = false
-
                 contents += new BoxPanel(Orientation.Vertical) {
+                    border = new EmptyBorder(225, 54, 0, 50)
                     opaque = false
-                    for {i <- 0 to 10} {
-                        contents += new BoxPanel(Orientation.Horizontal) {
-                            opaque = false
-                            for {j <- 0 to 14} {
-                                contents += new CustomButton(j, i, controller.getCreature(controller.board.field, i, j), controller) {
-                                    foreground = Color.BLACK
-                                    minimumSize = new Dimension(100, 80)
-                                    maximumSize = new Dimension(170, 100)
-                                    preferredSize = new Dimension(121, 70)
-                                    val cell: Cell = controller.getCreature(controller.board.field, i, j)
-                                    val currentplayer: Player = controller.board.currentplayer
-                                    if (cell.name.equals(" _ ")) {
-                                        background = Color.ORANGE
-                                    } else if (!cell.name.equals("   ")) {
-                                        if (currentplayer.equals(cell.player)) {
-                                            background = Color.WHITE
+
+                    contents += new BoxPanel(Orientation.Vertical) {
+                        opaque = false
+                        for {i <- 0 to 10} {
+                            contents += new BoxPanel(Orientation.Horizontal) {
+                                opaque = false
+                                for {j <- 0 to 14} {
+                                    contents += new CustomButton(j, i, controller.getCreature(controller.board.field, i, j), controller) {
+                                        foreground = Color.BLACK
+                                        minimumSize = new Dimension(100, 80)
+                                        maximumSize = new Dimension(170, 100)
+                                        preferredSize = new Dimension(121, 70)
+                                        val cell: Cell = controller.getCreature(controller.board.field, i, j)
+                                        val currentplayer: Player = controller.board.currentplayer
+                                        if (cell.name.equals(" _ ")) {
+                                            background = Color.ORANGE
+                                        } else if (!cell.name.equals("   ")) {
+                                            if (currentplayer.equals(cell.player)) {
+                                                background = Color.WHITE
+                                            } else {
+                                                background = new Color(250, 180, 180)
+                                            }
                                         } else {
-                                            background = new Color(250, 180, 180)
+                                            contentAreaFilled = false
+                                            borderPainted = false
+                                            opaque = false
+                                            background = new Color(230, 200, 120)
                                         }
-                                    } else {
-                                        contentAreaFilled = false
-                                        borderPainted = false
-                                        opaque = false
-                                        background = new Color(230, 200, 120)
-                                    }
 
-                                    if (cell.name.equals("XXX")) {
-                                        background = Color.LIGHT_GRAY
-                                    }
-                                    if (cell.name.equals(controller.board.currentcreature.name)) {
-                                        background = new Color(125, 190, 255)
-                                    }
-                                    if (controller.checkattack(Vector("m", j.toString, i.toString))) {
-                                        background = Color.RED
-                                    }
+                                        if (cell.name.equals("XXX")) {
+                                            background = Color.LIGHT_GRAY
+                                        }
+                                        if (cell.name.equals(controller.board.currentcreature.name)) {
+                                            background = new Color(125, 190, 255)
+                                        }
+                                        if (controller.checkattack(Vector("m", j.toString, i.toString))) {
+                                            background = Color.RED
+                                        }
 
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                contents += new BorderPanel {
-                    opaque = false
+                    contents += new BorderPanel {
+                        opaque = false
 
-                    add(new Label(controller.board.currentplayer.name + ": " + controller.board.realname(controller.board.currentcreature.name)) {
-                        font = new Font("Arial", 1, 30)
-                        foreground = Color.WHITE
-                    }, BorderPanel.Position.West)
+                        add(new Label(controller.board.currentplayer.name + ": " + controller.board.realname(controller.board.currentcreature.name)) {
+                            font = new Font("Arial", 1, 30)
+                            foreground = Color.WHITE
+                        }, BorderPanel.Position.West)
 
-                    val log: List[String] = controller.board.log
-                    add(new Label(if (log.isEmpty) "" else log.last) {
-                        font = new Font("Arial", 1, 30)
-                        foreground = Color.WHITE
-                    }, BorderPanel.Position.Center)
+                        val log: List[String] = controller.board.log
+                        add(new Label(if (log.isEmpty) "" else log.last) {
+                            font = new Font("Arial", 1, 30)
+                            foreground = Color.WHITE
+                        }, BorderPanel.Position.Center)
 
-                    val pass: Button = new Button("Pass") {
-                        background = Color.WHITE
-                        font = new Font("Arial", 1, 30)
-                        reactions += {
-                            case ButtonClicked(e) => {
-                                controller.next()
-                                controller.prediction()
-                                controller.notifyObservers
+                        val pass: Button = new Button("Pass") {
+                            background = Color.WHITE
+                            font = new Font("Arial", 1, 30)
+                            reactions += {
+                                case ButtonClicked(e) => {
+                                    controller.next()
+                                    controller.prediction()
+                                    controller.notifyObservers
+                                }
                             }
                         }
-                    }
-                    add(pass, BorderPanel.Position.East)
+                        add(pass, BorderPanel.Position.East)
 
+                    }
                 }
             }
-        }
-        if (controller.winner().isDefined) {
-            controller.gamestate = "finished"
+            if (controller.winner().isDefined) {
+                controller.gamestate = "finished"
+            }
         }
     }
 
@@ -283,6 +284,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
             case "finished" => scoreboard()
         }
     }
+
 }
 
 class ImagePanel() extends BoxPanel(Orientation.Vertical)
@@ -307,12 +309,12 @@ class ImagePanel() extends BoxPanel(Orientation.Vertical)
 
 class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends Button {
 
-    val currentcell: Cell = controller.getCreature(controller.board.field,Y,X)
+    val currentcell: Cell = controller.getCreature(controller.board.field, Y, X)
     val cellname: String = controller.board.realname(cell.name)
 
     text = "<html><center>" + cellname
     font = new Font("Arial", 1, 18)
-    if(!cell.player.name.equals("none")) {
+    if (!cell.player.name.equals("none")) {
         text += "<br>" + currentcell.multiplier + "</center></html>";
     }
 
@@ -320,10 +322,10 @@ class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends B
         case ButtonClicked(_) => {
             val posi = controller.position(controller.board.currentcreature)
             if (cellname.equals(" _ ")) {
-                controller.move(posi(0),posi(1),Y,X)
+                controller.move(posi(0), posi(1), Y, X)
                 next()
-            } else if (controller.checkattack(Vector("m",X.toString,Y.toString))){
-                controller.attack(posi(0),posi(1),Y,X)
+            } else if (controller.checkattack(Vector("m", X.toString, Y.toString))) {
+                controller.attack(posi(0), posi(1), Y, X)
                 next()
             }
         }
