@@ -21,25 +21,53 @@ object Hero {
     val gui = new SwingGui(controller)
 
     def main(args: Array[String]): Unit = {
-
-        println(startinfo() + mainmenu)
+        controller.next()
+        controller.prediction()
         gui.update
         gui.visible = true
 
-        while(!controller.gamestate.equals("gamerun")) {
-            val input = StdIn.readLine()
-            if(input.equals("n")) controller.gamestate = "gamerun"
-            else if (input.equals("exit")) return
-            else println("Ungültige Eingabe. ")
-        }
+        while (true) {
+            controller.gamestate match {
+                case "mainmenu" => {
+                    println(startinfo() + mainmenu)
+                    while (!controller.gamestate.equals("gamerun")) {
+                        val input = StdIn.readLine()
+                        controller.gamestate match {
+                            case "mainmenu" => {
+                                if (input.equals("n")) controller.gamestate = "gamerun"
+                                else if (input.equals("n")) println("Function not implemented yet.")
+                                else if (input.equals("exit")) return
+                                else println("Ungültige Eingabe. ")
+                            }
+                            case "gamerun" => {
+                                if (new Interpreter(input.split(" ").toVector).interpret()) {
+                                    if (input(0).equals("exit") || !tui.inputLine(input.split(" ").toVector)) return
+                                } else {
+                                    print("Ungültige Eingabe. ")
+                                }
+                                print("Neue Eingabe: ")
+                            }
+                            case "finished" => return
+                        }
+                    }
+                }
+                case "gamerun" => {
+                    println(controller.printSidesStart())
+                    controller.notifyObservers
+                    print(tui.commands())
 
-        println(controller.printSidesStart())
-        tui.nextRound(true)
-
-        while(true) { val input = StdIn.readLine().split(" ").toVector
-            if(new Interpreter(input).interpret()) { if (input(0).equals("exit") || !tui.inputLine(input)) return
-            } else { print("Ungültige Eingabe. ") }
-            print("Neue Eingabe: ")
+                    while (true) {
+                        val input = StdIn.readLine().split(" ").toVector
+                        if (new Interpreter(input).interpret()) {
+                            if (input(0).equals("exit") || !tui.inputLine(input)) return
+                        } else {
+                            print("Ungültige Eingabe. ")
+                        }
+                        print("Neue Eingabe: ")
+                    }
+                }
+                case "finished" => return
+            }
         }
     }
 

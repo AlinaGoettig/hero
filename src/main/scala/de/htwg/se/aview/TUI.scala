@@ -31,9 +31,14 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer {
             controller.cheatCode(input)
             controller.notifyObservers
         }
-        if(controller.gamestate.equals("finished"))
-            false
-        else true
+        controller.winner() match {
+            case Some(value) => {
+                controller.gamestate = "finished"
+                controller.notifyObservers
+                true
+            }
+            case None => false
+        }
     }
 
     def nextRound(check: Boolean): Unit = {

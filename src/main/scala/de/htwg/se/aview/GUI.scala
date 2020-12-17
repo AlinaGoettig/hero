@@ -117,6 +117,8 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
         contents = new ImagePanel {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/Background.png"
+        contents = new BoxPanel(Orientation.Vertical) {
+            background = Color.BLACK
             contents += new BoxPanel(Orientation.Vertical) {
                 border = new EmptyBorder(225,54,0,50)
                 opaque = false
@@ -195,6 +197,9 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 }
             }
         }
+        if (controller.winner().isDefined) {
+            controller.gamestate = "finished"
+        }
     }
 
     def scoreboard(): Unit = {
@@ -253,6 +258,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 reactions += {
                     case ButtonClicked(_) =>
                         controller.gamestate = "mainmenu"
+                        controller.notifyObservers
                 }
             }
             contents += new Button {
