@@ -34,13 +34,12 @@ class UndoManager {
     def undoStep(controller: Controller): Unit = {
         boarddo match {
             case  Nil =>
-            case head:: _ => {
+            case head:: _ =>
                 val board = boarddo.last
                 boardre = boardre :+ (controller.board,head._2)
                 boarddo = boarddo.dropRight(1)
                 controller.board = board._1
                 head._2.changeStep(board._1)
-            }
         }
 
     }
@@ -48,13 +47,12 @@ class UndoManager {
     def redoStep(controller: Controller): Unit = {
         boardre match {
             case  Nil =>
-            case head:: _ => {
+            case head:: _ =>
                 val board = boardre.last
                 boarddo = boarddo :+ (controller.board,head._2)
                 boardre = boardre.dropRight(1)
                 controller.board = board._1
                 head._2.changeStep(board._1)
-            }
         }
 
     }

@@ -9,10 +9,8 @@ package de.htwg.se.aview
 import de.htwg.se.util.{Observer, SetCommand, UndoManager}
 import de.htwg.se.controller.Controller
 
-import scala.io.StdIn
-
 //noinspection ScalaStyle
-class TUI(controller: Controller, executer : UndoManager) extends Observer{
+class TUI(controller: Controller, executer : UndoManager) extends Observer {
 
     controller.add(this)
 
@@ -35,10 +33,9 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer{
         }
 
         controller.winner() match {
-            case Some(value) => {
+            case Some(value) =>
                 print(controller.endInfo(value))
                 false
-            }
             case None => true
         }
     }

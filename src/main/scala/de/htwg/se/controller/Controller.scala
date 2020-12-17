@@ -160,7 +160,7 @@ class Controller() extends Observable {
 
     def deathcheck(X: Int, Y: Int): Boolean = {
         val field = board.field
-        if (field(X)(Y).multiplier <= 0) {
+        if (field(X)(Y).multiplier <= 0 || field(X)(Y).hp < 0) {
             board = board.copy(field.updated(X, field(X).updated(Y, CellFactory(""))))
             true
         } else {

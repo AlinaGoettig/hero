@@ -9,6 +9,8 @@ scalaVersion  := "2.12.7"
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
+libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0"
+
 //libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.144-R12"
 //libraryDependencies += "org.scalafx" %% "scalafx" % "15.0.1-R20"
 
