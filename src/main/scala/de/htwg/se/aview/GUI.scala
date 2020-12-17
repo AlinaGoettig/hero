@@ -82,9 +82,6 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     }
 
     def gamerun(): Unit = {
-        if (controller.winner().isDefined) {
-            controller.notifyObservers
-        }
         contents = new BoxPanel(Orientation.Vertical) {
             background = Color.BLACK
             contents += new BoxPanel(Orientation.Vertical) {
@@ -152,6 +149,9 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 add(pass, BorderPanel.Position.East)
             }
         }
+        if (controller.winner().isDefined) {
+            controller.gamestate = "finished"
+        }
     }
 
     def scoreboard(): Unit = {
@@ -208,6 +208,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 reactions += {
                     case ButtonClicked(_) =>
                         controller.gamestate = "mainmenu"
+                        controller.notifyObservers
                 }
             }
             contents += new Button {
