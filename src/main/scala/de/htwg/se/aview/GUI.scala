@@ -1,14 +1,21 @@
 package de.htwg.se.aview
 
-import java.awt.Color
-import java.awt.image.BufferedImage
-import java.io.File
+/**
+ * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ * @author Ronny Klotz & Alina Göttig
+ * @since 16.Dez.2020
+ */
 
-import scala.swing._
-import scala.swing.event._
 import de.htwg.se.controller.Controller
 import de.htwg.se.model.{Cell, Player}
 import de.htwg.se.util._
+
+import scala.swing._
+import scala.swing.event._
+
+import java.awt.Color
+import java.awt.image.BufferedImage
+import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
@@ -18,9 +25,10 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
     controller.add(this)
     //size = maximumSize
-    minimumSize = new Dimension(1920,1080)
-    preferredSize = new Dimension(1920,1080)
-    maximumSize = new Dimension(1920,1080)
+    minimumSize = new Dimension(1920,1100)
+    preferredSize = new Dimension(1920,1100)
+    maximumSize = new Dimension(1920,1100)
+    resizable = false
 
     title = "HERO"
     iconImage = toolkit.getImage("src/main/scala/de/htwg/se/aview/Graphics/Icon.png")
@@ -137,7 +145,11 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                         val cell: Cell = controller.getCreature(controller.board.field, i, j)
                                         val currentplayer: Player = controller.board.currentplayer
                                         if (cell.name.equals(" _ ")) {
-                                            background = Color.ORANGE
+                                            icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Marker.png")
+                                            contentAreaFilled = false
+                                            borderPainted = false
+                                            opaque = false
+                                            //background = Color.ORANGE
                                         } else if (!cell.name.equals("   ")) {
                                             if (currentplayer.equals(cell.player)) {
                                                 background = Color.WHITE
@@ -154,6 +166,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                         if (cell.name.equals("XXX")) {
                                             background = Color.LIGHT_GRAY
                                         }
+
                                         if (cell.name.equals(controller.board.currentcreature.name)) {
                                             background = new Color(125, 190, 255)
                                         }
@@ -172,11 +185,13 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
                         add(new Label(controller.board.currentplayer.name + ": " + controller.board.realname(controller.board.currentcreature.name)) {
                             font = new Font("Arial", 1, 30)
+                            border = new EmptyBorder(20,20,0,0)
                             foreground = Color.WHITE
                         }, BorderPanel.Position.West)
 
                         val log: List[String] = controller.board.log
                         add(new Label(if (log.isEmpty) "" else log.last) {
+                            border = new EmptyBorder(20,0,0,0)
                             font = new Font("Arial", 1, 30)
                             foreground = Color.WHITE
                         }, BorderPanel.Position.Center)
@@ -287,23 +302,21 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
 }
 
-class ImagePanel() extends BoxPanel(Orientation.Vertical)
-{
+class ImagePanel() extends BoxPanel(Orientation.Vertical) {
+
     var _imagePath = ""
     var bufferedImage:BufferedImage = null
 
     def imagePath = _imagePath
 
-    def imagePath_=(value:String)
-    {
+    def imagePath_=(value:String) {
         _imagePath = value
         bufferedImage = ImageIO.read(new File(_imagePath))
     }
 
 
-    override def paintComponent(g:Graphics2D) =
-    {
-        if (null != bufferedImage) g.drawImage(bufferedImage, 0, 0, null)
+    override def paintComponent(g:Graphics2D) = {
+        g.drawImage(bufferedImage, 0, 0, null)
     }
 }
 
@@ -321,7 +334,7 @@ class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends B
     reactions += {
         case ButtonClicked(_) => {
             val posi = controller.position(controller.board.currentcreature)
-            if (cellname.equals(" _ ")) {
+            if (cell.name.equals(" _ ")) {
                 controller.move(posi(0), posi(1), Y, X)
                 next()
             } else if (controller.checkattack(Vector("m", X.toString, Y.toString))) {
