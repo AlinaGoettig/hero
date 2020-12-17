@@ -1,6 +1,6 @@
 package de.htwg.se.aview
 
-import java.awt.Color
+import java.awt.{Color, Graphics2D}
 
 import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder
 
@@ -9,7 +9,7 @@ import scala.swing.event._
 import de.htwg.se.controller.Controller
 import de.htwg.se.model.{Cell, Player}
 import de.htwg.se.util._
-import javax.swing.{ImageIcon, SwingConstants}
+import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
 
 //noinspection ScalaStyle
@@ -28,15 +28,18 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
     def mainmenu(): Unit = {
         contents = new BoxPanel(Orientation.Vertical) {
+            border = new EmptyBorder(20, 450, 20, 0)
             contents += new Label() {
                 icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Font.png")
             }
             contents += new BoxPanel(Orientation.Vertical) {
-                border = new EmptyBorder(20,450,20,0)
+                border = new EmptyBorder(20, 270, 20, 0)
                 contents += new Button {
                     text = "New Game"
-                    foreground = Color.WHITE
+                    foreground = new Color(200, 200, 200)
                     font = new Font("Arial", 1, 30)
+                    contentAreaFilled = false
+                    borderPainted = false
                     horizontalTextPosition = Alignment.Center
                     verticalTextPosition = Alignment.Center
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
@@ -48,26 +51,35 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 }
                 contents += new Button {
                     text = "Load Game"
-                    foreground = Color.WHITE
+                    foreground = new Color(200, 200, 200)
                     font = new Font("Arial", 1, 30)
+                    contentAreaFilled = false
+                    borderPainted = false
                     horizontalTextPosition = Alignment.Center
                     verticalTextPosition = Alignment.Center
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
                 }
-                    contents += new Button {
-                        text = "Exit"
-                        foreground = Color.WHITE
-                        font = new Font("Arial", 1, 30)
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
-                        icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
-                        reactions += {
-                            case ButtonClicked(_) =>
-                                System.exit(1)
-                        }
+                contents += new Button {
+                    text = "Exit"
+                    foreground = new Color(200, 200, 200)
+                    font = new Font("Arial", 1, 30)
+                    contentAreaFilled = false
+                    borderPainted = false
+                    horizontalTextPosition = Alignment.Center
+                    verticalTextPosition = Alignment.Center
+                    icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
+                    reactions += {
+                        case ButtonClicked(_) =>
+                            System.exit(1)
                     }
                 }
-            contents += new Label("Game by: Alina Göttig & Ronny Klotz")
+                contents += new Button {
+                    this.border = new EmptyBorder(100, 130, 0, 0)
+                    text = "Game by: Alina Göttig & Ronny Klotz"
+                    contentAreaFilled = false
+                    borderPainted = false
+                }
+            }
         }
     }
 
