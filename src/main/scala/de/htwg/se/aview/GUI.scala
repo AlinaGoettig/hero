@@ -18,7 +18,10 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     var gamestate = "mainmenu"
 
     controller.add(this)
-    size = maximumSize
+    //size = maximumSize
+    minimumSize = new Dimension(1920,1080)
+    preferredSize = new Dimension(1920,1080)
+    maximumSize = new Dimension(1920,1080)
 
     title = "HERO"
     iconImage = toolkit.getImage("src/main/scala/de/htwg/se/aview/Graphics/Icon.png")
@@ -32,8 +35,10 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 border = new EmptyBorder(20,450,20,0)
                 contents += new Button {
                     text = "New Game"
-                    horizontalTextPosition =
-                    verticalTextPosition =
+                    foreground = Color.WHITE
+                    font = new Font("Arial", 1, 30)
+                    horizontalTextPosition = Alignment.Center
+                    verticalTextPosition = Alignment.Center
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
                     reactions += {
                         case ButtonClicked(_) =>
@@ -43,9 +48,19 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 }
                 contents += new Button {
                     text = "Load Game"
+                    foreground = Color.WHITE
+                    font = new Font("Arial", 1, 30)
+                    horizontalTextPosition = Alignment.Center
+                    verticalTextPosition = Alignment.Center
+                    icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
                 }
                     contents += new Button {
                         text = "Exit"
+                        foreground = Color.WHITE
+                        font = new Font("Arial", 1, 30)
+                        horizontalTextPosition = Alignment.Center
+                        verticalTextPosition = Alignment.Center
+                        icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
                         reactions += {
                             case ButtonClicked(_) =>
                                 System.exit(1)
@@ -57,6 +72,10 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     }
 
     def gamerun(): Unit = {
+        if (controller.winner().isDefined) {
+            gamestate = "scoreboard"
+            controller.notifyObservers
+        }
         contents = new BoxPanel(Orientation.Vertical) {
             background = Color.BLACK
             contents += new BoxPanel(Orientation.Vertical) {
