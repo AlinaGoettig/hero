@@ -15,8 +15,6 @@ import javax.swing.border.EmptyBorder
 //noinspection ScalaStyle
 class SwingGui(controller: Controller) extends Frame with Observer {
 
-    var gamestate = "mainmenu"
-
     controller.add(this)
     //size = maximumSize
     minimumSize = new Dimension(1920,1080)
@@ -45,7 +43,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
                     reactions += {
                         case ButtonClicked(_) =>
-                            gamestate = "gamerun"
+                            controller.gamestate = "gamerun"
                             controller.notifyObservers
                     }
                 }
@@ -85,7 +83,6 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
     def gamerun(): Unit = {
         if (controller.winner().isDefined) {
-            gamestate = "scoreboard"
             controller.notifyObservers
         }
         contents = new BoxPanel(Orientation.Vertical) {
@@ -158,11 +155,78 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     }
 
     def scoreboard(): Unit = {
+        contents = new BoxPanel(Orientation.Vertical) {
+            contents += new Label() {
+                icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Font.png")
+                horizontalAlignment = Alignment.Left
+            }
+            contents += new BoxPanel(Orientation.Horizontal) {
+                contents += new BoxPanel(Orientation.Vertical) {
+                    controller.winner() match {
+                        case Some(value) =>
+                            if (value == 1)
+                                contents += new Label("WINNER:")
+                            else
+                                contents += new Label("LOSER:")
+                    }
+                    border = new EmptyBorder(20, 450, 20, 0)
+                    contents += new Label {
+                        text = "Castle"
+                        foreground = Color.WHITE
+                        font = new Font("Arial", 1, 30)
+                        horizontalTextPosition = Alignment.Center
+                        verticalTextPosition = Alignment.Center
+                        icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
+                    }
+                }
+                contents += new BoxPanel(Orientation.Vertical) {
+                    controller.winner() match {
+                        case Some(value) =>
+                            if (value == 2)
+                                contents += new Label("WINNER:")
+                            else
+                                contents += new Label("LOSER:")
+                    }
+                    contents += new Label {
+                        text = "Inferno"
+                        foreground = Color.WHITE
+                        font = new Font("Arial", 1, 30)
+                        horizontalTextPosition = Alignment.Center
+                        verticalTextPosition = Alignment.Center
+                        icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
+                    }
+                }
+            }
 
+            contents += new Button {
+                text = "Menu"
+                foreground = Color.WHITE
+                font = new Font("Arial", 1, 30)
+                horizontalTextPosition = Alignment.Center
+                verticalTextPosition = Alignment.Center
+                icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
+                reactions += {
+                    case ButtonClicked(_) =>
+                        controller.gamestate = "mainmenu"
+                }
+            }
+            contents += new Button {
+                text = "Exit"
+                foreground = Color.WHITE
+                font = new Font("Arial", 1, 30)
+                horizontalTextPosition = Alignment.Center
+                verticalTextPosition = Alignment.Center
+                icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
+                reactions += {
+                    case ButtonClicked(_) =>
+                        System.exit(1)
+                }
+            }
+        }
     }
 
     override def update: Unit = {
-        gamestate match {
+        controller.gamestate match {
             case "mainmenu" => mainmenu()
             case "gamerun" => gamerun()
             case "finished" => scoreboard()

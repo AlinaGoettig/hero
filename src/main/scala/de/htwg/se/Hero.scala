@@ -22,10 +22,19 @@ object Hero {
 
     def main(args: Array[String]): Unit = {
 
-        println(startinfo() + controller.printSidesStart())
-
-        tui.nextRound(true)
+        println(startinfo() + mainmenu)
+        gui.update
         gui.visible = true
+
+        while(!controller.gamestate.equals("gamerun")) {
+            val input = StdIn.readLine()
+            if(input.equals("n")) controller.gamestate = "gamerun"
+            else if (input.equals("exit")) return
+            else println("Ungültige Eingabe. ")
+        }
+
+        println(controller.printSidesStart())
+        tui.nextRound(true)
 
         while(true) { val input = StdIn.readLine().split(" ").toVector
             if(new Interpreter(input).interpret()) { if (input(0).equals("exit") || !tui.inputLine(input)) return
@@ -40,6 +49,13 @@ object Hero {
         val middle = "\n" + " " * 35 + "Made by Alina Göttig & Ronny Klotz" + "\n"
         val bottom = " " * ((105 - version.length) / 2) + version + "\n"
         top + middle + bottom + "=" * 105 + "\n"
+    }
+
+    def mainmenu: String = {
+        val line = "=" * 105
+        "| n    | \tNew Game\n" +
+            "| l    | \tLoad Game\n" +
+            "| exit | \tExit the game\n" + line + "\n"
     }
 
 }

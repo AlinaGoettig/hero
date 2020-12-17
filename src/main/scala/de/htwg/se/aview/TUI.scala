@@ -31,13 +31,9 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer {
             controller.cheatCode(input)
             controller.notifyObservers
         }
-
-        controller.winner() match {
-            case Some(value) =>
-                print(controller.endInfo(value))
-                false
-            case None => true
-        }
+        if(controller.gamestate.equals("finished"))
+            false
+        else true
     }
 
     def nextRound(check: Boolean): Unit = {
@@ -60,6 +56,11 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer {
             "| exit  | Exit the game\n" + line + "\n"
     }
 
-    override def update: Unit = print(controller.output)
-
+    override def update: Unit = {
+        controller.gamestate match {
+            case "mainmenu" => print(controller.output)
+            case "gamerun" => print(controller.output)
+            case "finished" => controller.winner() match { case Some(value) => print (controller.endInfo(value)) }
+        }
+    }
 }
