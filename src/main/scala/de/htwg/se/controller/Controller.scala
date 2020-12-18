@@ -88,7 +88,7 @@ class Controller() extends Observable {
         val list = board.list
         val index = list.indexOf(board.currentcreature) + 1
         if (index == list.length) {
-            board = board.copy(currentplayer = list.head.player,currentcreature = list.head)
+            board = board.copy(currentplayer = list.head.player, currentcreature = list.head)
             if (list.head.multiplier <= 0) {
                 next()
             } else {
@@ -263,6 +263,7 @@ class Controller() extends Observable {
                  }
                  val info = List(board.currentplayer + " cheated! Killed all enemy creatures")
                  board = board.copy(log = board.log ++ info)
+                 gamestate = "finished"
                  info.last
          }
     }
@@ -366,7 +367,7 @@ class Controller() extends Observable {
         val player = if (playernumber == 1) "Castle" else "Inferno"
         val top = "\n" + "=" * 2 + " Result for the game: " + "=" * 81 + "\n" + player + " won the game !" + "\n" +
             "=" * 2 + " Creatures alive: " + "=" * 85 + "\n"
-        val listofliving = board.list.filter(Cell => Cell.multiplier > 0)
+        val listofliving = winnercreatures
         val title = "Name:\t\t\tMultiplier:\t\t\tHealth:\n"
         var middle = ""
         for (cell <- listofliving) {
@@ -376,6 +377,10 @@ class Controller() extends Observable {
             middle += name + " " * (16 - name.length) + multi + " " * (20 - multi.toString.length) + hp + "\n"
         }
         top + title + middle + lines()
+    }
+
+    def winnercreatures: List[Cell] = {
+        board.list.filter(Cell => Cell.multiplier > 0)
     }
 
 }

@@ -31,22 +31,25 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer {
             controller.cheatCode(input)
             controller.notifyObservers
         }
-        controller.winner() match {
-            case Some(value) => {
-                controller.gamestate = "finished"
-                controller.notifyObservers
-                true
-            }
-            case None => false
-        }
+        if (controller.winner().isDefined) true
+        else false
     }
 
     def nextRound(check: Boolean): Unit = {
-        if (check) controller.next()
-        controller.prediction()
-        controller.notifyObservers
+        if (check) {
+            if (controller.winner().isDefined){
+                controller.gamestate = "finished"
+            } else {
+                controller.next()
+                controller.prediction()
+            }
+            controller.notifyObservers
+        } else {
+            controller.prediction()
+            controller.notifyObservers
 
-        print(commands())
+            print(commands())
+        }
     }
 
     def commands(): String = {

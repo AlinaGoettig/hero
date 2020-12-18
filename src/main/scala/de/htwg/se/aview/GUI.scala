@@ -6,16 +6,16 @@ package de.htwg.se.aview
  * @since 16.Dez.2020
  */
 
+import de.htwg.se.util._
 import de.htwg.se.controller.Controller
 import de.htwg.se.model.{Cell, Player}
-import de.htwg.se.util._
 
 import scala.swing._
 import scala.swing.event._
-
-import java.awt.Color
+import java.awt.{Color, ComponentOrientation}
 import java.awt.image.BufferedImage
 import java.io.File
+
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
@@ -34,7 +34,6 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     iconImage = toolkit.getImage("src/main/scala/de/htwg/se/aview/Graphics/Icon.png")
 
     def mainmenu(): Unit = {
-
         contents = new ImagePanel() {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/Menubackground.png"
             contents += new BoxPanel(Orientation.Vertical) {
@@ -121,11 +120,6 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     }
 
     def gamerun(): Unit = {
-
-        if (controller.winner().isDefined) {
-            controller.notifyObservers
-        }
-
         contents = new ImagePanel {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/Background.png"
             contents += new BoxPanel(Orientation.Vertical) {
@@ -185,7 +179,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                         if (cell.name.equals(controller.board.currentcreature.name)) {
                                             background = new Color(125, 190, 255)
                                         }
-                                        if (controller.checkattack(Vector("m", j.toString, i.toString))) {
+                                        if (controller.checkattack(Vector("a", j.toString, i.toString))) {
                                             background = Color.RED
                                         }
 
@@ -216,8 +210,12 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                             font = new Font("Arial", 1, 30)
                             reactions += {
                                 case ButtonClicked(e) => {
-                                    controller.next()
-                                    controller.prediction()
+                                    if (controller.winner().isDefined){
+                                        controller.gamestate = "finished"
+                                    } else {
+                                        controller.next()
+                                        controller.prediction()
+                                    }
                                     controller.notifyObservers
                                 }
                             }
@@ -227,81 +225,164 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     }
                 }
             }
-            if (controller.winner().isDefined) {
-                controller.gamestate = "finished"
-            }
         }
     }
 
     def scoreboard(): Unit = {
-        contents = new BoxPanel(Orientation.Vertical) {
-            contents += new Label() {
-                icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Font.png")
-                horizontalAlignment = Alignment.Left
-            }
+        contents = new ImagePanel() {
+            imagePath = "src/main/scala/de/htwg/se/aview/Graphics/Menubackground.png"
 
-            contents += new BoxPanel(Orientation.Horizontal) {
+            contents += new BoxPanel(Orientation.Vertical) {
+                opaque = false
+                border = new EmptyBorder(200, 0, 20, 0)
+                //border = new EmptyBorder(20, 0, 20, 0)
 
                 contents += new BoxPanel(Orientation.Vertical) {
-                    controller.winner() match {
-                        case Some(value) =>
-                            if (value == 1)
-                                contents += new Label("WINNER:")
-                            else
-                                contents += new Label("LOSER:")
-                    }
-                    border = new EmptyBorder(20, 450, 20, 0)
-                    contents += new Label {
-                        text = "Castle"
+                    opaque = false
+                    //border = new EmptyBorder(0, 285, 20, 0)
+                    border = new EmptyBorder(0, 0, 20, 0)
+
+                    contents += new Label("WINNER:") {
+                        border = new EmptyBorder(0, 50, 0, 0)
                         foreground = Color.WHITE
+                        horizontalAlignment = Alignment.Center
+                        horizontalTextPosition = Alignment.Center
+                        verticalTextPosition = Alignment.Center
+                        font = new Font("Arial", 1, 30)
+                    }
+
+                    contents += new Label {
+                        controller.winner() match {
+                            case Some(value) =>
+                                if (value == 1) text = "Castle"
+                                else text = "Inferno"
+                            case None => text = "Winner not found"
+                        }
+                        foreground = new Color(230, 200, 130)
                         font = new Font("Arial", 1, 30)
                         horizontalTextPosition = Alignment.Center
                         verticalTextPosition = Alignment.Center
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
                     }
+                    contents += new BoxPanel(Orientation.Horizontal) {
+                        opaque = false
+                        border = new EmptyBorder(20, 100, 0, 0)
+                        //Name
+                        contents += new BoxPanel(Orientation.Vertical) {
+                            opaque = false
+                            border = new EmptyBorder(20, 140, 0, 20)
+                            contents += new Label {
+                                controller.winner() match {
+                                    case Some(value) => text = "Name:"
+                                    case None => text = "Error: Winner not found"
+                                }
+                                //border = new EmptyBorder(0, 140, 0, 0)
+                                foreground = Color.WHITE
+                                font = new Font("Arial", 1, 30)
+                            }
+                            for (cell <- controller.winnercreatures) {
+                                val name = controller.board.realname(cell.name)
+                                contents += new Label(name) {
+                                    //border = new EmptyBorder(0, 140, 0, 0)
+                                    foreground = Color.WHITE
+                                    font = new Font("Arial", 1, 30)
+                                }
+                            }
+                        }
+                        //Multiplier
+                        contents += new BoxPanel(Orientation.Vertical) {
+                            opaque = false
+                            border = new EmptyBorder(20, 0, 0, 20)
+                            contents += new Label {
+                                controller.winner() match {
+                                    case Some(value) => text = "Multiplier:"
+                                    case None => text = "Error: Winner not found"
+                                }
+                                //border = new EmptyBorder(0, 140, 0, 0)
+                                foreground = Color.WHITE
+                                horizontalAlignment = Alignment.Center
+                                horizontalTextPosition = Alignment.Center
+                                verticalTextPosition = Alignment.Center
+                                font = new Font("Arial", 1, 30)
+                            }
+                            for (cell <- controller.winnercreatures) {
+                                val multi = cell.multiplier
+                                contents += new Label(multi.toString) {
+                                    foreground = Color.WHITE
+                                    font = new Font("Arial", 1, 30)
+                                }
+                            }
+                        }
+                        //Health
+                        contents += new BoxPanel(Orientation.Vertical) {
+                            opaque = false
+                            border = new EmptyBorder(20, 0, 0, 20)
+                            contents += new Label {
+                                controller.winner() match {
+                                    case Some(value) => text = "Health:"
+                                    case None => text = "Error: Winner not found"
+                                }
+                                //border = new EmptyBorder(0, 140, 0, 0)
+                                foreground = Color.WHITE
+                                horizontalAlignment = Alignment.Center
+                                horizontalTextPosition = Alignment.Center
+                                verticalTextPosition = Alignment.Center
+                                font = new Font("Arial", 1, 30)
+                            }
+                            for (cell <- controller.winnercreatures) {
+                                val hp = cell.hp
+                                contents += new Label(hp.toString) {
+                                    foreground = Color.WHITE
+                                    font = new Font("Arial", 1, 30)
+                                }
+                            }
+                        }
+                    }
                 }
                 contents += new BoxPanel(Orientation.Vertical) {
-                    controller.winner() match {
-                        case Some(value) =>
-                            if (value == 2)
-                                contents += new Label("WINNER:")
-                            else
-                                contents += new Label("LOSER:")
-                    }
-                    contents += new Label {
-                        text = "Inferno"
-                        foreground = Color.WHITE
+                    opaque = false
+                    //border = new EmptyBorder(200, 270, 20, 0)
+                    border = new EmptyBorder(20, 0, 0, 0)
+
+                    contents += new Button {
+                        text = "Menu"
+                        foreground = new Color(200, 200, 200)
                         font = new Font("Arial", 1, 30)
+                        focusPainted = false
+                        contentAreaFilled = false
+                        borderPainted = false
                         horizontalTextPosition = Alignment.Center
                         verticalTextPosition = Alignment.Center
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
+                        reactions += {
+                            case ButtonClicked(_) =>
+                                controller.gamestate = "mainmenu"
+                                controller.notifyObservers
+                        }
                     }
-                }
-            }
+                    contents += new Button {
+                        text = "Exit"
+                        foreground = new Color(200, 200, 200)
+                        font = new Font("Arial", 1, 30)
+                        focusPainted = false
+                        contentAreaFilled = false
+                        borderPainted = false
+                        horizontalTextPosition = Alignment.Center
+                        verticalTextPosition = Alignment.Center
+                        icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
+                        reactions += {
+                            case ButtonClicked(_) =>
+                                System.exit(1)
+                        }
+                    }
+                    contents += new Label {
+                        border = new EmptyBorder(10, 175, 0, 0)
+                        foreground = Color.WHITE
+                        horizontalTextPosition = Alignment.Center
+                        verticalTextPosition = Alignment.Center
+                        text = "Thanks for playing!"
+                    }
 
-            contents += new Button {
-                text = "Menu"
-                foreground = Color.WHITE
-                font = new Font("Arial", 1, 30)
-                horizontalTextPosition = Alignment.Center
-                verticalTextPosition = Alignment.Center
-                icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
-                reactions += {
-                    case ButtonClicked(_) =>
-                        controller.gamestate = "mainmenu"
-                        controller.notifyObservers
-                }
-            }
-            contents += new Button {
-                text = "Exit"
-                foreground = Color.WHITE
-                font = new Font("Arial", 1, 30)
-                horizontalTextPosition = Alignment.Center
-                verticalTextPosition = Alignment.Center
-                icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
-                reactions += {
-                    case ButtonClicked(_) =>
-                        System.exit(1)
                 }
             }
         }
@@ -365,7 +446,7 @@ class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends B
             if (cell.name.equals(" _ ")) {
                 controller.move(posi(0), posi(1), Y, X)
                 next()
-            } else if (controller.checkattack(Vector("m", X.toString, Y.toString))) {
+            } else if (controller.checkattack(Vector("a", X.toString, Y.toString))) {
                 controller.attack(posi(0), posi(1), Y, X)
                 next()
             }
@@ -373,8 +454,12 @@ class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends B
     }
 
     def next(): Unit = {
-        controller.next()
-        controller.prediction()
+        if (controller.winner().isDefined){
+            controller.gamestate = "finished"
+        } else {
+            controller.next()
+            controller.prediction()
+        }
         controller.notifyObservers
     }
 

@@ -34,12 +34,19 @@ object Hero {
                         val input = StdIn.readLine()
                         controller.gamestate match {
                             case "mainmenu" => {
-                                if (input.equals("n")) controller.gamestate = "gamerun"
+                                if (input.equals("n")) {controller.gamestate = "gamerun"
+                                    println(controller.printSidesStart())
+                                    controller.notifyObservers
+                                    print(tui.commands())}
                                 else if (input.equals("n")) println("Function not implemented yet.")
                                 else if (input.equals("exit")) return
                                 else println("Ungültige Eingabe. ")
                             }
                             case "gamerun" => {
+                                println(controller.printSidesStart())
+                                controller.notifyObservers
+                                print(tui.commands())
+
                                 if (new Interpreter(input.split(" ").toVector).interpret()) {
                                     if (input(0).equals("exit") || !tui.inputLine(input.split(" ").toVector)) return
                                 } else {
@@ -52,10 +59,6 @@ object Hero {
                     }
                 }
                 case "gamerun" => {
-                    println(controller.printSidesStart())
-                    controller.notifyObservers
-                    print(tui.commands())
-
                     while (true) {
                         val input = StdIn.readLine().split(" ").toVector
                         if (new Interpreter(input).interpret()) {
