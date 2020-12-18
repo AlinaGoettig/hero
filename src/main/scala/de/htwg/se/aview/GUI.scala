@@ -55,6 +55,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         text = "New Game"
                         foreground = new Color(200, 200, 200)
                         font = new Font("Arial", 1, 30)
+                        focusPainted = false
                         contentAreaFilled = false
                         borderPainted = false
                         horizontalTextPosition = Alignment.Center
@@ -72,6 +73,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         text = "Load Game"
                         foreground = new Color(200, 200, 200)
                         font = new Font("Arial", 1, 30)
+                        focusPainted = false
                         contentAreaFilled = false
                         borderPainted = false
                         horizontalTextPosition = Alignment.Center
@@ -83,6 +85,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         text = "Exit"
                         foreground = new Color(200, 200, 200)
                         font = new Font("Arial", 1, 30)
+                        focusPainted = false
                         contentAreaFilled = false
                         borderPainted = false
                         horizontalTextPosition = Alignment.Center
@@ -146,10 +149,10 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                         val currentplayer: Player = controller.board.currentplayer
                                         if (cell.name.equals(" _ ")) {
                                             icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Marker.png")
+                                            focusPainted = false
                                             contentAreaFilled = false
                                             borderPainted = false
                                             opaque = false
-                                            //background = Color.ORANGE
                                         } else if (!cell.name.equals("   ")) {
                                             if (currentplayer.equals(cell.player)) {
                                                 background = Color.WHITE
@@ -162,6 +165,18 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                             opaque = false
                                             background = new Color(230, 200, 120)
                                         }
+
+                                        /*
+                                        if (!cell.player.name.equals("none")) {
+                                            if (cell.name.equals(controller.board.currentcreature.name)) {
+                                                icon = loadcellimage(cellname)(2)
+                                            } else if (controller.checkattack(Vector("m", j.toString, i.toString))) {
+                                                icon = loadcellimage(cellname)(3)
+                                            } else {
+                                                icon = loadcellimage(cellname)(1)
+                                            }
+                                        }
+                                         */
 
                                         if (cell.name.equals("XXX")) {
                                             background = Color.LIGHT_GRAY
@@ -292,6 +307,17 @@ class SwingGui(controller: Controller) extends Frame with Observer {
         }
     }
 
+    def loadcellimage(cellname: String)(mode: Int): ImageIcon = {
+        val name = cellname.replaceAll("_","")
+        if (mode == 1) {
+            new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/" + name + ".png")
+        } else if (mode == 2) {
+            new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/" + name + "activ.png")
+        }else {
+            new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/" + name + "attack.png")
+        }
+    }
+
     override def update: Unit = {
         controller.gamestate match {
             case "mainmenu" => mainmenu()
@@ -301,6 +327,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     }
 
 }
+
 
 class ImagePanel() extends BoxPanel(Orientation.Vertical) {
 
@@ -329,6 +356,7 @@ class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends B
     font = new Font("Arial", 1, 18)
     if (!cell.player.name.equals("none")) {
         text += "<br>" + currentcell.multiplier + "</center></html>";
+        tooltip = "Multiplier: " + currentcell.multiplier + " Health: " + currentcell.hp
     }
 
     reactions += {

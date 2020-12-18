@@ -39,7 +39,7 @@ case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentpla
 
     def realname(name: String): String = {
         name match {
-            case "HA." => "Ha_lbinger"
+            case "HA." => "Ha_lberdier"
             case ".FA" => "Fa_miliar"
             case "MA." => "Ma_rksman"
             case "MAG" => "Mag_og"
