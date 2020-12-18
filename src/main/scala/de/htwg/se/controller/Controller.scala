@@ -92,6 +92,7 @@ class Controller() extends Observable {
             if (list.head.multiplier <= 0) {
                 next()
             } else {
+                clear()
                 list.head
             }
         } else {
@@ -141,6 +142,7 @@ class Controller() extends Observable {
 
         if (deathcheck(Y2,X2)) {
             val renwed = List(loginfo.head + ". The creature got killed!")
+            replaceCreatureInList(newCell, newCell.copy(multiplier = 0, hp = 0))
             board = board.copy(log = board.log ++ renwed)
         } else {
             board = board.copy(log = board.log ++ loginfo)

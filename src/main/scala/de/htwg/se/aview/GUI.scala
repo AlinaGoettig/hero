@@ -234,7 +234,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
             contents += new BorderPanel() {
                 opaque = false
-                border = new EmptyBorder(100, 400, 100, 0)
+                border = new EmptyBorder(100, 750, 100, 0)
 
                 layout(new BoxPanel(Orientation.Vertical) {
                     opaque = false
