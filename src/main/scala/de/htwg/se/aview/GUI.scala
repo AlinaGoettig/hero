@@ -25,9 +25,9 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
     controller.add(this)
     //size = maximumSize
-    minimumSize = new Dimension(1920,1100)
-    preferredSize = new Dimension(1920,1100)
-    maximumSize = new Dimension(1920,1100)
+    minimumSize = new Dimension(1920, 1100)
+    preferredSize = new Dimension(1920, 1100)
+    maximumSize = new Dimension(1920, 1100)
     resizable = false
 
     title = "HERO"
@@ -194,13 +194,13 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
                         add(new Label(controller.board.currentplayer.name + ": " + controller.board.realname(controller.board.currentcreature.name)) {
                             font = new Font("Arial", 1, 30)
-                            border = new EmptyBorder(20,20,0,0)
+                            border = new EmptyBorder(20, 20, 0, 0)
                             foreground = Color.WHITE
                         }, BorderPanel.Position.West)
 
                         val log: List[String] = controller.board.log
                         add(new Label(if (log.isEmpty) "" else log.last) {
-                            border = new EmptyBorder(20,0,0,0)
+                            border = new EmptyBorder(20, 0, 0, 0)
                             font = new Font("Arial", 1, 30)
                             foreground = Color.WHITE
                         }, BorderPanel.Position.Center)
@@ -210,7 +210,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                             font = new Font("Arial", 1, 30)
                             reactions += {
                                 case ButtonClicked(e) => {
-                                    if (controller.winner().isDefined){
+                                    if (controller.winner().isDefined) {
                                         controller.gamestate = "finished"
                                     } else {
                                         controller.next()
@@ -232,14 +232,12 @@ class SwingGui(controller: Controller) extends Frame with Observer {
         contents = new ImagePanel() {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/Menubackground.png"
 
-            contents += new BoxPanel(Orientation.Vertical) {
+            contents += new BorderPanel() {
                 opaque = false
-                border = new EmptyBorder(200, 100, 20, 0)
+                border = new EmptyBorder(100, 400, 100, 0)
 
-                contents += new BoxPanel(Orientation.Vertical) {
+                layout(new BoxPanel(Orientation.Vertical) {
                     opaque = false
-                    border = new EmptyBorder(0, 50, 0, 0)
-
                     contents += new Label("WINNER:") {
                         border = new EmptyBorder(0, 150, 0, 0)
                         foreground = Color.WHITE
@@ -262,83 +260,85 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         verticalTextPosition = Alignment.Center
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/Buttonframe.png")
                     }
-                    contents += new BoxPanel(Orientation.Horizontal) {
+                }) = BorderPanel.Position.North
+
+                add(new BoxPanel(Orientation.Horizontal) {
+                    opaque = false
+                    //border = new EmptyBorder(20, 100, 0, 0)
+                    border = new EmptyBorder(20, 0, 0, 0)
+                    //Name
+                    contents += new BoxPanel(Orientation.Vertical) {
                         opaque = false
-                        //border = new EmptyBorder(20, 100, 0, 0)
-                        border = new EmptyBorder(20, 0, 0, 0)
-                        //Name
-                        contents += new BoxPanel(Orientation.Vertical) {
-                            opaque = false
-                            border = new EmptyBorder(20, 0, 0, 20)
-                            contents += new Label {
-                                controller.winner() match {
-                                    case Some(value) => text = "Name:"
-                                    case None => text = "Error: Winner not found"
-                                }
-                                //border = new EmptyBorder(0, 140, 0, 0)
-                                foreground = Color.WHITE
-                                font = new Font("Arial", 1, 30)
+                        border = new EmptyBorder(20, 0, 0, 20)
+                        contents += new Label {
+                            controller.winner() match {
+                                case Some(value) => text = "Name:"
+                                case None => text = "Error: Winner not found"
                             }
-                            for (cell <- controller.winnercreatures) {
-                                val name = controller.board.realname(cell.name)
-                                contents += new Label(name) {
-                                    //border = new EmptyBorder(0, 140, 0, 0)
-                                    foreground = Color.WHITE
-                                    font = new Font("Arial", 1, 30)
-                                }
-                            }
+                            //border = new EmptyBorder(0, 140, 0, 0)
+                            foreground = Color.WHITE
+                            font = new Font("Arial", 1, 30)
                         }
-                        //Multiplier
-                        contents += new BoxPanel(Orientation.Vertical) {
-                            opaque = false
-                            border = new EmptyBorder(20, 0, 0, 20)
-                            contents += new Label {
-                                controller.winner() match {
-                                    case Some(value) => text = "Multiplier:"
-                                    case None => text = "Error: Winner not found"
-                                }
+                        for (cell <- controller.winnercreatures) {
+                            val name = controller.board.realname(cell.name)
+                            contents += new Label(name) {
                                 //border = new EmptyBorder(0, 140, 0, 0)
                                 foreground = Color.WHITE
-                                horizontalAlignment = Alignment.Center
-                                horizontalTextPosition = Alignment.Center
-                                verticalTextPosition = Alignment.Center
                                 font = new Font("Arial", 1, 30)
-                            }
-                            for (cell <- controller.winnercreatures) {
-                                val multi = cell.multiplier
-                                contents += new Label(multi.toString) {
-                                    foreground = Color.WHITE
-                                    font = new Font("Arial", 1, 30)
-                                }
-                            }
-                        }
-                        //Health
-                        contents += new BoxPanel(Orientation.Vertical) {
-                            opaque = false
-                            border = new EmptyBorder(20, 0, 0, 20)
-                            contents += new Label {
-                                controller.winner() match {
-                                    case Some(value) => text = "Health:"
-                                    case None => text = "Error: Winner not found"
-                                }
-                                //border = new EmptyBorder(0, 140, 0, 0)
-                                foreground = Color.WHITE
-                                horizontalAlignment = Alignment.Center
-                                horizontalTextPosition = Alignment.Center
-                                verticalTextPosition = Alignment.Center
-                                font = new Font("Arial", 1, 30)
-                            }
-                            for (cell <- controller.winnercreatures) {
-                                val hp = cell.hp
-                                contents += new Label(hp.toString) {
-                                    foreground = Color.WHITE
-                                    font = new Font("Arial", 1, 30)
-                                }
                             }
                         }
                     }
-                }
-                contents += new BoxPanel(Orientation.Vertical) {
+                    //Multiplier
+                    contents += new BoxPanel(Orientation.Vertical) {
+                        opaque = false
+                        border = new EmptyBorder(20, 0, 0, 20)
+                        contents += new Label {
+                            controller.winner() match {
+                                case Some(value) => text = "Multiplier:"
+                                case None => text = "Error: Winner not found"
+                            }
+                            //border = new EmptyBorder(0, 140, 0, 0)
+                            foreground = Color.WHITE
+                            horizontalAlignment = Alignment.Center
+                            horizontalTextPosition = Alignment.Center
+                            verticalTextPosition = Alignment.Center
+                            font = new Font("Arial", 1, 30)
+                        }
+                        for (cell <- controller.winnercreatures) {
+                            val multi = cell.multiplier
+                            contents += new Label(multi.toString) {
+                                foreground = Color.WHITE
+                                font = new Font("Arial", 1, 30)
+                            }
+                        }
+                    }
+                    //Health
+                    contents += new BoxPanel(Orientation.Vertical) {
+                        opaque = false
+                        border = new EmptyBorder(20, 0, 0, 20)
+                        contents += new Label {
+                            controller.winner() match {
+                                case Some(value) => text = "Health:"
+                                case None => text = "Error: Winner not found"
+                            }
+                            //border = new EmptyBorder(0, 140, 0, 0)
+                            foreground = Color.WHITE
+                            horizontalAlignment = Alignment.Center
+                            horizontalTextPosition = Alignment.Center
+                            verticalTextPosition = Alignment.Center
+                            font = new Font("Arial", 1, 30)
+                        }
+                        for (cell <- controller.winnercreatures) {
+                            val hp = cell.hp
+                            contents += new Label(hp.toString) {
+                                foreground = Color.WHITE
+                                font = new Font("Arial", 1, 30)
+                            }
+                        }
+                    }
+                }, BorderPanel.Position.Center)
+
+                add(new BoxPanel(Orientation.Vertical) {
                     opaque = false
                     //border = new EmptyBorder(200, 270, 20, 0)
                     border = new EmptyBorder(40, 0, 0, 0)
@@ -382,18 +382,18 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         text = "Thanks for playing!"
                     }
 
-                }
+                }, BorderPanel.Position.South)
             }
         }
     }
 
     def loadcellimage(cellname: String)(mode: Int): ImageIcon = {
-        val name = cellname.replaceAll("_","")
+        val name = cellname.replaceAll("_", "")
         if (mode == 1) {
             new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/" + name + ".png")
         } else if (mode == 2) {
             new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/" + name + "activ.png")
-        }else {
+        } else {
             new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/" + name + "attack.png")
         }
     }
@@ -405,7 +405,6 @@ class SwingGui(controller: Controller) extends Frame with Observer {
             case "finished" => scoreboard()
         }
     }
-
 }
 
 
