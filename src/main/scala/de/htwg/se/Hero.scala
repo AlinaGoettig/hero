@@ -21,8 +21,6 @@ object Hero {
     val gui = new SwingGui(controller)
 
     def main(args: Array[String]): Unit = {
-        controller.next()
-        controller.prediction()
         gui.update
         gui.visible = true
 
@@ -30,15 +28,12 @@ object Hero {
             controller.gamestate match {
                 case "mainmenu" => {
                     println(startinfo() + mainmenu)
-                    while (!controller.gamestate.equals("gamerun")) {
+                    while (controller.gamestate.equals("mainmenu")) {
                         val input = StdIn.readLine()
                         controller.gamestate match {
                             case "mainmenu" => {
-                                if (input.equals("n")) {controller.gamestate = "gamerun"
-                                    println(controller.printSidesStart())
-                                    controller.notifyObservers
-                                    print(tui.commands())}
-                                else if (input.equals("n")) println("Function not implemented yet.")
+                                if (input.equals("n")) controller.gamestate = "gamerun"
+                                else if (input.equals("c")) println("Function not implemented yet.")
                                 else if (input.equals("exit")) return
                                 else println("Ungültige Eingabe. ")
                             }
@@ -46,31 +41,40 @@ object Hero {
                                 println(controller.printSidesStart())
                                 controller.notifyObservers
                                 print(tui.commands())
-
-                                if (new Interpreter(input.split(" ").toVector).interpret()) {
-                                    if (input(0).equals("exit") || !tui.inputLine(input.split(" ").toVector)) return
-                                } else {
-                                    print("Ungültige Eingabe. ")
-                                }
-                                print("Neue Eingabe: ")
+                                newgame(input)
                             }
                             case "finished" => return
                         }
                     }
                 }
-                case "gamerun" => {
-                    while (true) {
-                        val input = StdIn.readLine().split(" ").toVector
-                        if (new Interpreter(input).interpret()) {
-                            if (input(0).equals("exit") || !tui.inputLine(input)) return
-                        } else {
-                            print("Ungültige Eingabe. ")
-                        }
-                        print("Neue Eingabe: ")
-                    }
-                }
-                case "finished" => return
+                case "gamerun" => newgame("")
+                case "finished" =>
             }
+        }
+    }
+
+    def newgame(s:String): Unit = {
+        controller.inizGame()
+        if (s.equals("")){
+            println(controller.printSidesStart())
+            controller.notifyObservers
+            print(tui.commands())
+        } else {
+            if (new Interpreter(s.split(" ").toVector).interpret()) {
+                if (s.split(" ").toVector(0).equals("exit") || !tui.inputLine(s.split(" ").toVector)) return
+            } else {
+                print("Ungültige Eingabe. ")
+            }
+            print("Neue Eingabe: ")
+        }
+        while (controller.gamestate.equals("gamerun")) {
+            val input = StdIn.readLine().split(" ").toVector
+            if (new Interpreter(input).interpret()) {
+                if (input(0).equals("exit") || !tui.inputLine(input)) return
+            } else {
+                print("Ungültige Eingabe. ")
+            }
+            if (!controller.gamestate.equals("gamerun")) print("Neue Eingabe: ")
         }
     }
 

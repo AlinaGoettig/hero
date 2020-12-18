@@ -20,10 +20,13 @@ class Controller() extends Observable {
     // ----------------------------------------------- Inizial Game ----------------------------------------------------
 
     def inizGame(): Boolean= {
+        board = start()
         board = board.copy(board.field,player,player(0),CellFactory(""),createCreatureList())
         val creature = board.list(board.list.indexOf(board.list.last))
         board = board.copy(currentplayer = creature.player, currentcreature = creature)
-        notifyObservers
+        next()
+        prediction()
+        //notifyObservers
         true
     }
 

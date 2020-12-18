@@ -64,6 +64,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         reactions += {
                             case ButtonClicked(_) =>
                                 controller.gamestate = "gamerun"
+                                controller.inizGame()
                                 controller.notifyObservers
                         }
 
@@ -187,7 +188,6 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                             columns = 30
                             reactions += {
                                 case EditDone(_) =>
-                                    val tmp = text
                                     if (text.contains("CHEAT") && (text.contains("coconuts") || text.contains("godunit")
                                         || text.contains("feedcreature") || text.contains("handofjustice"))) {
                                         val split = text.split(" ")
