@@ -28,15 +28,15 @@ class TuiSpec extends WordSpec with Matchers {
 
         "accept input" in {
             tui.nextRound(true)
-            tui.inputLine("undo".split(" ").toVector) should be(true)
-            tui.inputLine("redo".split(" ").toVector) should be(true)
-            tui.inputLine("i 0 0".split(" ").toVector) should be(true)
-            tui.inputLine("m 3 0".split(" ").toVector) should be(true)
-            tui.inputLine("m 9 0".split(" ").toVector) should be(true)
-            tui.inputLine("a 9 0".split(" ").toVector) should be(true)
-            tui.inputLine("undo".split(" ").toVector) should be(true)
-            tui.inputLine("redo".split(" ").toVector) should be(true)
-            tui.inputLine("CHEAT handofjustice".split(" ").toVector) should be(false)
+            tui.inputLine("undo".split(" ").toVector) should be(false)
+            tui.inputLine("redo".split(" ").toVector) should be(false)
+            tui.inputLine("i 0 0".split(" ").toVector) should be(false)
+            tui.inputLine("m 3 0".split(" ").toVector) should be(false)
+            tui.inputLine("m 9 0".split(" ").toVector) should be(false)
+            tui.inputLine("a 9 0".split(" ").toVector) should be(false)
+            tui.inputLine("undo".split(" ").toVector) should be(false)
+            tui.inputLine("redo".split(" ").toVector) should be(false)
+            tui.inputLine("CHEAT handofjustice".split(" ").toVector) should be(true)
         }
     }}
 

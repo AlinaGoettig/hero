@@ -26,7 +26,7 @@ class BoardSpec extends WordSpec with Matchers {
         }
 
         "has a current creature information" in {
-            board.currentcreatureinfo() should include("Ha_lbinger")
+            board.currentcreatureinfo() should include("Ha_lberdier")
             board.currentcreatureinfo() should include("2-3")
             board.currentcreatureinfo() should include("10")
             board.currentcreatureinfo() should include("Ranged")
@@ -59,7 +59,7 @@ class BoardSpec extends WordSpec with Matchers {
             board.lines() should include regex """=+"""
         }
         "and has an illustration of the full name" in {
-            board.realname(creature1.name) should be("Ha_lbinger")
+            board.realname(creature1.name) should be("Ha_lberdier")
             board.realname("MA.") should be("Ma_rksman")
             board.realname("MAG") should be("Mag_og")
             board.realname("RO.") should be("Ro_yal Griffin")

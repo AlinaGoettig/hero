@@ -15,7 +15,7 @@ class Iterator extends WordSpec with Matchers {
             creature._2 should be(Cell("HA.", "2-3", 10, 3, style = false, 28, Player("Castle")))
             creature._1 should be(Vector(0, 0))
             obstacle._2 should be(Cell("XXX", "0", 0, 0, style = false, 0, Player("none")))
-            obstacle._1 should be(Vector(6, 1))
+            obstacle._1 should be(Vector(4, 8))
         }
         "and tell if there is a next cell" in {
             creaturelist.hasNext should be(true)

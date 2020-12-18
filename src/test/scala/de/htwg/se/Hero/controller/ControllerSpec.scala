@@ -56,29 +56,29 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.next()
                 controller.prediction()
                 controller.notifyObservers
-                controller.checkmove(Vector("m", "9", "0")) should be(true)
+                controller.checkmove(Vector("m", "9", "0")) should be(false)
                 new SetCommand(Vector("m","9","0"),controller).doStep
                 controller.next()
                 controller.prediction()
                 controller.notifyObservers
                 controller.printfield()
 
-                controller.areacheck(5, 14) should be(false)
-                controller.areacheck(1, 1) should be(true)
+                controller.areacheck(5, 14) should be(true)
+                controller.areacheck(1, 1) should be(false)
 
-                controller.checkattack(Vector("a", "14", "5")) should be(true)
+                controller.checkattack(Vector("a", "14", "5")) should be(false)
                 new SetCommand(Vector("a","14","5"),controller).doStep
                 controller.checkmove(Vector("m", "9", "0")) should be(false)
                 new SetCommand(Vector("m","9","0"),controller).doStep
                 controller.next()
                 controller.prediction()
                 controller.notifyObservers
-                controller.checkmove(Vector("m", "10", "1")) should be(true)
+                controller.checkmove(Vector("m", "10", "1")) should be(false)
                 new SetCommand(Vector("m","10","1"),controller).doStep
                 controller.next()
                 controller.prediction()
                 controller.notifyObservers
-                controller.checkmove(Vector("m", "4", "2")) should be(true)
+                controller.checkmove(Vector("m", "4", "2")) should be(false)
                 new SetCommand(Vector("m","4","2"),controller).doStep
                 controller.next()
                 controller.prediction()
@@ -92,7 +92,7 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.checkattack(Vector("a", "9", "3")) should be(false)
                 controller.checkattack(Vector("a", "9", "2")) should be(true)
                 new SetCommand(Vector("a","9","2"),controller).doStep
-                controller.checkmove(Vector("m", "11", "3")) should be(false)
+                controller.checkmove(Vector("m", "11", "3")) should be(true)
                 controller.checkmove(Vector("m", "9", "3")) should be(true)
                 new SetCommand(Vector("m","9","3"),controller).doStep
                 controller.prediction()
@@ -131,13 +131,13 @@ class ControllerSpec extends WordSpec with Matchers {
                 controller.board = controller.start()
                 controller.inizGame()
                 controller.cheatCode(Vector("CHEAT", "handofjustice"))
-                controller.winner().get should be(2)
+                controller.winner().get should be(1)
 
                 controller.board = controller.start()
                 controller.inizGame()
                 controller.next()
                 controller.cheatCode(Vector("CHEAT", "handofjustice"))
-                controller.winner().get should be(1)
+                controller.winner().get should be(2)
             }
         }
     }
