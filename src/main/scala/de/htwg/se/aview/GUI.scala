@@ -12,13 +12,9 @@ import de.htwg.se.model.Cell
 
 import scala.swing._
 import scala.swing.event._
-
 import java.awt.Color
-import java.awt.image.BufferedImage
 
-import java.io.File
-import javax.imageio.ImageIO
-
+import de.htwg.se.aview.swingparts.{CustomButton, ImagePanel}
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
 
@@ -138,7 +134,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
                 val top = new Label() {
 
-                    foreground = Color.WHITE
+                    foreground = new Color(200, 200, 200)
                     horizontalTextPosition = Alignment.Center
                     verticalTextPosition = Alignment.Center
                     font = new Font("Arial", 1, 30)
@@ -192,7 +188,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     contentAreaFilled = false
                     borderPainted = false
                     focusPainted = false
-                    foreground = Color.WHITE
+                    foreground = new Color(200, 200, 200)
                     horizontalTextPosition = Alignment.Center
                     verticalTextPosition = Alignment.Center
                     font = new Font("Arial", 1, 30)
@@ -501,67 +497,6 @@ class SwingGui(controller: Controller) extends Frame with Observer {
             case "gamerun" => gamerun()
             case "finished" => scoreboard()
         }
-    }
-
-}
-
-
-class ImagePanel() extends BoxPanel(Orientation.Vertical) {
-
-    var _imagePath = ""
-    var bufferedImage:BufferedImage = null
-
-    def imagePath: String = _imagePath
-
-    def imagePath_=(value:String) {
-        _imagePath = value
-        bufferedImage = ImageIO.read(new File(_imagePath))
-    }
-
-
-    override def paintComponent(g:Graphics2D): Unit = {
-        g.drawImage(bufferedImage, 0, 0, null)
-    }
-}
-
-class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends Button {
-
-    val currentcell: Cell = controller.getCreature(controller.board.field, Y, X)
-    val cellname: String = controller.board.realname(cell.name)
-
-    font = new Font("Arial", 1, 14)
-    if (!cell.player.name.equals("none")) {
-        horizontalTextPosition = Alignment.Right
-        verticalTextPosition = Alignment.Top
-        text = currentcell.multiplier.toString
-        val style = if(cell.style) "Ranged" else "Melee"
-        tooltip = "<html>Player: " + cell.player.name + "<br>Name: " + cellname.replaceAll("_","") +
-            "<br>Damage: " + cell.dmg + "<br>Attackstyle: " + style +
-            "<br>Multiplier: " + currentcell.multiplier + "<br>Health: " + currentcell.hp + "</html>"
-    } else {
-        text = "<html><center>" + cellname
-    }
-
-    reactions += {
-        case ButtonClicked(_) =>
-            val posi = controller.position(controller.board.currentcreature)
-            if (cell.name.equals(" _ ")) {
-                controller.move(posi(0), posi(1), Y, X)
-                next()
-            } else if (controller.checkattack(Vector("a", X.toString, Y.toString))) {
-                controller.attack(posi(0), posi(1), Y, X)
-                next()
-            }
-    }
-
-    def next(): Unit = {
-        if (controller.winner().isDefined){
-            controller.gamestate = "finished"
-        } else {
-            controller.next()
-            controller.prediction()
-        }
-        controller.notifyObservers
     }
 
 }

@@ -124,23 +124,22 @@ class Controller() extends Observable {
     // --------------------------------------------------- Attack ------------------------------------------------------
 
     def attack(Y1: Int, X1: Int, Y2: Int, X2: Int): String = {
-        val field = board.field
-        val attacker = field(Y1)(X1)
-        val defender = field(Y2)(X2)
+        val attacker = board.field(Y1)(X1)
+        val defender = board.field(Y2)(X2)
 
-        val dmg = attacker.attackamount() * attacker.multiplier
-        val multicheck = defender.hp - dmg
-        val multidif = dmg.toFloat / defender.hp
+        val damage = attacker.attackamount() * attacker.multiplier
+        val health = defender.multiplier * defender.hp
+        val tempstats = health - damage
         val basehp = findbasehp(defender.name)
-        val multiplier = if (multicheck < 0) defender.multiplier - multidif.toInt else defender.multiplier
-        val hp = if (multiplier != defender.multiplier) basehp * (multidif.toInt + 1) - dmg else defender.hp - dmg
-
-        val newCell = Cell(defender.name, defender.dmg, hp, defender.speed, defender.style, multiplier, defender.player)
+        val temphealth = tempstats % basehp
+        val newhealth = if(temphealth == 0) basehp else temphealth
+        val newmultiplier = if(temphealth == 0) (tempstats / basehp) - 1 else tempstats / basehp
+        val newCell = defender.copy(hp = newhealth, multiplier = newmultiplier)
 
         replaceCreatureInList(defender,newCell)
 
-        board = board.copy(field.updated(Y2, field(Y2).updated(X2, newCell)))
-        val loginfo = List(board.realname(attacker.name) + " dealt " + dmg + " points to "
+        board = board.copy(board.field.updated(Y2, board.field(Y2).updated(X2, newCell)))
+        val loginfo = List(board.realname(attacker.name) + " dealt " + damage + " points to "
             + board.realname(defender.name))
 
         if (deathcheck(Y2,X2)) {
@@ -150,7 +149,7 @@ class Controller() extends Observable {
         } else {
             board = board.copy(log = board.log ++ loginfo)
         }
-        dmg.toString
+        damage.toString
     }
 
     def replaceCreatureInList(oldC: Cell, newC: Cell): Cell = {
@@ -311,14 +310,14 @@ class Controller() extends Observable {
 
     def areacheck (i: Int, j: Int) : Boolean = {
         val field = board.field
-        val list : List[Any] = List(if(i - 1 >= 0 && j - 1 >= 0) field(i - 1)(j - 1).name,
-                        if(i - 1 >= 0 && j >= 0) field(i - 1)(j).name,
-                        if(i - 1 >= 0 && j + 1 < 14) field(i - 1)(j + 1).name,
-                        if(i - 1 >= 0 && j >= 0) field(i - 1)(j).name,
-                        if(i + 1 < 11 && j >= 0) field(i + 1)(j).name,
-                        if(i + 1 < 11 && j - 1 >= 0) field(i + 1)(j - 1).name,
-                        if(i >= 0 && j + 1 < 14) field(i)(j + 1).name,
-                        if(i + 1 < 11 && j + 1 < 14) field(i + 1)(j + 1).name)
+        val list: List[Any] = List(if(i - 1 >= 0 && j - 1 >= 0) field(i - 1)(j - 1).name,
+            if(i - 1 >= 0) field(i - 1)(j).name,
+            if(i - 1 >= 0 && j + 1 < 14) field(i - 1)(j + 1).name,
+            if(j - 1 >= 0) field(i)(j - 1).name,
+            if(j + 1 < 14) field(i)(j + 1).name,
+            if(i + 1 < 11 && j - 1 >= 0) field(i + 1)(j - 1).name,
+            if(i + 1 < 11) field(i + 1)(j).name,
+            if(i + 1 < 11 && j + 1 < 14) field(i + 1)(j + 1).name)
         list.exists(name => name.equals(" _ "))
     }
 
