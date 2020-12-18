@@ -8,15 +8,17 @@ package de.htwg.se.aview
 
 import de.htwg.se.util._
 import de.htwg.se.controller.Controller
-import de.htwg.se.model.{Cell, Player}
+import de.htwg.se.model.Cell
 
 import scala.swing._
 import scala.swing.event._
+
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.io.File
 
+import java.io.File
 import javax.imageio.ImageIO
+
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
 
@@ -40,7 +42,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
             contents += new BoxPanel(Orientation.Vertical) {
 
                 opaque = false
-                border = new EmptyBorder(20, 450, 20, 0)
+                border = new EmptyBorder(0, 450, 20, 0)
 
                 contents += new Label() {
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Font.png")
@@ -83,6 +85,24 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     }
 
                     contents += new Button {
+                        text = "Credit"
+                        foreground = new Color(200, 200, 200)
+                        font = new Font("Arial", 1, 30)
+                        focusPainted = false
+                        contentAreaFilled = false
+                        borderPainted = false
+                        horizontalTextPosition = Alignment.Center
+                        verticalTextPosition = Alignment.Center
+                        icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
+                        reactions += {
+                            case ButtonClicked(_) =>
+                                controller.gamestate = "credit"
+                                controller.notifyObservers
+                        }
+                    }
+
+
+                    contents += new Button {
                         text = "Exit"
                         foreground = new Color(200, 200, 200)
                         font = new Font("Arial", 1, 30)
@@ -97,28 +117,99 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                 System.exit(1)
                         }
                     }
-                    contents += new Label {
-                        this.border = new EmptyBorder(50, 110, 0, 0)
-                        foreground = Color.WHITE
-                        text = "Code written: Alina Göttig & Ronny Klotz"
-                    }
 
                     contents += new Label {
-                        this.border = new EmptyBorder(0, 160, 0, 0)
+                        border = new EmptyBorder(0,155,0,0)
                         foreground = Color.WHITE
-                        text = "Graphics: Ronny Klolz"
-                    }
-
-                    contents += new Label {
-                        this.border = new EmptyBorder(0, 120, 0, 0)
-                        foreground = Color.WHITE
-                        text = "Gameversion: 1.3 GUI Implementation"
+                        text = "Version: 1.3 Swing GUI"
                     }
 
                 }
             }
 
         }
+    }
+
+    def credit(): Unit = {
+        contents = new ImagePanel() {
+            imagePath = "src/main/scala/de/htwg/se/aview/Graphics/UI/Menubackground.png"
+            contents += new BorderPanel {
+                opaque = false
+
+                val top = new Label() {
+
+                    foreground = Color.WHITE
+                    horizontalTextPosition = Alignment.Center
+                    verticalTextPosition = Alignment.Center
+                    font = new Font("Arial", 1, 30)
+                    icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
+                    text = "Credit"
+                }
+                add(top,BorderPanel.Position.North)
+
+                val middle = new BoxPanel(Orientation.Vertical) {
+
+                    border = new EmptyBorder(50,300,0,300)
+                    opaque = false
+
+                    contents += new Label("<html><center>Code written</center></html>") {
+                        foreground = Color.WHITE
+                        font = new Font("Arial", 1, 30)
+                    }
+                    contents += new Label("<html><center>Alina Göttig and Ronny Klotz</center></html>") {
+                        foreground = Color.WHITE
+                        border = new EmptyBorder(0,0,100,0)
+                        font = new Font("Arial", 1, 20)
+                    }
+
+                    contents += new Label("<html><center>Graphic design</center></html>") {
+                        foreground = Color.WHITE
+                        font = new Font("Arial", 1, 30)
+                    }
+                    contents += new Label("<html><center>Ronny Klotz</center></html>") {
+                        foreground = Color.WHITE
+                        border = new EmptyBorder(0,0,100,0)
+                        font = new Font("Arial", 1, 20)
+                    }
+
+                    contents += new Label("<html><center>Programs and Language</center></html>") {
+                        foreground = Color.WHITE
+                        font = new Font("Arial", 1, 30)
+                    }
+                    contents += new Label() {
+                        foreground = Color.WHITE
+                        text = "<html><center>IDE: IntelliJ IDEA Community Edition<br>Scala: 2.13.3" +
+                            "<br>Java JDK: 1.8.0<br>Sbt: 1.4.5<br><br>Adobe Photoshop CC 2019" +
+                            "<br>Marmoset Hexels<br><br><br><br>Project for Software Engineering at HTWG Konstanz AIN</center></html>"
+                        font = new Font("Arial", 1, 20)
+                    }
+
+                }
+                add(middle,BorderPanel.Position.Center)
+
+                val bottom = new Button() {
+                    opaque = false
+                    contentAreaFilled = false
+                    borderPainted = false
+                    focusPainted = false
+                    foreground = Color.WHITE
+                    horizontalTextPosition = Alignment.Center
+                    verticalTextPosition = Alignment.Center
+                    font = new Font("Arial", 1, 30)
+                    icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
+                    text = "Back"
+
+                    reactions += {
+                        case ButtonClicked(_) =>
+                            controller.gamestate = "mainmenu"
+                            controller.notifyObservers
+                    }
+                }
+                add(bottom,BorderPanel.Position.South)
+            }
+
+        }
+
     }
 
     def gamerun(): Unit = {
@@ -406,6 +497,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     override def update: Unit = {
         controller.gamestate match {
             case "mainmenu" => mainmenu()
+            case "credit" => credit()
             case "gamerun" => gamerun()
             case "finished" => scoreboard()
         }
