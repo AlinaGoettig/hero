@@ -234,16 +234,14 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
             contents += new BoxPanel(Orientation.Vertical) {
                 opaque = false
-                border = new EmptyBorder(200, 0, 20, 0)
-                //border = new EmptyBorder(20, 0, 20, 0)
+                border = new EmptyBorder(200, 100, 20, 0)
 
                 contents += new BoxPanel(Orientation.Vertical) {
                     opaque = false
-                    //border = new EmptyBorder(0, 285, 20, 0)
-                    border = new EmptyBorder(0, 0, 20, 0)
+                    border = new EmptyBorder(0, 50, 0, 0)
 
                     contents += new Label("WINNER:") {
-                        border = new EmptyBorder(0, 50, 0, 0)
+                        border = new EmptyBorder(0, 150, 0, 0)
                         foreground = Color.WHITE
                         horizontalAlignment = Alignment.Center
                         horizontalTextPosition = Alignment.Center
@@ -266,11 +264,12 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     }
                     contents += new BoxPanel(Orientation.Horizontal) {
                         opaque = false
-                        border = new EmptyBorder(20, 100, 0, 0)
+                        //border = new EmptyBorder(20, 100, 0, 0)
+                        border = new EmptyBorder(20, 0, 0, 0)
                         //Name
                         contents += new BoxPanel(Orientation.Vertical) {
                             opaque = false
-                            border = new EmptyBorder(20, 140, 0, 20)
+                            border = new EmptyBorder(20, 0, 0, 20)
                             contents += new Label {
                                 controller.winner() match {
                                     case Some(value) => text = "Name:"
@@ -342,7 +341,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 contents += new BoxPanel(Orientation.Vertical) {
                     opaque = false
                     //border = new EmptyBorder(200, 270, 20, 0)
-                    border = new EmptyBorder(20, 0, 0, 0)
+                    border = new EmptyBorder(40, 0, 0, 0)
 
                     contents += new Button {
                         text = "Menu"
