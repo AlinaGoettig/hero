@@ -22,7 +22,7 @@ import javax.swing.border.EmptyBorder
 class SwingGui(controller: Controller) extends Frame with Observer {
 
     controller.add(this)
-    //size = maximumSize
+    // ------------------------------------------------- Frame Setup ---------------------------------------------------
     minimumSize = new Dimension(1920,1080)
     preferredSize = new Dimension(1920,1080)
     maximumSize = new Dimension(1920,1080)
@@ -31,16 +31,18 @@ class SwingGui(controller: Controller) extends Frame with Observer {
     title = "HERO"
     iconImage = toolkit.getImage("src/main/scala/de/htwg/se/aview/Graphics/UI/Icon.png")
 
-
+    // -------------------------------------------------- Main Menu ----------------------------------------------------
     def mainmenu(): Unit = {
         contents = new ImagePanel() {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/UI/Menubackground.png"
+
             contents += new BoxPanel(Orientation.Vertical) {
 
                 opaque = false
                 border = new EmptyBorder(0, 450, 20, 0)
 
                 contents += new Label() {
+                    opaque = false
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Font.png")
                 }
 
@@ -126,6 +128,8 @@ class SwingGui(controller: Controller) extends Frame with Observer {
         }
     }
 
+    // ------------------------------------------------ Menu->Credit ---------------------------------------------------
+
     def credit(): Unit = {
         contents = new ImagePanel() {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/UI/Menubackground.png"
@@ -208,6 +212,8 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
     }
 
+    // ------------------------------------------------- Menu->Game ----------------------------------------------------
+
     def gamerun(): Unit = {
         contents = new ImagePanel {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/UI/Background.png"
@@ -271,8 +277,8 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                             opaque = false
                             foreground = Color.WHITE
                             font = new Font("Arial", 1, 20)
-                            border = new EmptyBorder(10,300,0,300)
-                            columns = 30
+                            border = new EmptyBorder(10,300,0,180)
+                            columns = 25
                             reactions += {
                                 case EditDone(_) =>
                                     if (text.contains("CHEAT") && (text.contains("coconuts") || text.contains("godunit")
@@ -294,9 +300,16 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
 
                         val passpanel: FlowPanel = new FlowPanel() {
+                            preferredSize = new Dimension(300,100)
                             opaque = false
-                            border = new EmptyBorder(20,0,0,30)
+                            border = new EmptyBorder(0,0,0,30)
                             contents += new Button("Pass") {
+                                opaque = false
+                                contentAreaFilled = false
+                                borderPainted = false
+                                focusPainted = false
+                                foreground = Color.WHITE
+                                preferredSize = new Dimension(300,70)
                                 background = Color.WHITE
                                 font = new Font("Arial", 1, 30)
                                 reactions += {
@@ -315,10 +328,13 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         add(passpanel, BorderPanel.Position.East)
 
                     }
+
                 }
             }
         }
     }
+
+    // ---------------------------------------------- Game->Scoreboard -------------------------------------------------
 
     def scoreboard(): Unit = {
         contents = new ImagePanel() {
@@ -478,6 +494,8 @@ class SwingGui(controller: Controller) extends Frame with Observer {
             }
         }
     }
+
+    // ----------------------------------------------- Frame Function --------------------------------------------------
 
     def loadcellimage(cellname: String)(mode: Int): ImageIcon = {
         val name = cellname.replaceAll("_","")

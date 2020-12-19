@@ -128,8 +128,7 @@ class Controller() extends Observable {
         val defender = board.field(Y2)(X2)
 
         val damage = attacker.attackamount() * attacker.multiplier
-        val health = defender.multiplier * defender.hp
-        val tempstats = health - damage
+        val tempstats = (defender.multiplier * defender.hp) - damage
         val basehp = findbasehp(defender.name)
         val temphealth = tempstats % basehp
         val newhealth = if(temphealth == 0) basehp else temphealth
