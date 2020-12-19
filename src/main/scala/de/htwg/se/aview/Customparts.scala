@@ -1,12 +1,35 @@
-package de.htwg.se.aview.swingparts
+package de.htwg.se.aview
+
+import java.awt.Color
+import java.awt.image.BufferedImage
+import java.io.File
 
 import de.htwg.se.controller.Controller
 import de.htwg.se.model.Cell
+import javax.imageio.ImageIO
 
-import scala.swing.{Alignment, Button, Font}
+import scala.swing._
 import scala.swing.event.ButtonClicked
 
-class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends Button {
+class ImagePanel() extends BoxPanel(Orientation.Vertical) {
+
+    var _imagePath = ""
+    var bufferedImage:BufferedImage = null
+
+    def imagePath: String = _imagePath
+
+    def imagePath_=(value:String) {
+        _imagePath = value
+        bufferedImage = ImageIO.read(new File(_imagePath))
+    }
+
+
+    override def paintComponent(g:Graphics2D): Unit = {
+        g.drawImage(bufferedImage, 0, 0, null)
+    }
+}
+
+class CoorButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends Button {
 
     val currentcell: Cell = controller.getCreature(controller.board.field, Y, X)
     val cellname: String = controller.board.realname(cell.name)
@@ -46,4 +69,30 @@ class CustomButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends B
         controller.notifyObservers
     }
 
+}
+
+class ShortLabel(info: String, fontsize: Int, fontcolor: Color)(alin: Boolean) extends Label {
+    text = info
+    font = new Font("Arial", 1, fontsize)
+    foreground = fontcolor
+    if (alin) {
+        horizontalTextPosition = Alignment.Center
+        verticalTextPosition = Alignment.Center
+    }
+}
+
+class ShortButton(info: String, fontsize: Int, fontcolor: Color)(typ: Boolean)(alin: Boolean) extends Button {
+    text = info
+    font = new Font("Arial", 1, fontsize)
+    foreground = fontcolor
+    if (typ) {
+        opaque = false
+        focusPainted = false
+        contentAreaFilled = false
+        borderPainted = false
+    }
+    if (alin) {
+        horizontalTextPosition = Alignment.Center
+        verticalTextPosition = Alignment.Center
+    }
 }

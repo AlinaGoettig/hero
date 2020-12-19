@@ -14,7 +14,6 @@ import scala.swing._
 import scala.swing.event._
 import java.awt.Color
 
-import de.htwg.se.aview.swingparts.{CustomButton, ImagePanel}
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
 
@@ -51,15 +50,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     opaque = false
                     border = new EmptyBorder(20, 270, 20, 0)
 
-                    contents += new Button {
-                        text = "New Game"
-                        foreground = new Color(200, 200, 200)
-                        font = new Font("Arial", 1, 30)
-                        focusPainted = false
-                        contentAreaFilled = false
-                        borderPainted = false
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
+                    contents += new ShortButton("New Game",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                         reactions += {
                             case ButtonClicked(_) =>
@@ -70,27 +61,11 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
                     }
 
-                    contents += new Button {
-                        text = "Load Game"
-                        foreground = new Color(200, 200, 200)
-                        font = new Font("Arial", 1, 30)
-                        focusPainted = false
-                        contentAreaFilled = false
-                        borderPainted = false
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
+                    contents += new ShortButton("Load Game",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                     }
 
-                    contents += new Button {
-                        text = "Credit"
-                        foreground = new Color(200, 200, 200)
-                        font = new Font("Arial", 1, 30)
-                        focusPainted = false
-                        contentAreaFilled = false
-                        borderPainted = false
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
+                    contents += new ShortButton("Credit",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                         reactions += {
                             case ButtonClicked(_) =>
@@ -100,15 +75,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     }
 
 
-                    contents += new Button {
-                        text = "Exit"
-                        foreground = new Color(200, 200, 200)
-                        font = new Font("Arial", 1, 30)
-                        focusPainted = false
-                        contentAreaFilled = false
-                        borderPainted = false
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
+                    contents += new ShortButton("Exit",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                         reactions += {
                             case ButtonClicked(_) =>
@@ -116,10 +83,9 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                         }
                     }
 
-                    contents += new Label {
+                    contents += new Label("Version: 1.3 Swing GUI") {
                         border = new EmptyBorder(0,155,0,0)
                         foreground = Color.WHITE
-                        text = "Version: 1.3 Swing GUI"
                     }
 
                 }
@@ -136,46 +102,35 @@ class SwingGui(controller: Controller) extends Frame with Observer {
             contents += new BorderPanel {
                 opaque = false
 
-                val top = new Label() {
-
-                    foreground = new Color(200, 200, 200)
-                    horizontalTextPosition = Alignment.Center
-                    verticalTextPosition = Alignment.Center
-                    font = new Font("Arial", 1, 30)
+                val top: Label = new ShortLabel("Credit",30,new Color(200, 200, 200))(true) {
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
-                    text = "Credit"
                 }
                 add(top,BorderPanel.Position.North)
 
-                val middle = new BoxPanel(Orientation.Vertical) {
+                val middle: BoxPanel = new BoxPanel(Orientation.Vertical) {
 
                     border = new EmptyBorder(50,300,0,300)
                     opaque = false
 
-                    contents += new Label("<html><center>Code written</center></html>") {
-                        foreground = Color.WHITE
-                        font = new Font("Arial", 1, 30)
-                    }
-                    contents += new Label("<html><center>Alina Göttig and Ronny Klotz</center></html>") {
-                        foreground = Color.WHITE
+                    contents += new ShortLabel("<html><center>Code written</center></html>"
+                        ,30,Color.WHITE)(false)
+
+                    contents += new ShortLabel("<html><center>Alina Göttig and Ronny Klotz</center></html>"
+                        ,20,Color.WHITE)(false) {
                         border = new EmptyBorder(0,0,100,0)
-                        font = new Font("Arial", 1, 20)
                     }
 
-                    contents += new Label("<html><center>Graphic design</center></html>") {
-                        foreground = Color.WHITE
-                        font = new Font("Arial", 1, 30)
-                    }
-                    contents += new Label("<html><center>Ronny Klotz</center></html>") {
-                        foreground = Color.WHITE
+                    contents += new ShortLabel("<html><center>Graphic design</center></html>"
+                        ,30,Color.WHITE)(false)
+
+                    contents += new ShortLabel("<html><center>Ronny Klotz</center></html>"
+                        ,20,Color.WHITE)(false) {
                         border = new EmptyBorder(0,0,100,0)
-                        font = new Font("Arial", 1, 20)
                     }
 
-                    contents += new Label("<html><center>Programs and Language</center></html>") {
-                        foreground = Color.WHITE
-                        font = new Font("Arial", 1, 30)
-                    }
+                    contents += new ShortLabel("<html><center>Programs and Language</center></html>"
+                        ,30,Color.WHITE)(false)
+
                     contents += new Label() {
                         foreground = Color.WHITE
                         text = "<html><center>IDE: IntelliJ IDEA Community Edition<br>Scala: 2.13.3" +
@@ -187,17 +142,8 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                 }
                 add(middle,BorderPanel.Position.Center)
 
-                val bottom = new Button() {
-                    opaque = false
-                    contentAreaFilled = false
-                    borderPainted = false
-                    focusPainted = false
-                    foreground = new Color(200, 200, 200)
-                    horizontalTextPosition = Alignment.Center
-                    verticalTextPosition = Alignment.Center
-                    font = new Font("Arial", 1, 30)
+                val bottom: Button = new ShortButton("Back",30,new Color(200, 200, 200))(true)(true) {
                     icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
-                    text = "Back"
 
                     reactions += {
                         case ButtonClicked(_) =>
@@ -229,7 +175,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                             contents += new BoxPanel(Orientation.Horizontal) {
                                 opaque = false
                                 for {j <- 0 to 14} {
-                                    contents += new CustomButton(j, i, controller.getCreature(controller.board.field, i, j), controller) {
+                                    contents += new CoorButton(j, i, controller.getCreature(controller.board.field, i, j), controller) {
 
                                         opaque = false
                                         contentAreaFilled = false
@@ -266,11 +212,10 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                     contents += new BorderPanel {
                         opaque = false
 
-                        add(new Label(controller.board.currentplayer.name + ": "
-                            + controller.board.realname(controller.board.currentcreature.name.replace("_",""))) {
-                            font = new Font("Arial", 1, 30)
+                        val info = controller.board.currentplayer.name + ": " +
+                            controller.board.realname(controller.board.currentcreature.name.replace("_",""))
+                        add(new ShortLabel(info,30,Color.WHITE)(false) {
                             border = new EmptyBorder(10,70,0,0)
-                            foreground = Color.WHITE
                         }, BorderPanel.Position.West)
 
                         val log: TextField = new TextField() {
@@ -303,15 +248,8 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                             preferredSize = new Dimension(300,100)
                             opaque = false
                             border = new EmptyBorder(0,0,0,30)
-                            contents += new Button("Pass") {
-                                opaque = false
-                                contentAreaFilled = false
-                                borderPainted = false
-                                focusPainted = false
-                                foreground = Color.WHITE
+                            contents += new ShortButton("Pass",30,Color.WHITE)(true)(false) {
                                 preferredSize = new Dimension(300,70)
-                                background = Color.WHITE
-                                font = new Font("Arial", 1, 30)
                                 reactions += {
                                     case ButtonClicked(_) =>
                                         if (controller.winner().isDefined){
@@ -346,120 +284,88 @@ class SwingGui(controller: Controller) extends Frame with Observer {
 
                 layout(new BoxPanel(Orientation.Vertical) {
                     opaque = false
-                    contents += new Label("WINNER:") {
+                    contents += new ShortLabel("WINNER:",30,Color.WHITE)(true) {
                         border = new EmptyBorder(0, 150, 0, 0)
-                        foreground = Color.WHITE
-                        horizontalAlignment = Alignment.Center
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
-                        font = new Font("Arial", 1, 30)
                     }
 
-                    contents += new Label {
+                    contents += new ShortLabel("",30,new Color(230, 200, 130))(true) {
                         controller.winner() match {
                             case Some(value) =>
                                 if (value == 1) text = "Castle"
                                 else text = "Inferno"
                             case None => text = "Winner not found"
                         }
-                        foreground = new Color(230, 200, 130)
-                        font = new Font("Arial", 1, 30)
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                     }
                 }) = BorderPanel.Position.North
 
                 add(new BoxPanel(Orientation.Horizontal) {
                     opaque = false
-                    //border = new EmptyBorder(20, 100, 0, 0)
                     border = new EmptyBorder(20, 0, 0, 0)
-                    //Name
+
                     contents += new BoxPanel(Orientation.Vertical) {
                         opaque = false
                         border = new EmptyBorder(20, 0, 0, 20)
-                        contents += new Label {
+
+                        contents += new ShortLabel("",30,Color.WHITE)(false) {
                             controller.winner() match {
-                                case Some(value) => text = "Name:"
+                                case Some(_) => text = "Name:"
                                 case None => text = "Error: Winner not found"
                             }
-                            //border = new EmptyBorder(0, 140, 0, 0)
-                            foreground = Color.WHITE
-                            font = new Font("Arial", 1, 30)
                         }
+
                         for (cell <- controller.winnercreatures) {
                             val name = controller.board.realname(cell.name)
-                            contents += new Label(name) {
-                                //border = new EmptyBorder(0, 140, 0, 0)
-                                foreground = Color.WHITE
-                                font = new Font("Arial", 1, 30)
-                            }
+                            contents += new ShortLabel(name,30,Color.WHITE)(false)
                         }
+
                     }
-                    //Multiplier
+
                     contents += new BoxPanel(Orientation.Vertical) {
                         opaque = false
                         border = new EmptyBorder(20, 0, 0, 20)
-                        contents += new Label {
+
+                        contents += new ShortLabel("",30,Color.WHITE)(true) {
                             controller.winner() match {
-                                case Some(value) => text = "Multiplier:"
+                                case Some(_) => text = "Multiplier:"
                                 case None => text = "Error: Winner not found"
                             }
-                            //border = new EmptyBorder(0, 140, 0, 0)
-                            foreground = Color.WHITE
                             horizontalAlignment = Alignment.Center
-                            horizontalTextPosition = Alignment.Center
-                            verticalTextPosition = Alignment.Center
-                            font = new Font("Arial", 1, 30)
                         }
+
                         for (cell <- controller.winnercreatures) {
                             val multi = cell.multiplier
-                            contents += new Label(multi.toString) {
-                                foreground = Color.WHITE
-                                font = new Font("Arial", 1, 30)
-                            }
+                            contents += new ShortLabel(multi.toString,30,Color.WHITE)(false)
                         }
+
                     }
-                    //Health
+
                     contents += new BoxPanel(Orientation.Vertical) {
                         opaque = false
                         border = new EmptyBorder(20, 0, 0, 20)
-                        contents += new Label {
+
+                        contents += new ShortLabel("",30,Color.WHITE)(true) {
                             controller.winner() match {
-                                case Some(value) => text = "Health:"
+                                case Some(_) => text = "Health:"
                                 case None => text = "Error: Winner not found"
                             }
-                            //border = new EmptyBorder(0, 140, 0, 0)
-                            foreground = Color.WHITE
                             horizontalAlignment = Alignment.Center
                             horizontalTextPosition = Alignment.Center
-                            verticalTextPosition = Alignment.Center
-                            font = new Font("Arial", 1, 30)
                         }
+
                         for (cell <- controller.winnercreatures) {
                             val hp = cell.hp
-                            contents += new Label(hp.toString) {
-                                foreground = Color.WHITE
-                                font = new Font("Arial", 1, 30)
-                            }
+                            contents += new ShortLabel(hp.toString,30,Color.WHITE)(false)
                         }
+
                     }
                 }, BorderPanel.Position.Center)
 
                 add(new BoxPanel(Orientation.Vertical) {
                     opaque = false
-                    //border = new EmptyBorder(200, 270, 20, 0)
                     border = new EmptyBorder(40, 0, 0, 0)
 
-                    contents += new Button {
-                        text = "Menu"
-                        foreground = new Color(200, 200, 200)
-                        font = new Font("Arial", 1, 30)
-                        focusPainted = false
-                        contentAreaFilled = false
-                        borderPainted = false
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
+                    contents += new ShortButton("Menu",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                         reactions += {
                             case ButtonClicked(_) =>
@@ -467,27 +373,17 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                 controller.notifyObservers
                         }
                     }
-                    contents += new Button {
-                        text = "Exit"
-                        foreground = new Color(200, 200, 200)
-                        font = new Font("Arial", 1, 30)
-                        focusPainted = false
-                        contentAreaFilled = false
-                        borderPainted = false
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
+
+                    contents += new ShortButton("Exit",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                         reactions += {
                             case ButtonClicked(_) =>
                                 System.exit(1)
                         }
                     }
-                    contents += new Label {
-                        border = new EmptyBorder(10, 175, 0, 0)
-                        foreground = Color.WHITE
-                        horizontalTextPosition = Alignment.Center
-                        verticalTextPosition = Alignment.Center
-                        text = "Thanks for playing!"
+
+                    contents += new ShortLabel("Thanks for playing!",15,Color.WHITE)(true) {
+                        border = new EmptyBorder(10, 160, 0, 0)
                     }
 
                 }, BorderPanel.Position.South)
