@@ -66,6 +66,7 @@ class TUI(controller: Controller, executer : UndoManager) extends Observer {
 
     override def update: Unit = {
         controller.gamestate match {
+            case "credit" => print("Not supported feature! -> Credit view")
             case "mainmenu" => print(controller.output)
             case "gamerun" => print(controller.output)
             case "finished" => controller.winner() match { case Some(value) => print (controller.endInfo(value)) }

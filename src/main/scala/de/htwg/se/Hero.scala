@@ -79,7 +79,7 @@ object Hero {
     }
 
     def startinfo(): String = {
-        val version = "Gameversion: 1.3 GUI Implemenation"
+        val version = "Gameversion: 1.3 GUI Implementation"
         val top = "\n" + "=" * 44 + " Welcome to Hero " + "=" * 44
         val middle = "\n" + " " * 35 + "Made by Alina Göttig & Ronny Klotz" + "\n"
         val bottom = " " * ((105 - version.length) / 2) + version + "\n"
