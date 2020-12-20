@@ -44,6 +44,8 @@ class Controller() extends Observable {
 
     def getCreature(field: Vector[Vector[Cell]], x: Int, y: Int): Cell = field(x)(y)
 
+    def winnercreatures: List[Cell] = { board.list.filter(Cell => Cell.multiplier > 0) }
+
     def active(X: Int, Y: Int): Boolean =
         if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
 
@@ -128,8 +130,8 @@ class Controller() extends Observable {
         val defender = board.field(Y2)(X2)
 
         val damage = attacker.attackamount() * attacker.multiplier
-        val tempstats = (defender.multiplier * defender.hp) - damage
         val basehp = findbasehp(defender.name)
+        val tempstats = (defender.multiplier * basehp + defender.hp) - damage
         val temphealth = tempstats % basehp
         val newhealth = if(temphealth == 0) basehp else temphealth
         val newmultiplier = if(temphealth == 0) (tempstats / basehp) - 1 else tempstats / basehp
@@ -380,10 +382,6 @@ class Controller() extends Observable {
             middle += name + " " * (16 - name.length) + multi + " " * (20 - multi.toString.length) + hp + "\n"
         }
         top + title + middle + lines()
-    }
-
-    def winnercreatures: List[Cell] = {
-        board.list.filter(Cell => Cell.multiplier > 0)
     }
 
 }
