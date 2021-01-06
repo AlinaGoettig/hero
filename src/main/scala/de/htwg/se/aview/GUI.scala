@@ -7,13 +7,14 @@ package de.htwg.se.aview
  */
 
 import de.htwg.se.util._
-import de.htwg.se.controller.Controller
-import de.htwg.se.model.Cell
 
 import scala.swing._
 import scala.swing.event._
 import java.awt.Color
 
+import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
+import de.htwg.se.controller.controllerComponent.ControllerInterface
+import de.htwg.se.model.boardComponent.boardImpl.Cell
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
 

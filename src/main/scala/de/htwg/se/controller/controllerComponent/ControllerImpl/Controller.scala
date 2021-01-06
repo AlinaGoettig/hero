@@ -1,4 +1,4 @@
-package de.htwg.se.controller
+package de.htwg.se.controller.controllerComponent.ControllerImpl
 
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
@@ -6,11 +6,13 @@ package de.htwg.se.controller
  * @since 17.Nov.2020
  */
 
-import de.htwg.se.model.{Board, Cell, Player}
+import de.htwg.se.controller.controllerComponent.ControllerInterface
+import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
+import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util._
 
 //noinspection ScalaStyle
-class Controller() extends Observable {
+class Controller() extends Observable with ControllerInterface {
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Inferno"))
     var gamestate = "mainmenu"
@@ -37,12 +39,6 @@ class Controller() extends Observable {
     }
 
     // ----------------------------------------------- Short liner -----------------------------------------------------
-
-    def fieldnumber(x: String): String = if (x.length == 2) "  " + x + "   " else "   " + x + "   "
-
-    def lines(): String = "=" * 7 * 15 + "\n"
-
-    def getCreature(field: Vector[Vector[Cell]], x: Int, y: Int): Cell = field(x)(y)
 
     def winnercreatures: List[Cell] = { board.list.filter(Cell => Cell.multiplier > 0) }
 

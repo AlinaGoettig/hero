@@ -1,7 +1,9 @@
 package de.htwg.se.util
 
-import de.htwg.se.controller.Controller
-import de.htwg.se.model.Board
+import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
+import de.htwg.se.controller.controllerComponent.ControllerInterface
+import de.htwg.se.model.boardComponent.BoardInterface
+import de.htwg.se.model.boardComponent.boardImpl.Board
 
 trait Command {
     def doStep:Unit
@@ -31,7 +33,7 @@ class UndoManager {
         command.doStep
     }
 
-    def undoStep(controller: Controller): Unit = {
+    def undoStep(controller: ControllerInterface): Unit = {
         boarddo match {
             case  Nil =>
             case head:: _ =>

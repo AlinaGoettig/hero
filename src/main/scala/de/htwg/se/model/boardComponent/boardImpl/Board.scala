@@ -1,13 +1,23 @@
-package de.htwg.se.model
+package de.htwg.se.model.boardComponent.boardImpl
+
+import de.htwg.se.model.boardComponent.BoardInterface
+import de.htwg.se.model.playerComponent.Player
 
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ *
  * @author Ronny Klotz & Alina Göttig
  * @since 9.Nov.2020
  */
 
 //noinspection ScalaStyle
-case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentplayer: Player, currentcreature: Cell, list: List[Cell], log: List[String]) {
+case class Board(field: Vector[Vector[Cell]],
+                 player: Vector[Player],
+                 currentplayer: Player,
+                 currentcreature: Cell,
+                 list: List[Cell],
+                 log: List[String])
+    extends BoardInterface {
 
     def currentcreatureinfo(): String = {
         val attackstyle = if (currentcreature.style) "Ranged" else "Melee"
@@ -33,32 +43,8 @@ case class Board(field: Vector[Vector[Cell]], player: Vector[Player], currentpla
     }
 
     def lastlog(): String = {
-        val info = if(log.nonEmpty) log.last + "\n" else "\n"
+        val info = if (log.nonEmpty) log.last + "\n" else "\n"
         "==" + " Log: " + "=" * 97 + "\n" + info + lines()
     }
-
-    def realname(name: String): String = {
-        name match {
-            case "HA." => "Ha_lberdier"
-            case ".FA" => "Fa_miliar"
-            case "MA." => "Ma_rksman"
-            case "MAG" => "Mag_og"
-            case "RO." => "Ro_yal Griffin"
-            case ".CE" => "Ce_rberus"
-            case "AN." => "Arch An_gle"
-            case ".DE" => "Arch De_vil"
-            case "CH." => "Ch_ampion"
-            case ".EF" => "Ef_reet Sultan"
-            case "ZE." => "Ze_alot"
-            case ".PI" => "Pi_t Lord"
-            case "CR." => "Cr_usader"
-            case ".HO" => "Ho_rned Demon"
-            case "   " => "   "
-            case " _ " => "   "
-            case "XXX" => "   "
-        }
-    }
-
-    def lines(): String = "=" * 7 * 15 + "\n"
 
 }
