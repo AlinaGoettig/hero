@@ -16,7 +16,7 @@ class Controller() extends Observable with ControllerInterface {
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Inferno"))
     var gamestate = "mainmenu"
-    var board: Board = start()
+    var board: Board
     inizGame()
 
     // ----------------------------------------------- Inizial Game ----------------------------------------------------
@@ -53,7 +53,7 @@ class Controller() extends Observable with ControllerInterface {
         board
     }
 
-    def placeCreatures(board: Board, iterator: CreaturelistIterator): Board = {
+     def placeCreatures(board: Board, iterator: CreaturelistIterator): Board = {
 
         val info = iterator.next()
         val creature = info._2

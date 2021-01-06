@@ -6,12 +6,11 @@ package de.htwg.se.aview
  * @since 17.Nov.2020
  */
 
-import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.util.{Observer, SetCommand, UndoManager}
 
 //noinspection ScalaStyle
-class TUI(controller: Controller, executer : UndoManager) extends Observer {
+class TUI(controller: ControllerInterface, executer : UndoManager) extends Observer {
 
     controller.add(this)
 

@@ -7,7 +7,6 @@ package de.htwg.se.util
  * @since 03.Dez.2020
  */
 
-import de.htwg.se.model.boardComponent.boardImpl
 import de.htwg.se.model.boardComponent.boardImpl.Cell
 import de.htwg.se.model.playerComponent.Player
 
@@ -26,33 +25,33 @@ class CreaturelistIterator() extends CustomIterator {
         // Coordinates -> (Name | Damage | Health | Speed | Type | Multiplier | Player)
 
         //Halberdier
-        Vector(Vector(0, 0) -> boardImpl.Cell("HA.", "2-3", 10, 3, style = false, 28, player(0)),
+        Vector(Vector(0, 0) -> Cell("HA.", "2-3", 10, 3, style = false, 28, player(0)),
         //Familiar
-        Vector(14, 0) -> boardImpl.Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)),
+        Vector(14, 0) -> Cell(".FA", "1-2", 4, 5, style = false, 44, player(1)),
         //Marksman
-        Vector(0, 1) -> boardImpl.Cell("MA.", "4-6", 10, 3, style = true, 28, player(0)),
+        Vector(0, 1) -> Cell("MA.", "4-6", 10, 3, style = true, 28, player(0)),
         //Magog
-        Vector(14, 1) -> boardImpl.Cell("MAG", "2-4", 13, 4, style = true, 20, player(1)),
+        Vector(14, 1) -> Cell("MAG", "2-4", 13, 4, style = true, 20, player(1)),
         //Royal Griffin
-        Vector(0, 2) -> boardImpl.Cell("RO.", "3-6", 10, 4, style = false, 18, player(0)),
+        Vector(0, 2) -> Cell("RO.", "3-6", 10, 4, style = false, 18, player(0)),
         //Cerberus
-        Vector(14, 2) -> boardImpl.Cell(".CE", "2-7", 25, 5, style = false, 10, player(1)),
+        Vector(14, 2) -> Cell(".CE", "2-7", 25, 5, style = false, 10, player(1)),
         //Arch Angel
-        Vector(0, 5) -> boardImpl.Cell("AN.", "50", 250, 12, style = false, 2, player(0)),
+        Vector(0, 5) -> Cell("AN.", "50", 250, 12, style = false, 2, player(0)),
         //Arch Devil
-        Vector(14, 5) -> boardImpl.Cell(".DE", "30-40", 200, 11, style = false, 2, player(1)),
+        Vector(14, 5) -> Cell(".DE", "30-40", 200, 11, style = false, 2, player(1)),
         //Champion
-        Vector(0, 8) -> boardImpl.Cell("CH.", "20-25", 100, 6, style = false, 4, player(0)),
+        Vector(0, 8) -> Cell("CH.", "20-25", 100, 6, style = false, 4, player(0)),
         //Efreet Sultan
-        Vector(14, 8) -> boardImpl.Cell(".EF", "16-24", 90, 9, style = false, 4, player(1)),
+        Vector(14, 8) -> Cell(".EF", "16-24", 90, 9, style = false, 4, player(1)),
         //Zealot
-        Vector(0, 9) -> boardImpl.Cell("ZE.", "10-12", 24, 5, style = true, 6, player(0)),
+        Vector(0, 9) -> Cell("ZE.", "10-12", 24, 5, style = true, 6, player(0)),
         //Pit Lord
-        Vector(14, 9) -> boardImpl.Cell(".PI", "13-17", 45, 5, style = false, 6, player(1)),
+        Vector(14, 9) -> Cell(".PI", "13-17", 45, 5, style = false, 6, player(1)),
         //Crusader
-        Vector(0, 10) -> boardImpl.Cell("CR.", "7-10", 35, 4, style = false, 8, player(0)),
+        Vector(0, 10) -> Cell("CR.", "7-10", 35, 4, style = false, 8, player(0)),
         //Horned Demon
-        Vector(14, 10) -> boardImpl.Cell(".HO", "7-9", 40, 4, style = false, 8, player(1)))
+        Vector(14, 10) -> Cell(".HO", "7-9", 40, 4, style = false, 8, player(1)))
     }
 
     var position: Int = 0;
@@ -74,7 +73,7 @@ class CreaturelistIterator() extends CustomIterator {
 
 //noinspection ScalaStyle
 class ObstacleListIterator() extends CustomIterator {
-    val obstacle: Cell = boardImpl.Cell("XXX", "0", 0, 0, style = false, 0, Player("none"))
+    val obstacle: Cell = Cell("XXX", "0", 0, 0, style = false, 0, Player("none"))
     val list: Vector[(Vector[Int],Cell)] = Vector(
         Vector(4, 8) -> obstacle,
         Vector(4, 7) -> obstacle,
