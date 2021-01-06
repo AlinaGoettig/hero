@@ -12,14 +12,13 @@ import scala.swing._
 import scala.swing.event._
 import java.awt.Color
 
-import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.controller.controllerComponent.ControllerInterface
-import de.htwg.se.model.boardComponent.boardImpl.Cell
+import de.htwg.se.model.boardComponent.CellInterface
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
 
 //noinspection ScalaStyle
-class SwingGui(controller: Controller) extends Frame with Observer {
+class SwingGui(controller: ControllerInterface) extends Frame with Observer {
 
     controller.add(this)
     // ------------------------------------------------- Frame Setup ---------------------------------------------------
@@ -188,7 +187,7 @@ class SwingGui(controller: Controller) extends Frame with Observer {
                                         maximumSize = new Dimension(119, 85)
                                         preferredSize = new Dimension(119, 85)
 
-                                        val cell: Cell = controller.getCreature(controller.board.field, i, j)
+                                        val cell: CellInterface = controller.getCreature(controller.board.field, i, j)
 
                                         if (!cell.player.name.equals("none")) {
                                             if (cell.name.equals(controller.board.currentcreature.name)) {

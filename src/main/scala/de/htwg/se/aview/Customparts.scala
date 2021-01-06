@@ -4,8 +4,8 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 
-import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
-import de.htwg.se.model.boardComponent.boardImpl.Cell
+import de.htwg.se.controller.controllerComponent.ControllerInterface
+import de.htwg.se.model.boardComponent.CellInterface
 import javax.imageio.ImageIO
 
 import scala.swing._
@@ -29,9 +29,9 @@ class ImagePanel() extends BoxPanel(Orientation.Vertical) {
     }
 }
 
-class CoorButton(X: Int, Y: Int, cell: Cell, controller: Controller) extends Button {
+class CoorButton(X: Int, Y: Int, cell: CellInterface, controller: ControllerInterface) extends Button {
 
-    val currentcell: Cell = controller.getCreature(controller.board.field, Y, X)
+    val currentcell: CellInterface = controller.getCreature(controller.board.field, Y, X)
     val cellname: String = controller.board.realname(cell.name)
 
     font = new Font("Arial", 1, 14)

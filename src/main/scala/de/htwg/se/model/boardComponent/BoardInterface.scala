@@ -1,6 +1,15 @@
 package de.htwg.se.model.boardComponent
 
+import de.htwg.se.model.playerComponent.Player
+
 trait BoardInterface {
+
+    def field: Vector[Vector[CellInterface]]
+    def player: Vector[Player]
+    def currentplayer: Player
+    def currentcreature: CellInterface
+    def list: List[CellInterface]
+    def log: List[String]
 
     def currentcreatureinfo(): String
     def creatureinfo(Y: Int, X: Int): String
@@ -30,6 +39,14 @@ trait BoardInterface {
 }
 
 trait CellInterface {
+
+    def name: String
+    def dmg: String
+    def hp: Int
+    def speed: Int
+    def style: Boolean
+    def multiplier: Int
+    def player: Player
 
     def toString(): String
     def attackable(): String
