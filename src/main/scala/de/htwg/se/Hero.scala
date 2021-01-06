@@ -7,7 +7,7 @@ package de.htwg.se.Hero.model
  */
 
 import de.htwg.se.aview.{SwingGui, TUI}
-import de.htwg.se.controller.Controller
+import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.util.{Interpreter, UndoManager}
 
 import scala.io.StdIn

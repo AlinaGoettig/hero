@@ -1,7 +1,7 @@
 package de.htwg.se.Hero.util
 
 import de.htwg.se.aview.TUI
-import de.htwg.se.controller.Controller
+import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.util.{Observable, UndoManager}
 import org.scalatest._
 

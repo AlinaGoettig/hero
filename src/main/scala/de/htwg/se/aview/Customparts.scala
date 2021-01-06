@@ -4,8 +4,8 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 
-import de.htwg.se.controller.Controller
-import de.htwg.se.model.Cell
+import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
+import de.htwg.se.model.boardComponent.boardImpl.Cell
 import javax.imageio.ImageIO
 
 import scala.swing._

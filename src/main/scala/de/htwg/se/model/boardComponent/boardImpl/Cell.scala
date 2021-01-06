@@ -1,14 +1,18 @@
-package de.htwg.se.model
-
-/**
- * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
- * @author Ronny Klotz & Alina Göttig
- * @since 9.Nov.2020
- */
+package de.htwg.se.model.boardComponent.boardImpl
 
 import java.util.concurrent.ThreadLocalRandom
 
-case class Cell(name: String, dmg: String, hp: Int, speed: Int, style: Boolean, multiplier: Int, player: Player) {
+import de.htwg.se.model.boardComponent.CellInterface
+import de.htwg.se.model.playerComponent.Player
+
+case class Cell(name: String,
+                dmg: String,
+                hp: Int,
+                speed: Int,
+                style: Boolean,
+                multiplier: Int,
+                player: Player)
+    extends CellInterface {
 
     override def toString(): String = "│ " + name + " │"
 

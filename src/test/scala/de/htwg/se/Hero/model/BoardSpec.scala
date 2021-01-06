@@ -1,13 +1,16 @@
 package de.htwg.se.model
 
+import de.htwg.se.model.boardComponent.boardImpl
+import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
+import de.htwg.se.model.playerComponent.Player
 import org.scalatest._
 
 class BoardSpec extends WordSpec with Matchers {
     "A Board" when { "new" should {
         val player = Vector(Player("Player1"),Player("Player2"))
-        val emptycell = Cell("   ", "0", 0, 0, false, 0, Player("none"))
-        val creature1 = Cell("HA.", "2-3", 10, 3, style = true, 28, player(0))
-        val creature2 = Cell(".FA", "1-2", 4, 5, style = false, 44, player(1))
+        val emptycell = boardImpl.Cell("   ", "0", 0, 0, false, 0, Player("none"))
+        val creature1 = boardImpl.Cell("HA.", "2-3", 10, 3, style = true, 28, player(0))
+        val creature2 = boardImpl.Cell(".FA", "1-2", 4, 5, style = false, 44, player(1))
         val field = Vector(Vector(creature1,emptycell),Vector(emptycell,creature2))
         val list = List(creature1,creature2)
         val log = List("Castle cheated!")
