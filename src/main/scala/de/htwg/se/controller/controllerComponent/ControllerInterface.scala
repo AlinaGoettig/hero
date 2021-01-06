@@ -43,4 +43,5 @@ trait ControllerInterface extends Observable  {
     def info(in:Vector[String]): String
     def endInfo(playernumber: Int): String
 
+
 }

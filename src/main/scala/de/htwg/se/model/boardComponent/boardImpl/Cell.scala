@@ -25,4 +25,14 @@ case class Cell(name: String,
         amount
     }
 
+    def copy(name: String = this.name,
+             dmg: String = this.dmg,
+             hp: Int = this.hp,
+             speed: Int = this.speed,
+             style: Boolean = this.style,
+             multiplier: Int = this.multiplier,
+             player: Player = this.player): CellInterface = {
+    Cell(name, dmg, hp, speed, style, multiplier, player)
+    }
+
 }

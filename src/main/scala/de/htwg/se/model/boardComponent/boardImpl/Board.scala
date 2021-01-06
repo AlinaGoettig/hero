@@ -1,6 +1,6 @@
 package de.htwg.se.model.boardComponent.boardImpl
 
-import de.htwg.se.model.boardComponent.BoardInterface
+import de.htwg.se.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.model.playerComponent.Player
 
 /**
@@ -47,4 +47,11 @@ case class Board(field: Vector[Vector[Cell]],
         "==" + " Log: " + "=" * 97 + "\n" + info + lines()
     }
 
+    def copy(field: Vector[Vector[CellInterface]] = this.field,
+             player: Vector[Player] = this.player,
+             currentplayer: Player = this.currentplayer,
+             currentcreature: CellInterface = this.currentcreature,
+             list: List[CellInterface] = this.list,
+             log: List[String] = this.log): BoardInterface= Board(field.asInstanceOf[Vector[Vector[Cell]]],
+        player, currentplayer,currentcreature.asInstanceOf[Cell],list.asInstanceOf[List[Cell]], log)
 }

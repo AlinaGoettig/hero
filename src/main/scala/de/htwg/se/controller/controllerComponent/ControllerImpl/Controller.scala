@@ -7,6 +7,7 @@ package de.htwg.se.controller.controllerComponent.ControllerImpl
  */
 
 import de.htwg.se.controller.controllerComponent.ControllerInterface
+import de.htwg.se.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
 import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util._
@@ -16,23 +17,23 @@ class Controller() extends Observable with ControllerInterface {
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Inferno"))
     var gamestate = "mainmenu"
-    var board: Board
+    var board: BoardInterface = start()
     inizGame()
 
     // ----------------------------------------------- Inizial Game ----------------------------------------------------
 
     def inizGame(): Boolean= {
         board = start()
-        board = board.copy(board.field,player,player(0),CellFactory(""),createCreatureList())
+        board = board.copy(board.field,player,player(0),CellFactory(""),createCreatureList(), board.log)
         val creature = board.list(board.list.indexOf(board.list.last))
-        board = board.copy(currentplayer = creature.player, currentcreature = creature)
+        board = board.copy(board.field, board.player, creature.player, creature, board.list, board.log)
         next()
         prediction()
         //notifyObservers
         true
     }
 
-    def createCreatureList(): List[Cell] = {
+    def createCreatureList(): List[CellInterface] = {
         val field = board.field
         List(field(0)(0),field(0)(14),field(1)(0),field(1)(14),field(2)(0),field(2)(14),field(5)(0),
             field(5)(14),field(8)(0),field(8)(14),field(9)(0),field(9)(14),field(10)(0),field(10)(14))
@@ -40,26 +41,27 @@ class Controller() extends Observable with ControllerInterface {
 
     // ----------------------------------------------- Short liner -----------------------------------------------------
 
-    def winnercreatures: List[Cell] = { board.list.filter(Cell => Cell.multiplier > 0) }
+    def winnercreatures: List[CellInterface] = { board.list.filter(Cell => Cell.multiplier > 0) }
 
     def active(X: Int, Y: Int): Boolean =
         if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
 
     // --------------------------------------------------- Start -------------------------------------------------------
 
-    def start(): Board = {
+    def start(): BoardInterface = {
         val emptyboard = Board(Vector.fill(11, 15)(CellFactory("")),player,player(0),CellFactory(""),List.empty,List.empty)
         val board = placeCreatures(emptyboard, new CreaturelistIterator)
         board
     }
 
-     def placeCreatures(board: Board, iterator: CreaturelistIterator): Board = {
+     def placeCreatures(board: BoardInterface, iterator: CreaturelistIterator): BoardInterface = {
 
         val info = iterator.next()
         val creature = info._2
         val coor = info._1
 
-        val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),creature)))
+        val creatureadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),creature)), board.player,
+            board.currentplayer, board.currentcreature, board.list, board.log)
 
         if(iterator.hasNext) {
             placeCreatures(creatureadd,iterator)
@@ -68,13 +70,14 @@ class Controller() extends Observable with ControllerInterface {
         }
     }
 
-    def placeObstacles(board: Board, iterator: ObstacleListIterator): Board = {
+    def placeObstacles(board: BoardInterface, iterator: ObstacleListIterator): BoardInterface = {
 
         val info = iterator.next()
         val obstacle = info._2
         val coor = info._1
 
-        val obstacleadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),obstacle)))
+        val obstacleadd = board.copy(board.field.updated(coor(1),board.field(coor(1)).updated(coor(0),obstacle)),
+            board.player, board.currentplayer, board.currentcreature, board.list, board.log)
 
         if(iterator.hasNext) {
             placeObstacles(obstacleadd,iterator)
@@ -85,11 +88,12 @@ class Controller() extends Observable with ControllerInterface {
 
     // ---------------------------------------- State of game Change ---------------------------------------------------
 
-    def next(): Cell = {
+    def next(): CellInterface = {
         val list = board.list
         val index = list.indexOf(board.currentcreature) + 1
         if (index == list.length) {
-            board = board.copy(currentplayer = list.head.player, currentcreature = list.head)
+            board = board.copy(board.field, board.player, list.head.player, list.head, board.list, board.log)
+
             if (list.head.multiplier <= 0) {
                 next()
             } else {
@@ -97,7 +101,8 @@ class Controller() extends Observable with ControllerInterface {
                 list.head
             }
         } else {
-            board = board.copy(currentplayer = list(index).player, currentcreature = list(index))
+            board = board.copy(board.field, board.player, list(index).player, list(index), board.list, board.log)
+
             if (list(index).multiplier <= 0) {
                 next()
             } else {
@@ -131,37 +136,41 @@ class Controller() extends Observable with ControllerInterface {
         val temphealth = tempstats % basehp
         val newhealth = if(temphealth == 0) basehp else temphealth
         val newmultiplier = if(temphealth == 0) (tempstats / basehp) - 1 else tempstats / basehp
-        val newCell = defender.copy(hp = newhealth, multiplier = newmultiplier)
+        val newCell = defender.copy(defender.name, defender.dmg, newhealth,
+            defender.speed, defender.style, newmultiplier,defender.player)
 
         replaceCreatureInList(defender,newCell)
 
-        board = board.copy(board.field.updated(Y2, board.field(Y2).updated(X2, newCell)))
+        board = board.copy(board.field.updated(Y2, board.field(Y2).updated(X2, newCell)),
+            board.player, board.currentplayer, board.currentcreature, board.list, board.log)
         val loginfo = List(board.realname(attacker.name) + " dealt " + damage + " points to "
             + board.realname(defender.name))
 
         if (deathcheck(Y2,X2)) {
             val renwed = List(loginfo.head + ". The creature got killed!")
-            replaceCreatureInList(newCell, newCell.copy(multiplier = 0, hp = 0))
-            board = board.copy(log = board.log ++ renwed)
+            replaceCreatureInList(newCell, newCell.copy(newCell.name, newCell.dmg, 0, newCell.speed,
+                newCell.style, 0, newCell.player))
+            board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list, board.log ++ renwed)
         } else {
-            board = board.copy(log = board.log ++ loginfo)
+            board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list, board.log ++ loginfo)
         }
         damage.toString
     }
 
-    def replaceCreatureInList(oldC: Cell, newC: Cell): Cell = {
+    def replaceCreatureInList(oldC: CellInterface, newC: CellInterface): CellInterface = {
         val tmp = board.list
         val index = tmp.indexOf(oldC)
         val (left, _ :: right) = tmp.splitAt(index)
         val newList = left ++ List(newC) ++ right
-        board = board.copy(list = newList)
+        board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, newList, board.log)
         newC
     }
 
     def deathcheck(X: Int, Y: Int): Boolean = {
         val field = board.field
         if (field(X)(Y).multiplier <= 0 || field(X)(Y).hp < 0) {
-            board = board.copy(field.updated(X, field(X).updated(Y, CellFactory(""))))
+            board = board.copy(field.updated(X, field(X).updated(Y, CellFactory(""))), board.player,
+                board.currentplayer, board.currentcreature, board.list, board.log)
             true
         } else {
             false
@@ -180,32 +189,35 @@ class Controller() extends Observable with ControllerInterface {
         val field = board.field
         val cret1 = field(X1)(Y1)
         val cret2 = field(X2)(Y2)
-        board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)))
-        board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)))
-
+        board = board.copy(field.updated(X1, field(X1).updated(Y1, cret2)), board.player,
+            board.currentplayer, board.currentcreature, board.list, board.log)
+        board = board.copy(board.field.updated(X2, board.field(X2).updated(Y2, cret1)),
+            board.player, board.currentplayer, board.currentcreature, board.list, board.log)
         Vector(X2,Y2)
     }
 
-    def prediction(): Vector[Vector[Cell]] = {
+    def prediction(): Vector[Vector[CellInterface]] = {
         val creature = position(board.currentcreature)
         for (j <- 0 to 10) {
             for (i <- 0 to 14) {
                 val field = board.field
                 val dist = Math.abs(creature(0) - j) + Math.abs(creature(1) - i)
                 if (field(j)(i).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
-                    board = board.copy(field = field.updated(j, field(j).updated(i, CellFactory("marker"))))
+                    board = board.copy(field.updated(j, field(j).updated(i, CellFactory("marker"))), board.player,
+                        board.currentplayer, board.currentcreature, board.list, board.log)
                 }
             }
         }
         board.field
     }
 
-    def clear(): Vector[Vector[Cell]] = {
+    def clear(): Vector[Vector[CellInterface]] = {
         for (i <- 0 to 14) {
             for (j <- 0 to 10) {
                 val field = board.field
                 if (field(j)(i).name.equals(" _ ")) {
-                    board = board.copy(field = field.updated(j, field(j).updated(i, CellFactory(""))))
+                    board = board.copy(field = field.updated(j, field(j).updated(i, CellFactory(""))),
+                        board.player, board.currentplayer, board.currentcreature, board.list, board.log)
                 }
             }
         }
@@ -224,55 +236,61 @@ class Controller() extends Observable with ControllerInterface {
         Vector(-1, -1)
     }
 
-    def position(creature: Cell): Vector[Int] = {
+    def position(creature: CellInterface): Vector[Int] = {
         intpos(creature.name)
     }
 
     def cheatCode(code: Vector[String]): String = {
          code(1) match {
              case "coconuts" =>
-                 val newC = board.currentcreature.copy(speed = 20)
+                 val newC = board.currentcreature.copy(board.currentcreature.name, board.currentcreature.dmg,
+                     board.currentcreature.hp, 20, board.currentcreature.style, board.currentcreature.multiplier, board.currentcreature.player)
                  changeStats(newC)
                  prediction()
                  val info = List(board.currentplayer + " cheated! Activated infinity movment speed for "
                      + board.realname(board.currentcreature.name))
-                 board = board.copy(log = board.log ++ info)
+                 board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list, board.log ++ info)
                  info.last
              case "godunit" =>
-                 val newC = board.currentcreature.copy(dmg = "1000", hp = 1000, multiplier = 1000, speed = 20)
+                 val newC = board.currentcreature.copy(board.currentcreature.name, "1000", 1000, 20,
+                     board.currentcreature.style, 1000, board.currentcreature.player)
                  changeStats(newC)
                  prediction()
                  val info = List(board.currentplayer + " cheated! Activated god mode for "
                      + board.realname(board.currentcreature.name))
-                 board = board.copy(log = board.log ++ info)
+                 board = board.copy(board.field, board.player, board.currentplayer,
+                     board.currentcreature, board.list, board.log ++ info)
                  info.last
              case "feedcreature" =>
                  val basestats = baseStats()
-                 val newC = board.currentcreature.copy(multiplier = basestats(0), hp = basestats(1))
+                 val newC = board.currentcreature.copy(board.currentcreature.name, board.currentcreature.dmg, basestats(1),
+                     board.currentcreature.speed, board.currentcreature.style, basestats(0), board.currentcreature.player)
                  changeStats(newC)
                  val info = List(board.currentplayer + " cheated! Set " + board.realname(board.currentcreature.name)
                      + " values back to beginning")
-                 board = board.copy(log = board.log ++ info)
+                 board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list, board.log ++ info)
                  info.last
              case "handofjustice" =>
                  val enemy = board.list.filter(Cell => !Cell.player.equals(board.currentplayer))
                  for (cell <- enemy) {
-                     val newC = cell.copy(multiplier = 0, hp = 0)
+                     val newC = cell.copy(cell.name, cell.dmg, 0, cell.speed, cell.style, 0, cell.player)
                      replaceCreatureInList(cell,newC)
                      val coor = position(cell)
-                     board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), CellFactory(""))), currentcreature = newC)
+                     board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), CellFactory(""))),
+                         board.player, board.currentplayer, newC, board.list, board.log)
                  }
                  val info = List(board.currentplayer + " cheated! Killed all enemy creatures")
-                 board = board.copy(log = board.log ++ info)
+                 board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list, board.log ++ info)
                  gamestate = "finished"
                  info.last
          }
     }
 
-    def changeStats(newC: Cell): Boolean = {
+    def changeStats(newC: CellInterface): Boolean = {
         replaceCreatureInList(board.currentcreature,newC)
         val coor = position(board.currentcreature)
-        board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), newC)), currentcreature = newC)
+        board = board.copy(field = board.field.updated(coor(0), board.field(coor(0)).updated(coor(1), newC)),
+            board.player, board.currentplayer, newC, board.list, board.log)
         true
     }
 

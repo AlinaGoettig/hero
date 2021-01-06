@@ -4,12 +4,12 @@ import de.htwg.se.model.playerComponent.Player
 
 trait BoardInterface {
 
-    def field: Vector[Vector[CellInterface]]
-    def player: Vector[Player]
-    def currentplayer: Player
-    def currentcreature: CellInterface
-    def list: List[CellInterface]
-    def log: List[String]
+    val field: Vector[Vector[CellInterface]]
+    val player: Vector[Player]
+    val currentplayer: Player
+    val currentcreature: CellInterface
+    val list: List[CellInterface]
+    val log: List[String]
 
     def currentcreatureinfo(): String
     def creatureinfo(Y: Int, X: Int): String
@@ -36,6 +36,13 @@ trait BoardInterface {
     }
     def lines(): String = "=" * 7 * 15 + "\n"
 
+    def copy(field: Vector[Vector[CellInterface]],
+             player: Vector[Player],
+             currentplayer: Player,
+             currentcreature: CellInterface,
+             list: List[CellInterface],
+             log: List[String]): BoardInterface
+
 }
 
 trait CellInterface {
@@ -51,5 +58,12 @@ trait CellInterface {
     def toString(): String
     def attackable(): String
     def attackamount(): Int
+    def copy(name: String,
+             dmg: String,
+             hp: Int,
+             speed: Int,
+             style: Boolean,
+             multiplier: Int,
+             player: Player): CellInterface
 
 }
