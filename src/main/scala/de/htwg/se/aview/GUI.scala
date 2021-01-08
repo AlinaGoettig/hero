@@ -17,8 +17,7 @@ import de.htwg.se.model.boardComponent.CellInterface
 import javax.swing.ImageIcon
 import javax.swing.border.EmptyBorder
 
-//noinspection ScalaStyle
-class SwingGui(controller: ControllerInterface) extends Frame with Observer {
+class GUI(controller: ControllerInterface) extends Frame with Observer {
 
     controller.add(this)
     // ------------------------------------------------- Frame Setup ---------------------------------------------------
@@ -32,6 +31,7 @@ class SwingGui(controller: ControllerInterface) extends Frame with Observer {
 
     // -------------------------------------------------- Main Menu ----------------------------------------------------
     def mainmenu(): Unit = {
+
         contents = new ImagePanel() {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/UI/Menubackground.png"
 

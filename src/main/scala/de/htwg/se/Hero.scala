@@ -6,7 +6,7 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
-import de.htwg.se.aview.{SwingGui, TUI}
+import de.htwg.se.aview.{GUI, TUI}
 import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.util.{Interpreter, UndoManager}
 
@@ -18,7 +18,7 @@ object Hero {
     val controller = new Controller()
     val executer = new UndoManager
     val tui = new TUI(controller, executer)
-    val gui = new SwingGui(controller)
+    val gui = new GUI(controller)
 
     def main(args: Array[String]): Unit = {
         gui.update

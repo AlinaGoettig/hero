@@ -8,7 +8,7 @@ package de.htwg.se.controller.controllerComponent.ControllerImpl
 
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.model.boardComponent.{BoardInterface, CellInterface}
-import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
+import de.htwg.se.model.boardComponent.boardImpl.Board
 import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util._
 
