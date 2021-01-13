@@ -6,6 +6,7 @@ package de.htwg.se.controller.controllerComponent.ControllerImpl
  * @since 17.Nov.2020
  */
 
+import com.google.inject.Inject
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.model.boardComponent.boardImpl.Board
@@ -13,7 +14,7 @@ import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util._
 
 //noinspection ScalaStyle
-class Controller() extends Observable with ControllerInterface {
+class Controller @Inject () extends Observable with ControllerInterface {
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Inferno"))
     var gamestate = "mainmenu"

@@ -6,8 +6,10 @@ package de.htwg.se.Hero.model
  * @since 9.Nov.2020
  */
 
+import com.google.inject.{Guice, Injector}
+import de.htwg.se.HeroModule
 import de.htwg.se.aview.{GUI, TUI}
-import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
+import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.util.{Interpreter, UndoManager}
 
 import scala.io.StdIn
@@ -15,7 +17,8 @@ import scala.io.StdIn
 //noinspection ScalaStyle
 object Hero {
 
-    val controller = new Controller()
+    val injector: Injector = Guice.createInjector(new HeroModule)
+    val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
     val executer = new UndoManager
     val tui = new TUI(controller, executer)
     val gui = new GUI(controller)
