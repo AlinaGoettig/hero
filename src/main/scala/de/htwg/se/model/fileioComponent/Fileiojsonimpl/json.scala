@@ -1,4 +1,4 @@
-package de.htwg.se.model.fileioComponent.Fileiojsonimpl
+package de.htwg.se.model.fileioComponent.fileiojsonimpl
 
 import java.io._
 
@@ -9,36 +9,40 @@ import de.htwg.se.model.playerComponent.Player
 import play.api.libs.json._
 
 import scala.io.Source
-import scala.swing.Table.ElementMode.Cell
-import scala.xml.PrettyPrinter
 
-class json extends FileIOInterface{
-    override def load(controller: ControllerInterface): Unit = {
+class Json extends FileIOInterface{
+    override def load(controller: ControllerInterface): Boolean = {
         //um die Methode Cell.copy zu verwenden
         val tmp: CellInterface = controller.board.field(0)(0)
 
-        val source: String = Source.fromFile("HeroSave.json").getLines.mkString
-        val json: JsValue = Json.parse(source)
+        if (scala.reflect.io.File("HeroSave.json").exists) {
+            val source: String = Source.fromFile("HeroSave.json").getLines.mkString
+            val json: JsValue = Json.parse(source)
 
-        val currentplayer: String = (json \ "cp").get.toString()
-        val currentcreature: CellInterface = reCell(tmp, (json \ "cc").get.as[JsObject])._3
-        val list: List[CellInterface] = (json \ "list").as[List[JsObject]].map(x => reCell(tmp, x)._3)
-        val log: List[String] = (json \ "log").as[List[String]]
+            val currentplayer: String = (json \ "cp").get.toString()
+            val currentcreature: CellInterface = reCell(tmp, (json \ "cc").get.as[JsObject])._3
+            val list: List[CellInterface] = (json \ "list").as[List[JsObject]].map(x => reCell(tmp, x)._3)
+            val log: List[String] = (json \ "log").as[List[String]]
 
-        controller.clearCreatures()
-        for (i <- 0 until (json \ "field").as[List[JsObject]].length) {
-            val cell = (json \ "field")(i).as[JsObject]
+            controller.clearCreatures()
+            for (i <- 0 until (json \ "field").as[List[JsObject]].length) {
+                val cell = (json \ "field") (i).as[JsObject]
 
-            val currentCell = reCell(tmp, cell)
-            controller.loadCreature(currentCell._2, currentCell._1, currentCell._3)
+                val currentCell = reCell(tmp, cell)
+                controller.loadCreature(currentCell._2, currentCell._1, currentCell._3)
+            }
+            controller.loadCurrentplayer(Player(currentplayer))
+            controller.loadCurrentCreature(currentcreature)
+            list.foreach(s => controller.loadList(s))
+            log.foreach(l => controller.loadLog(l))
+            true
+        } else {
+            print("No file to load a save game! -> HeroSave.json")
+            false
         }
-        controller.loadCurrentplayer(Player(currentplayer))
-        controller.loadCurrentCreature(currentcreature)
-        list.foreach(s => controller.loadList(s))
-        log.foreach(l => controller.loadLog(l))
     }
 
-    def reCell (tmp: CellInterface, cell: JsObject): Tuple3[Int, Int, CellInterface] = {
+    def reCell (tmp: CellInterface, cell: JsObject): (Int, Int, CellInterface) = {
         val name = (cell \ "name").as[String]
         val dmg = (cell \ "damage").as[String]
         val hp = (cell \ "hp").as[Int]

@@ -11,6 +11,7 @@ import de.htwg.se.util._
 import scala.swing._
 import scala.swing.event._
 import java.awt.Color
+import java.awt.event.{MouseAdapter, MouseListener}
 
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.model.boardComponent.CellInterface
@@ -62,12 +63,18 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
                     contents += new ShortButton("Load Game",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
+                        if (!scala.reflect.io.File("HeroSave.json").exists && !scala.reflect.io.File("HeroSave.xml").exists) {
+                            foreground = new Color(30,30,30)
+                        }
                         reactions += {
                             case ButtonClicked(_) =>
-                                controller.gamestate = "gamerun"
-                                controller.load()
-                                controller.prediction()
-                                controller.notifyObservers
+                                if (controller.load()) {
+                                    controller.gamestate = "gamerun"
+                                    controller.prediction()
+                                    controller.notifyObservers
+                                } else {
+                                    foreground = new Color(30,30,30)
+                                }
                         }
                     }
 

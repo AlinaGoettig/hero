@@ -1,7 +1,6 @@
 package de.htwg.se.controller.controllerComponent.ControllerImpl
 
 /**
- * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
  * @author Ronny Klotz & Alina Göttig
  * @since 17.Nov.2020
  */
@@ -20,23 +19,23 @@ class Controller @Inject () extends Observable with ControllerInterface {
 
     val player: Vector[Player] = Vector(Player("Castle"),Player("Inferno"))
     var gamestate = "mainmenu"
-    var board: BoardInterface = start()
-    inizGame()
+    var board: BoardInterface = inizGame()
 
     val injector: Injector = Guice.createInjector(new HeroModule)
     val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
 
     // ----------------------------------------------- Initial Game ----------------------------------------------------
 
-    def inizGame(): Boolean= {
-        board = start()
+    def inizGame(): BoardInterface= {
+        val emptyboard = Board(Vector.fill(11, 15)(CellFactory("")),player,player(0),CellFactory(""),List.empty,List.empty)
+        val boardpart = placeCreatures(emptyboard, new CreaturelistIterator)
+        board = boardpart
         board = board.copy(board.field,player,player(0),CellFactory(""),createCreatureList(), board.log)
         val creature = board.list(board.list.indexOf(board.list.last))
         board = board.copy(board.field, board.player, creature.player, creature, board.list, board.log)
         next()
         prediction()
-        //notifyObservers
-        true
+        board
     }
 
     def createCreatureList(): List[CellInterface] = {
@@ -52,17 +51,20 @@ class Controller @Inject () extends Observable with ControllerInterface {
     def active(X: Int, Y: Int): Boolean =
         if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
 
-    def load(): Unit = fileIO.load(this)
+    def load(): Boolean = fileIO.load(this)
 
     def save(): Unit = fileIO.save(this)
 
     // --------------------------------------------------- Start -------------------------------------------------------
 
+    /*
     def start(): BoardInterface = {
         val emptyboard = Board(Vector.fill(11, 15)(CellFactory("")),player,player(0),CellFactory(""),List.empty,List.empty)
         val board = placeCreatures(emptyboard, new CreaturelistIterator)
+        this.board = board
         board
     }
+     */
 
      def placeCreatures(board: BoardInterface, iterator: CreaturelistIterator): BoardInterface = {
 
@@ -95,6 +97,8 @@ class Controller @Inject () extends Observable with ControllerInterface {
             obstacleadd
         }
     }
+
+    // ------------------------------------------- Load game file ------------------------------------------------------
 
     def loadCreature(X: Int, Y: Int, cell: CellInterface): BoardInterface = {
         board = board.copy(board.field.updated(Y,board.field(Y).updated(X,cell)), board.player,
@@ -320,7 +324,7 @@ class Controller @Inject () extends Observable with ControllerInterface {
                  board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list, board.log ++ info)
                  info.last
              case "handofjustice" =>
-                 val enemy = board.list.filter(Cell => !Cell.player.equals(board.currentplayer))
+                 val enemy = board.list.filter(Cell => !Cell.player.name.equals(board.currentplayer.name))
                  for (cell <- enemy) {
                      val newC = cell.copy(cell.name, cell.dmg, 0, cell.speed, cell.style, 0, cell.player)
                      replaceCreatureInList(cell,newC)

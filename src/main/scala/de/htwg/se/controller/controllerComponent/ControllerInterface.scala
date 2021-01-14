@@ -26,7 +26,7 @@ trait ControllerInterface extends Observable  {
     /**
      * Initializes the playing field and uses other functions to prepare processes for the first round
      */
-    def inizGame(): Boolean
+    def inizGame(): BoardInterface
 
     /**
      * Intern function for startup.
@@ -38,7 +38,7 @@ trait ControllerInterface extends Observable  {
     /**
      * Updates the current board with the board of a previously played game
      */
-    def load(): Unit
+    def load(): Boolean
 
     /**
      * Saves the current game to an extern file
@@ -116,8 +116,8 @@ trait ControllerInterface extends Observable  {
 
     /**
      * Fills the board with Empty cells, creatures and obstacles
+     * def start(): BoardInterface
      */
-    def start(): BoardInterface
 
     /**
      * Place the creature of the Pattern Iterator into the board field

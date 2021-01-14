@@ -11,16 +11,14 @@ class ControllerSpec extends WordSpec with Matchers {
     "The Gameboard" when {
         "game is running" should {
             val controller = new Controller
-            controller.board = controller.start()
+            controller.board = controller.inizGame()
 
             "have informations" in {
                 controller.board shouldNot be(null)
             }
 
             "when game starts" in {
-                assert(controller.inizGame())
                 assert(controller.createCreatureList().isInstanceOf[List[Cell]])
-                assert(controller.start().isInstanceOf[Board])
                 assert(controller.placeCreatures(controller.board, new CreaturelistIterator).isInstanceOf[Board])
                 assert(controller.placeObstacles(controller.board, new ObstacleListIterator).isInstanceOf[Board])
                 assert(controller.printSidesStart().isInstanceOf[String])
@@ -106,7 +104,7 @@ class ControllerSpec extends WordSpec with Matchers {
             }
 
             "when cheating" in {
-                controller.board = controller.start()
+                controller.board = controller.inizGame()
                 controller.inizGame()
                 assert(controller.cheatCode(Vector("CHEAT", "coconuts")).isInstanceOf[String])
                 assert(controller.cheatCode(Vector("CHEAT", "godunit")).isInstanceOf[String])
@@ -130,13 +128,11 @@ class ControllerSpec extends WordSpec with Matchers {
             }
 
             "to win" in {
-                controller.board = controller.start()
-                controller.inizGame()
+                controller.board = controller.inizGame()
                 controller.cheatCode(Vector("CHEAT", "handofjustice"))
                 controller.winner().get should be(1)
 
-                controller.board = controller.start()
-                controller.inizGame()
+                controller.board = controller.inizGame()
                 controller.next()
                 controller.cheatCode(Vector("CHEAT", "handofjustice"))
                 controller.winner().get should be(2)

@@ -11,7 +11,7 @@ import de.htwg.se.model.playerComponent.Player
  */
 
 //noinspection ScalaStyle
-case class Board(field: Vector[Vector[Cell]],
+case class Board (field: Vector[Vector[Cell]],
                  player: Vector[Player],
                  currentplayer: Player,
                  currentcreature: Cell,

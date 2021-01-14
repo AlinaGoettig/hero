@@ -2,7 +2,6 @@ package de.htwg.se.model.fileioComponent.fileioxmlimpl
 
 import java.io.{File, PrintWriter}
 import de.htwg.se.controller.controllerComponent.ControllerInterface
-import de.htwg.se.model.boardComponent.boardImpl.Cell
 import de.htwg.se.model.boardComponent.CellInterface
 import de.htwg.se.model.fileioComponent.FileIOInterface
 import de.htwg.se.model.playerComponent.Player
@@ -17,27 +16,34 @@ import scala.xml.{Node, PrettyPrinter}
 
 class Xml extends FileIOInterface{
 
-    override def load(controller: ControllerInterface): Unit = {
-        controller.clearCreatures()
-        val source = scala.xml.XML.loadFile("HeroSave.xml")
-        val fieldcreatures = (source \ "field") \ "cell"
-        for (c <- fieldcreatures) {
-            controller.loadCreature(Integer.parseInt((c \ "x").text),Integer.parseInt((c \ "y").text),extractCreature(c))
-        }
-        controller.loadCurrentplayer(Player((source \ "cp").head.text))
-        controller.loadCurrentCreature(extractCreature(((source \ "cc") \ "cell").head))
-        for (c <- (source \ "list") \ "cell") {
-            controller.loadList(extractCreature(c))
-        }
-        val log = (source \ "log").head.text.split("\n")
-        if (log.nonEmpty) {
-            for (entry <- log) {
-                if (!entry.equals("    ") && !entry.equals("")) {
-                    controller.loadLog(entry)
+    override def load(controller: ControllerInterface): Boolean = {
+        if (scala.reflect.io.File("HeroSave.xml").exists) {
+            controller.clearCreatures()
+            val basecell: CellInterface = controller.board.currentcreature
+            val source = scala.xml.XML.loadFile("HeroSave.xml")
+            val fieldcreatures = (source \ "field") \ "cell"
+            for (c <- fieldcreatures) {
+                controller.loadCreature(Integer.parseInt((c \ "x").text)
+                    , Integer.parseInt((c \ "y").text), extractCreature(c, basecell))
+            }
+            controller.loadCurrentplayer(Player((source \ "cp").head.text))
+            controller.loadCurrentCreature(extractCreature(((source \ "cc") \ "cell").head, basecell))
+            for (c <- (source \ "list") \ "cell") {
+                controller.loadList(extractCreature(c, basecell))
+            }
+            val log = (source \ "log").head.text.split("\n")
+            if (log.nonEmpty) {
+                for (entry <- log) {
+                    if (!entry.equals("    ") && !entry.equals("")) {
+                        controller.loadLog(entry)
+                    }
                 }
             }
+            true
+        } else {
+            print("No file to load a save game! -> HeroSave.xml")
+            false
         }
-
     }
 
     override def save(controller: ControllerInterface): Unit = {
@@ -47,15 +53,14 @@ class Xml extends FileIOInterface{
         pw.close()
     }
 
-    def extractCreature (c:Node): CellInterface = {
-        Cell((c \ "name").text,
+    def extractCreature (c:Node, basecell: CellInterface): CellInterface = {
+        basecell.copy((c \ "name").text,
             (c \ "damage").text,
             Integer.parseInt((c \ "health").text),
             Integer.parseInt((c \ "speed").text),
             (c \ "style").text.toBoolean,
             Integer.parseInt((c \ "multiplier").text),
-            Player((c \ "player").text)
-        )
+            Player((c \ "player").text))
     }
 
     def boardToXml(controller: ControllerInterface): Node = {

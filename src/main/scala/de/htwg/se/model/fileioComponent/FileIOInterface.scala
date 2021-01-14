@@ -13,7 +13,7 @@ trait FileIOInterface {
     /**
      * Load all wanted updates to the controller
      */
-    def load(controller: ControllerInterface): Unit
+    def load(controller: ControllerInterface): Boolean
 
     /**
      * Saves all wanted values of the controller
