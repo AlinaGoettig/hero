@@ -26,7 +26,7 @@ class Controller @Inject () extends Observable with ControllerInterface {
     val injector: Injector = Guice.createInjector(new HeroModule)
     val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
 
-    // ----------------------------------------------- Inizial Game ----------------------------------------------------
+    // ----------------------------------------------- Initial Game ----------------------------------------------------
 
     def inizGame(): Boolean= {
         board = start()
