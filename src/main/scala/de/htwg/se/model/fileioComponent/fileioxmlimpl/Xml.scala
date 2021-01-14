@@ -29,10 +29,12 @@ class Xml extends FileIOInterface{
         for (c <- (source \ "list") \ "cell") {
             controller.loadList(extractCreature(c))
         }
-        val log = (source \ "log").head.text.split("|")
-        if (log.nonEmpty && !log(0).equals("")) {
+        val log = (source \ "log").head.text.split("\n")
+        if (log.nonEmpty) {
             for (entry <- log) {
-                controller.loadLog(entry)
+                if (!entry.equals("    ") && !entry.equals("")) {
+                    controller.loadLog(entry)
+                }
             }
         }
 
@@ -72,7 +74,7 @@ class Xml extends FileIOInterface{
         val currentplayer: Node = <cp>{ controller.board.currentplayer.name }</cp>
         val currentcreature: Node = <cc>{ cellToXml(0, 0, controller.board.currentcreature)(typ = false) }</cc>
         val list: Node = <list>{ controller.board.list.map(c => cellToXml(0, 0, c)(typ = false)) }</list>
-        val log: Node = <log>{ controller.board.log.map(l => l + "|") }</log>
+        val log: Node = <log>{ controller.board.log.map(l => l + "\n") }</log>
 
         val board = <board>{ field }{ currentplayer }{ currentcreature }{ list }{ log }</board>
         board

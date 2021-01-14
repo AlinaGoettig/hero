@@ -253,7 +253,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                         val passpanel: FlowPanel = new FlowPanel() {
                             preferredSize = new Dimension(300,100)
                             opaque = false
-                            border = new EmptyBorder(15,5,0,30)
+                            border = new EmptyBorder(15,15,0,30)
                             contents += new ShortButton("Pass",30,Color.WHITE)(true)(false) {
                                 //preferredSize = new Dimension(300,70)
                                 reactions += {

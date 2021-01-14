@@ -123,6 +123,7 @@ class Controller @Inject () extends Observable with ControllerInterface {
     }
 
     def clearCreatures(): BoardInterface = {
+        board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, List.empty, board.log)
         for (i <- 0 to 10) {
             for (j <- 0 to 14) {
                 if (!board.field(i)(j).name.equals("   ") && !board.field(i)(j).name.equals("XXX")) {
