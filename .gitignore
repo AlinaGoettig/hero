@@ -10,15 +10,6 @@ bin/
 .idea/
 target/
 
-# Maven
-log/
-target/
-
-# Gradle
-.gradle/
-build/
-pom.xml
-
 # sbt
 .cache
 .history
@@ -44,3 +35,5 @@ project/.sbtserver
 
 # Application
 Hero.log
+HeroSave.xml
+HeroSave.json

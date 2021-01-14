@@ -5,6 +5,8 @@ import java.util.concurrent.ThreadLocalRandom
 import de.htwg.se.model.boardComponent.CellInterface
 import de.htwg.se.model.playerComponent.Player
 
+import scala.xml.Node
+
 case class Cell(name: String,
                 dmg: String,
                 hp: Int,

@@ -55,7 +55,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                         reactions += {
                             case ButtonClicked(_) =>
                                 controller.gamestate = "gamerun"
-                                controller.inizGame()
                                 controller.notifyObservers
                         }
 
@@ -63,6 +62,13 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
                     contents += new ShortButton("Load Game",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
+                        reactions += {
+                            case ButtonClicked(_) =>
+                                controller.gamestate = "gamerun"
+                                controller.load()
+                                controller.prediction()
+                                controller.notifyObservers
+                        }
                     }
 
                     contents += new ShortButton("Credit",30,new Color(200, 200, 200))(true)(true) {
@@ -247,9 +253,9 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                         val passpanel: FlowPanel = new FlowPanel() {
                             preferredSize = new Dimension(300,100)
                             opaque = false
-                            border = new EmptyBorder(0,0,0,30)
+                            border = new EmptyBorder(15,5,0,30)
                             contents += new ShortButton("Pass",30,Color.WHITE)(true)(false) {
-                                preferredSize = new Dimension(300,70)
+                                //preferredSize = new Dimension(300,70)
                                 reactions += {
                                     case ButtonClicked(_) =>
                                         if (controller.winner().isDefined){
@@ -259,6 +265,13 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                                             controller.prediction()
                                         }
                                         controller.notifyObservers
+                                }
+                            }
+                            contents += new ShortButton("Save",30,Color.WHITE)(true)(false) {
+                                reactions += {
+                                    case ButtonClicked(_) =>
+                                        controller.save()
+                                        log.text = "Currently running game got saved!"
                                 }
                             }
                         }

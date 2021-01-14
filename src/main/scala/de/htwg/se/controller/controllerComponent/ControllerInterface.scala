@@ -36,6 +36,54 @@ trait ControllerInterface extends Observable  {
     def createCreatureList(): List[CellInterface]
 
     /**
+     * Updates the current board with the board of a previously played game
+     */
+    def load(): Unit
+
+    /**
+     * Saves the current game to an extern file
+     */
+    def save(): Unit
+
+    /**
+     * Support function for loading in extern data.
+     * Takes a creature and update it at the X and Y coordinates on the current board
+     */
+    def loadCreature(X: Int, Y: Int, cell: CellInterface): BoardInterface
+
+    /**
+     * Support function for loading in extern data.
+     * Change the current activ player on the running board
+     */
+    def loadCurrentplayer(player: Player): Player
+
+    /**
+     * Support function for loading in extern data.
+     * Change the current activ creature on the running board
+     */
+    def loadCurrentCreature(cell: CellInterface): CellInterface
+
+    /**
+     * Support function for loading in extern data.
+     * Adds a creature to the turn controlling list
+     */
+    def loadList(cell: CellInterface): List[CellInterface]
+
+    /**
+     * Support function for loading in extern data.
+     * Adds a combat log to the log of the running game
+     */
+    def loadLog(log: String): List[String]
+
+    /**
+     * Support function for loading in extern data.
+     * Prepare the board for loading in new creature.
+     * Removes all creautres that are currently on the board,
+     * to load in new one
+     */
+    def clearCreatures(): BoardInterface
+
+    /**
      * Support function to print out the position of the board.
      * Needed only in the TUI
      */

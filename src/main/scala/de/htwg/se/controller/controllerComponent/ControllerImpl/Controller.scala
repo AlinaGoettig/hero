@@ -6,10 +6,12 @@ package de.htwg.se.controller.controllerComponent.ControllerImpl
  * @since 17.Nov.2020
  */
 
-import com.google.inject.Inject
+import com.google.inject.{Guice, Inject, Injector}
+import de.htwg.se.HeroModule
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.model.boardComponent.boardImpl.Board
+import de.htwg.se.model.fileioComponent.FileIOInterface
 import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util._
 
@@ -20,6 +22,9 @@ class Controller @Inject () extends Observable with ControllerInterface {
     var gamestate = "mainmenu"
     var board: BoardInterface = start()
     inizGame()
+
+    val injector: Injector = Guice.createInjector(new HeroModule)
+    val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
 
     // ----------------------------------------------- Inizial Game ----------------------------------------------------
 
@@ -46,6 +51,10 @@ class Controller @Inject () extends Observable with ControllerInterface {
 
     def active(X: Int, Y: Int): Boolean =
         if (getCreature(board.field, X, Y).player.name == board.currentplayer.name) true else false
+
+    def load(): Unit = fileIO.load(this)
+
+    def save(): Unit = fileIO.save(this)
 
     // --------------------------------------------------- Start -------------------------------------------------------
 
@@ -85,6 +94,44 @@ class Controller @Inject () extends Observable with ControllerInterface {
         } else {
             obstacleadd
         }
+    }
+
+    def loadCreature(X: Int, Y: Int, cell: CellInterface): BoardInterface = {
+        board = board.copy(board.field.updated(Y,board.field(Y).updated(X,cell)), board.player,
+            board.currentplayer, board.currentcreature, board.list, board.log)
+        board
+    }
+
+    def loadCurrentplayer(player: Player): Player = {
+        board = board.copy(board.field, board.player, player, board.currentcreature, board.list, board.log)
+        board.currentplayer
+    }
+
+    def loadCurrentCreature(cell: CellInterface): CellInterface = {
+        board = board.copy(board.field, board.player, board.currentplayer, cell, board.list, board.log)
+        board.currentcreature
+    }
+
+    def loadList(cell: CellInterface): List[CellInterface] = {
+        board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list ++ List(cell), board.log)
+        board.list
+    }
+
+    def loadLog(log: String): List[String] = {
+        board = board.copy(board.field, board.player, board.currentplayer, board.currentcreature, board.list, board.log ++ List(log))
+        board.log
+    }
+
+    def clearCreatures(): BoardInterface = {
+        for (i <- 0 to 10) {
+            for (j <- 0 to 14) {
+                if (!board.field(i)(j).name.equals("   ") && !board.field(i)(j).name.equals("XXX")) {
+                    board = board.copy(board.field.updated(i,board.field(i).updated(j,CellFactory(""))), board.player,
+                        board.currentplayer, board.currentcreature, board.list, board.log)
+                }
+            }
+        }
+        board
     }
 
     // ---------------------------------------- State of game Change ---------------------------------------------------
