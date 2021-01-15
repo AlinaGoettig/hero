@@ -11,7 +11,6 @@ import de.htwg.se.util._
 import scala.swing._
 import scala.swing.event._
 import java.awt.Color
-import java.awt.event.{MouseAdapter, MouseListener}
 
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.model.boardComponent.CellInterface

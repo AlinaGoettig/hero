@@ -18,19 +18,24 @@ class Xml extends FileIOInterface{
 
     override def load(controller: ControllerInterface): Boolean = {
         if (scala.reflect.io.File("HeroSave.xml").exists) {
+
             controller.clearCreatures()
             val basecell: CellInterface = controller.board.currentcreature
             val source = scala.xml.XML.loadFile("HeroSave.xml")
+
             val fieldcreatures = (source \ "field") \ "cell"
             for (c <- fieldcreatures) {
                 controller.loadCreature(Integer.parseInt((c \ "x").text)
                     , Integer.parseInt((c \ "y").text), extractCreature(c, basecell))
             }
+
             controller.loadCurrentplayer(Player((source \ "cp").head.text))
             controller.loadCurrentCreature(extractCreature(((source \ "cc") \ "cell").head, basecell))
+
             for (c <- (source \ "list") \ "cell") {
                 controller.loadList(extractCreature(c, basecell))
             }
+
             val log = (source \ "log").head.text.split("\n")
             if (log.nonEmpty) {
                 for (entry <- log) {
@@ -39,10 +44,14 @@ class Xml extends FileIOInterface{
                     }
                 }
             }
+
             true
+
         } else {
+
             print("No file to load a save game! -> HeroSave.xml")
             false
+
         }
     }
 
@@ -64,6 +73,7 @@ class Xml extends FileIOInterface{
     }
 
     def boardToXml(controller: ControllerInterface): Node = {
+
         var creatures = new ListBuffer[Node]()
         for (x <- 0 to 10) {
             for (y <- 0 to 14) {
@@ -75,6 +85,7 @@ class Xml extends FileIOInterface{
             }
         }
         creatures.toList
+
         val field: Node = <field>{ creatures.map(c => c) }</field>
         val currentplayer: Node = <cp>{ controller.board.currentplayer.name }</cp>
         val currentcreature: Node = <cc>{ cellToXml(0, 0, controller.board.currentcreature)(typ = false) }</cc>

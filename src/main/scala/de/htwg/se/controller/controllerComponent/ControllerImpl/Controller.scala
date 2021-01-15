@@ -27,12 +27,15 @@ class Controller @Inject () extends Observable with ControllerInterface {
     // ----------------------------------------------- Initial Game ----------------------------------------------------
 
     def inizGame(): BoardInterface= {
+
         val emptyboard = Board(Vector.fill(11, 15)(CellFactory("")),player,player(0),CellFactory(""),List.empty,List.empty)
         val boardpart = placeCreatures(emptyboard, new CreaturelistIterator)
         board = boardpart
+
         board = board.copy(board.field,player,player(0),CellFactory(""),createCreatureList(), board.log)
         val creature = board.list(board.list.indexOf(board.list.last))
         board = board.copy(board.field, board.player, creature.player, creature, board.list, board.log)
+
         next()
         prediction()
         board
@@ -56,15 +59,6 @@ class Controller @Inject () extends Observable with ControllerInterface {
     def save(): Unit = fileIO.save(this)
 
     // --------------------------------------------------- Start -------------------------------------------------------
-
-    /*
-    def start(): BoardInterface = {
-        val emptyboard = Board(Vector.fill(11, 15)(CellFactory("")),player,player(0),CellFactory(""),List.empty,List.empty)
-        val board = placeCreatures(emptyboard, new CreaturelistIterator)
-        this.board = board
-        board
-    }
-     */
 
      def placeCreatures(board: BoardInterface, iterator: CreaturelistIterator): BoardInterface = {
 
@@ -142,11 +136,12 @@ class Controller @Inject () extends Observable with ControllerInterface {
     // ---------------------------------------- State of game Change ---------------------------------------------------
 
     def next(): CellInterface = {
+
         val list = board.list
         val index = list.indexOf(board.currentcreature) + 1
+
         if (index == list.length) {
             board = board.copy(board.field, board.player, list.head.player, list.head, board.list, board.log)
-
             if (list.head.multiplier <= 0) {
                 next()
             } else {
@@ -166,8 +161,10 @@ class Controller @Inject () extends Observable with ControllerInterface {
     }
 
     def winner(): Option[Int] = {
+
         val player1 = board.list.exists(Cell => Cell.player.equals(player.head) && Cell.multiplier > 0)
         val player2 = board.list.exists(Cell => Cell.player.equals(player.last) && Cell.multiplier > 0)
+
         if (player1 && !player2) {
             Some(1)
         } else if (!player1 && player2) {
@@ -253,8 +250,10 @@ class Controller @Inject () extends Observable with ControllerInterface {
         val creature = position(board.currentcreature)
         for (j <- 0 to 10) {
             for (i <- 0 to 14) {
+
                 val field = board.field
                 val dist = Math.abs(creature(0) - j) + Math.abs(creature(1) - i)
+                
                 if (field(j)(i).name.equals("   ") && dist <= field(creature(0))(creature(1)).speed) {
                     board = board.copy(field.updated(j, field(j).updated(i, CellFactory("marker"))), board.player,
                         board.currentplayer, board.currentcreature, board.list, board.log)
