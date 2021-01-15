@@ -71,7 +71,8 @@ class Json extends FileIOInterface{
                 for {
                     x <- 0 until controller.board.field.size;
                     y <- 0 until controller.board.field(0).size
-                    if !controller.board.field(x)(y).name.equals("   ") && !controller.board.field(x)(y).name.equals("XXX")
+                    if !controller.board.field(x)(y).name.equals("   ") && !controller.board.field(x)(y).name.equals("XXX") &&
+                        !controller.board.field(x)(y).name.equals(" _ ")
                     } yield {
                     jCell(controller.board.field(x)(y), x, y)
                 }

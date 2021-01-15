@@ -426,7 +426,8 @@ class Controller @Inject () extends Observable with ControllerInterface {
     }
 
     def output: String = {
-        printfield() + "\n" + board.currentplayerinfo() + "\n" + board.currentcreatureinfo() + "\n" + board.lastlog()
+        printfield() + "\n" + board.currentplayerinfo() + "\n" +
+            board.currentcreatureinfo() + "\n" + board.lastlog()
     }
 
     def info(in:Vector[String]) : String = {

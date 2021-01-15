@@ -16,7 +16,7 @@ class HeroModule extends  AbstractModule with ScalaModule{
 
         bind[ControllerInterface].to[ControllerImpl.Controller]
 
-        bind[FileIOInterface].to[Xml] // [Json] or [Xml]
+        bind[FileIOInterface].to[Json] // [Json] or [Xml]
 
     }
 
