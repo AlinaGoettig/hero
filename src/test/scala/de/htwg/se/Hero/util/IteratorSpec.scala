@@ -3,10 +3,9 @@ package de.htwg.se.Hero.util
 import de.htwg.se.model.boardComponent.boardImpl
 import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util.{CreaturelistIterator, ObstacleListIterator}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class Iterator extends AnyWordSpec with Matchers {
+class Iterator extends WordSpec with Matchers {
 
     "An Iterator" when { "new" should {
         val creaturelist = new CreaturelistIterator

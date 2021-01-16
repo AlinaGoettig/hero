@@ -3,10 +3,9 @@ package de.htwg.se.Hero.aView
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.util.UndoManager
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class TuiSpec extends AnyWordSpec with Matchers {
+class TuiSpec extends WordSpec with Matchers {
 
     "A TUI" when { "new" should {
         val controller = new Controller()

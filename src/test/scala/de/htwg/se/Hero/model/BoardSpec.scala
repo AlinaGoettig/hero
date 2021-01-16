@@ -3,10 +3,9 @@ package de.htwg.se.model
 import de.htwg.se.model.boardComponent.boardImpl
 import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
 import de.htwg.se.model.playerComponent.Player
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class BoardSpec extends AnyWordSpec with Matchers {
+class BoardSpec extends WordSpec with Matchers {
     "A Board" when { "new" should {
         val player = Vector(Player("Player1"),Player("Player2"))
         val emptycell = boardImpl.Cell("   ", "0", 0, 0, false, 0, Player("none"))

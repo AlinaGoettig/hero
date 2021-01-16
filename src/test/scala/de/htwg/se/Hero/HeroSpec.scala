@@ -1,10 +1,10 @@
 package de.htwg.se.Hero
 
 import de.htwg.se.Hero.model.Hero.startinfo
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class HeroSpec extends AnyWordSpec with Matchers {
+
+class HeroSpec extends WordSpec with Matchers {
 
     /*"A game run" when { "new" should {
         val info = startinfo()

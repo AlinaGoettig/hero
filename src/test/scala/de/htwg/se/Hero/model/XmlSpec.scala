@@ -4,10 +4,9 @@ import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.model.fileioComponent.fileioxmlimpl.Xml
 import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.model.boardComponent.boardImpl.Cell
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class XmlSpec extends AnyWordSpec with Matchers {
+class XmlSpec extends WordSpec with Matchers {
 
     "A Xml" when { "new" should {
         val xml = new Xml()

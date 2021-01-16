@@ -1,8 +1,7 @@
 package de.htwg.se.Hero.model
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class JsonSpec extends AnyWordSpec with Matchers {
+class JsonSpec extends WordSpec with Matchers {
 
 }

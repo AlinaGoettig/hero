@@ -1,10 +1,9 @@
 package de.htwg.se.model
 
 import de.htwg.se.model.playerComponent.Player
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class PlayerSpec extends AnyWordSpec with Matchers {
+class PlayerSpec extends WordSpec with Matchers {
 
     "A Player" when { "new" should {
         val player = Player("Test")

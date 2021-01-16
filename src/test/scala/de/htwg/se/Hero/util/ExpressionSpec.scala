@@ -1,10 +1,9 @@
 package de.htwg.se.Hero.util
 
 import de.htwg.se.util.Interpreter
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class ExpressionSpec extends AnyWordSpec with Matchers {
+class ExpressionSpec extends WordSpec with Matchers {
 
     "An Expression" when { "checking" should {
 

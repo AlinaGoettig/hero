@@ -3,10 +3,9 @@ package de.htwg.se.Hero.util
 import de.htwg.se.model.boardComponent.boardImpl
 import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util.CellFactory
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest._
 
-class FactoryMethod extends AnyWordSpec with Matchers {
+class FactoryMethod extends WordSpec with Matchers {
 
     "An FactoryMethod" when { "new" should {
         val marker = CellFactory("marker")
