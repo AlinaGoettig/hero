@@ -4,7 +4,13 @@ import de.htwg.se.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util.{CreaturelistIterator, Observable, ObstacleListIterator}
 
-
+/**
+ * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
+ * @author Ronny Klotz & Alina Göttig
+ * @since 10.Nov.2021
+ *
+ * Game logic and inner working
+ */
 trait ControllerInterface extends Observable  {
 
     /**

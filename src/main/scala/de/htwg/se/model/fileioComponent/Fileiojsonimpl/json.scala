@@ -10,6 +10,11 @@ import play.api.libs.json._
 
 import scala.io.Source
 
+/**
+ * @author Ronny Klotz & Alina Göttig
+ * @since 14.Jan.2021
+ */
+
 class Json extends FileIOInterface{
     override def load(controller: ControllerInterface): Boolean = {
         //um die Methode Cell.copy zu verwenden

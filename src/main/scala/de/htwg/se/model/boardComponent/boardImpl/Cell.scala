@@ -5,7 +5,10 @@ import java.util.concurrent.ThreadLocalRandom
 import de.htwg.se.model.boardComponent.CellInterface
 import de.htwg.se.model.playerComponent.Player
 
-import scala.xml.Node
+/**
+ * @author Ronny Klotz & Alina Göttig
+ * @since 9.Nov.2021
+ */
 
 case class Cell(name: String,
                 dmg: String,

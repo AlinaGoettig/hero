@@ -1,7 +1,6 @@
 package de.htwg.se.aview
 
 /**
- * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
  * @author Ronny Klotz & Alina Göttig
  * @since 16.Dez.2020
  */

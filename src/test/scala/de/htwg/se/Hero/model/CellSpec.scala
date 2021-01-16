@@ -3,9 +3,10 @@ package de.htwg.se.model
 import de.htwg.se.model.boardComponent.boardImpl
 import de.htwg.se.model.boardComponent.boardImpl.Cell
 import de.htwg.se.model.playerComponent.Player
-import org.scalatest._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class CellSpec extends WordSpec with Matchers {
+class CellSpec extends AnyWordSpec with Matchers {
 
     "A Cell " when { "new" should {
         val cell = boardImpl.Cell("Test","10-20", 100,10,false,10,Player("Test"))
@@ -24,6 +25,10 @@ class CellSpec extends WordSpec with Matchers {
         }
         "have a marker for attackable" in {
             cell.attackable() should be("│>Test<│")
+        }
+        "have a copy by value" in {
+            val copy = cell.copy(cell.name,cell.dmg,cell.hp,cell.speed,cell.style,cell.multiplier,cell.player)
+            copy.name should be (cell.name)
         }
         "and have a damage calculation" in {
             cell.attackamount() should be >= 10

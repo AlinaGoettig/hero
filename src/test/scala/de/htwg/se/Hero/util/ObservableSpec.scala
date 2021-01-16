@@ -3,9 +3,10 @@ package de.htwg.se.Hero.util
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.util.{Observable, UndoManager}
-import org.scalatest._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class ObservableSpec extends WordSpec with Matchers {
+class ObservableSpec extends AnyWordSpec with Matchers {
 
     "An Observer" when { "new" should {
             val obserable = new Observable

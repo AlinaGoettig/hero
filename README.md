@@ -16,6 +16,8 @@ This fight represents the epic battle between angels and demons.
 The player will controll one of the choisen sides on a tile-like battleground. Each player get 7 unique creatures with
 different values, like health points, damage amount, movment speed, etc. to fight until somebody got nothing left.
 
+[![Hero - Project release trailer](https://s12.directupload.net/images/210116/yfv8fb55.png)](https://youtu.be/WEJsVZXKBGw "Hero - Project release trailer")
+
 ## Project information
 
 This project was developed in the course of the third semester at the HTWG-Konstanz (Applied Computer Science) in the lecture

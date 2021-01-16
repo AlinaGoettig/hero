@@ -11,6 +11,11 @@ import javax.imageio.ImageIO
 import scala.swing._
 import scala.swing.event.ButtonClicked
 
+/**
+ * @author Ronny Klotz & Alina Göttig
+ * @since 16.Dez.2020
+ */
+
 class ImagePanel() extends BoxPanel(Orientation.Vertical) {
 
     var _imagePath = ""
@@ -41,7 +46,7 @@ class CoorButton(X: Int, Y: Int, cell: CellInterface, controller: ControllerInte
         text = currentcell.multiplier.toString
         val style = if(cell.style) "Ranged" else "Melee"
         tooltip = "<html>Player: " + cell.player.name + "<br>Name: " + cellname.replaceAll("_","") +
-            "<br>Damage: " + cell.dmg + "<br>Attackstyle: " + style +
+            "<br>Damage: " + cell.dmg + "<br>Attackstyle: " + style + "<br>Speed: " + currentcell.speed +
             "<br>Multiplier: " + currentcell.multiplier + "<br>Health: " + currentcell.hp + "</html>"
     } else {
         text = "<html><center>" + cellname

@@ -9,7 +9,6 @@ import scala.collection.mutable.ListBuffer
 import scala.xml.{Node, PrettyPrinter}
 
 /**
- * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
  * @author Ronny Klotz & Alina Göttig
  * @since 14.Jan.2021
  */
@@ -65,10 +64,10 @@ class Xml extends FileIOInterface{
     def extractCreature (c:Node, basecell: CellInterface): CellInterface = {
         basecell.copy((c \ "name").text,
             (c \ "damage").text,
-            Integer.parseInt((c \ "health").text),
-            Integer.parseInt((c \ "speed").text),
+            (c \ "health").text.toInt,
+            (c \ "speed").text.toInt,
             (c \ "style").text.toBoolean,
-            Integer.parseInt((c \ "multiplier").text),
+            (c \ "multiplier").text.toInt,
             Player((c \ "player").text))
     }
 
@@ -80,7 +79,9 @@ class Xml extends FileIOInterface{
                 if (!controller.board.field(x)(y).name.equals("   ") &&
                     !controller.board.field(x)(y).name.equals("XXX") &&
                     !controller.board.field(x)(y).name.equals(" _ ")) {
+
                     creatures += cellToXml(x,y,controller.board.field(x)(y))(typ = true)
+
                 }
             }
         }

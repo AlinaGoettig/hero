@@ -3,9 +3,10 @@ package de.htwg.se.model
 import de.htwg.se.model.boardComponent.boardImpl
 import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
 import de.htwg.se.model.playerComponent.Player
-import org.scalatest._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class BoardSpec extends WordSpec with Matchers {
+class BoardSpec extends AnyWordSpec with Matchers {
     "A Board" when { "new" should {
         val player = Vector(Player("Player1"),Player("Player2"))
         val emptycell = boardImpl.Cell("   ", "0", 0, 0, false, 0, Player("none"))
@@ -60,6 +61,11 @@ class BoardSpec extends WordSpec with Matchers {
             board.lines().length should be(7*15+1)
 
             board.lines() should include regex """=+"""
+        }
+        "has a copy by value" in {
+            val copy = board.copy(board.field,board.player,board.currentplayer,board.currentcreature,board.list,board.log)
+            copy.currentplayer.name should be (board.currentplayer.name)
+            copy.currentcreature.name should be (board.currentcreature.name)
         }
         "and has an illustration of the full name" in {
             board.realname(creature1.name) should be("Ha_lberdier")

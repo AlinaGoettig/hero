@@ -3,6 +3,11 @@ package de.htwg.se.util
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.model.boardComponent.BoardInterface
 
+/**
+ * @author Ronny Klotz & Alina Göttig
+ * @since 06.Dez.2020
+ */
+
 trait Command {
     def doStep:Unit
     def changeStep(board: BoardInterface):Unit
@@ -11,11 +16,13 @@ trait Command {
 class SetCommand(Command: Vector[String], controller: ControllerInterface) extends Command {
     override def doStep: Unit = {
         val current = controller.intpos(controller.board.currentcreature.name)
+
         if (Command.head.equals("m")) {
             controller.move(current(0), current(1), Command(2).toInt, Command(1).toInt)
         } else if (Command.head.equals("a")) {
             controller.attack(current(0), current(1), Command(2).toInt, Command(1).toInt)
         }
+
     }
     override def changeStep(board: BoardInterface): Unit = controller.board = board
 }
