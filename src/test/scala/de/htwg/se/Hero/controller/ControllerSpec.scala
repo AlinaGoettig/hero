@@ -2,12 +2,10 @@ package de.htwg.se.controller
 
 import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
-import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util.{CellFactory, CreaturelistIterator, ObstacleListIterator, SetCommand}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 //import de.htwg.se.util.Observable
-import org.scalatest._
 
 class ControllerSpec extends AnyWordSpec with Matchers {
     "The Gameboard" when {
