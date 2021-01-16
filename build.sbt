@@ -7,7 +7,7 @@ version       := "0.1"
 scalaVersion  := "2.13.3"
 
 libraryDependencies += "org.scoverage" %% "scalac-scoverage-runtime" % "1.4.0"
-libraryDependencies += "org.scoverage" % "scalac-scoverage-plugin_2.10" % "1.4.1"
+libraryDependencies += "org.scoverage" % "scalac-scoverage-plugin_2.10" % "1.3.1"
 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.2"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.2" % "test"
