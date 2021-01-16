@@ -80,6 +80,9 @@ class BoardSpec extends WordSpec with Matchers {
             board.realname(".PI") should be("Pi_t Lord")
             board.realname("CR.") should be("Cr_usader")
             board.realname(".HO") should be("Ho_rned Demon")
+            board.realname("   ") should be("   ")
+            board.realname(" _ ") should be("   ")
+            board.realname("XXX") should be("   ")
         }
 
     }}

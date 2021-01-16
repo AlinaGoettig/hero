@@ -2,6 +2,8 @@ package de.htwg.se.Hero.aView
 
 import de.htwg.se.aview.TUI
 import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
+import de.htwg.se.model.boardComponent.boardImpl.Cell
+import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util.UndoManager
 import org.scalatest._
 
@@ -36,7 +38,30 @@ class TuiSpec extends WordSpec with Matchers {
             tui.inputLine("a 9 0".split(" ").toVector) should be(false)
             tui.inputLine("undo".split(" ").toVector) should be(false)
             tui.inputLine("redo".split(" ").toVector) should be(false)
+            tui.inputLine("save".split(" ").toVector) should be(false)
             tui.inputLine("CHEAT handofjustice".split(" ").toVector) should be(true)
+        }
+
+        "credit information" in {
+            tui.credits should include ("Code written")
+        }
+
+        "finish the game" in {
+            val tmplist = List(Cell("HA.","0",1,1,false,1,Player("Castle")))
+            controller.board = controller.board.copy(controller.board.field,
+                controller.board.player,
+                controller.board.currentplayer,
+                controller.board.currentcreature,
+                tmplist,
+                controller.board.log)
+            tui.nextRound(true)
+        }
+
+        "have gamestate change updates" in {
+            controller.gamestate = "gamerun"
+            tui.update
+            controller.gamestate = "credit"
+            tui.update
         }
     }}
 

@@ -2,6 +2,7 @@ package de.htwg.se.controller
 
 import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.model.boardComponent.boardImpl.{Board, Cell}
+import de.htwg.se.model.playerComponent.Player
 import de.htwg.se.util.{CellFactory, CreaturelistIterator, ObstacleListIterator, SetCommand}
 import org.scalatest._
 //import de.htwg.se.util.Observable
@@ -24,11 +25,44 @@ class ControllerSpec extends WordSpec with Matchers {
 
             }
 
+            "load functions" in {
+                val tmpboard= controller.board
+                controller.load() should be (false)
+
+                controller.loadCreature(4,8,CellFactory(""))
+                controller.board.field(4)(8).name should be ("   ")
+
+                val tmpcreature = controller.board.currentcreature
+                val tmpplayer = controller.board.currentplayer
+                controller.loadCurrentplayer(Player("NONE"))
+                controller.loadCurrentCreature(CellFactory("marker"))
+                controller.board.currentplayer.name should be ("NONE")
+                controller.board.currentcreature.name should be (" _ ")
+                controller.loadCurrentplayer(tmpplayer)
+                controller.loadCurrentCreature(tmpcreature)
+
+                controller.loadList(CellFactory(""))
+                controller.board.list.last.name should be ("   ")
+                controller.board = tmpboard
+
+                controller.loadLog("Test")
+                controller.board.log.last should be ("Test")
+
+                controller.clearCreatures()
+                controller.board.field(0)(0).name should be ("   ")
+                controller.board = tmpboard
+            }
+
+
             "call several times" in {
                 assert(controller.next().isInstanceOf[Cell])
                 assert(controller.winner().isInstanceOf[Option[Int]])
                 controller.winner() should be(None)
                 assert(controller.deathcheck(0, 0).isInstanceOf[Boolean])
+                controller.deathcheck(8,10) should be (true)
+                val replacecreautre = Cell("HA.","0",1,1,false,1,Player("Inferno"))
+                controller.loadCreature(8,10,replacecreautre)
+                controller.attack(0,0,10,8)
                 assert(controller.findbasehp(controller.board.field(0)(0).name).isInstanceOf[Int])
                 assert(controller.prediction().isInstanceOf[Vector[Vector[Cell]]])
                 assert(controller.clear().isInstanceOf[Vector[Vector[Cell]]])
