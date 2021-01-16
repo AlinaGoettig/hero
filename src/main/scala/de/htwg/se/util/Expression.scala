@@ -38,7 +38,8 @@ class LetterAMI(input: String) extends Expression {
 
 class OneWord(input: String) extends Expression {
     override def interpret: Boolean = {
-        if(input.equals("p") || input.equals("exit") || input.equals("undo") || input.equals("redo")) {
+        if(input.equals("p") || input.equals("exit") || input.equals("undo") ||
+            input.equals("redo") || input.equals("save")) {
             true
         } else {
             false
