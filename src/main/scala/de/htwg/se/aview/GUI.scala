@@ -10,7 +10,10 @@ import de.htwg.se.util._
 import scala.swing._
 import scala.swing.event._
 import java.awt.Color
+import java.nio.file.Paths
+import java.util.logging.LogManager
 
+import com.malliina.audio.javasound.FileJavaSoundPlayer
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.model.boardComponent.CellInterface
 import javax.swing.ImageIcon
@@ -30,6 +33,13 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
     // -------------------------------------------------- Main Menu ----------------------------------------------------
     def mainmenu(): Unit = {
+
+        //Music
+        LogManager.getLogManager().reset()
+        val file = Paths get "src/main/scala/de/htwg/se/aview/Audio/Menu.mp3"
+        val player: FileJavaSoundPlayer = new FileJavaSoundPlayer(file)
+        player.volume = 30
+        player.play()
 
         contents = new ImagePanel() {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/UI/Menubackground.png"
@@ -53,6 +63,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                         reactions += {
                             case ButtonClicked(_) =>
+                                player.stop()
                                 controller.gamestate = "gamerun"
                                 controller.notifyObservers
                         }
@@ -67,6 +78,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                         reactions += {
                             case ButtonClicked(_) =>
                                 if (controller.load()) {
+                                    player.stop()
                                     controller.gamestate = "gamerun"
                                     controller.prediction()
                                     controller.notifyObservers
@@ -145,8 +157,9 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                     contents += new Label() {
                         foreground = Color.WHITE
                         text = "<html><center>IDE: IntelliJ IDEA Community Edition<br>Scala: 2.13.3" +
-                            "<br>Java JDK: 1.8.0<br>Sbt: 1.4.5<br><br>Adobe Photoshop CC 2019" +
-                            "<br>Marmoset Hexels<br><br><br><br>Project for Software Engineering at HTWG Konstanz AIN</center></html>"
+                            "<br>Java JDK: 1.8.0<br>Sbt: 1.4.5<br><br>Adobe Photoshop CC 2019<br>Marmoset Hexels" +
+                            "<br><br>Music:<br>Rob King & Paul Romero<br>Originial Heroes of Might & Magic III Album" +
+                            "<br><br><br>Project for Software Engineering at HTWG Konstanz AIN</center></html>"
                         font = new Font("Arial", 1, 20)
                     }
 
@@ -172,6 +185,13 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     // ------------------------------------------------- Menu->Game ----------------------------------------------------
 
     def gamerun(): Unit = {
+
+        //Music
+        val file = Paths get "src/main/scala/de/htwg/se/aview/Audio/Combat.mp3"
+        val player = new FileJavaSoundPlayer(file)
+        player.volume = 25
+        player.play()
+
         contents = new ImagePanel {
             imagePath = "src/main/scala/de/htwg/se/aview/Graphics/UI/Background.png"
             contents += new BoxPanel(Orientation.Vertical) {

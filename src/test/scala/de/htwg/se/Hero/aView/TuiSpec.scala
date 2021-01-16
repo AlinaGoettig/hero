@@ -4,7 +4,7 @@ import de.htwg.se.aview.TUI
 import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import de.htwg.se.model.boardComponent.boardImpl.Cell
 import de.htwg.se.model.playerComponent.Player
-import de.htwg.se.util.UndoManager
+import de.htwg.se.util.{Command, SetCommand, UndoManager}
 import org.scalatest._
 
 class TuiSpec extends WordSpec with Matchers {
@@ -62,6 +62,11 @@ class TuiSpec extends WordSpec with Matchers {
             tui.update
             controller.gamestate = "credit"
             tui.update
+        }
+
+        "has to manage undo and redo" in {
+            val input = Vector("a","1","1")
+            val command: Command = new SetCommand(input,controller)
         }
     }}
 

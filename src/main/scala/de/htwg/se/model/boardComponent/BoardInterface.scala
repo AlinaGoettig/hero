@@ -2,8 +2,6 @@ package de.htwg.se.model.boardComponent
 
 import de.htwg.se.model.playerComponent.Player
 
-import scala.xml.Node
-
 /**
  * Scala project for the game Hero (based on Heroes of Might and Magic III - Fight)
  * @author Ronny Klotz & Alina Göttig

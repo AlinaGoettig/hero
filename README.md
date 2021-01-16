@@ -2,6 +2,9 @@
 Scala - Hero Project
 =====================================================
 ## The journey of our first Scala based video game
+`INFO:` If you want to clone the repository and play the game with GUI, set the environment variable UI_TYPE=full
+
+
 
 ![](src/main/scala/de/htwg/se/aview/Graphics/UI/Font.png)
 
@@ -37,6 +40,7 @@ Scalastic |
 Scala Guice |
 Scala Xml |
 Play Json |
+Util Audio |
 
 ## Links about the main game
 

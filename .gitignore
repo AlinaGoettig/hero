@@ -35,5 +35,3 @@ project/.sbtserver
 
 # Application
 Hero.log
-HeroSave.xml
-HeroSave.json

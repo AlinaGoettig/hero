@@ -27,7 +27,7 @@ class ControllerSpec extends WordSpec with Matchers {
 
             "load functions" in {
                 val tmpboard= controller.board
-                controller.load() should be (false)
+                controller.load() should be (true)
 
                 controller.loadCreature(4,8,CellFactory(""))
                 controller.board.field(4)(8).name should be ("   ")

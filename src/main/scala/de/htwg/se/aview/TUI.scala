@@ -11,22 +11,22 @@ import de.htwg.se.util.{Observer, SetCommand, UndoManager}
 import scala.io.StdIn
 
 //noinspection ScalaStyle
-class TUI(controller: ControllerInterface, executer : UndoManager) extends Observer {
+class TUI(controller: ControllerInterface, manager : UndoManager) extends Observer {
 
     controller.add(this)
 
     def inputLine(input: Vector[String]): Boolean = {
         if((input.head.equals("m") && controller.checkmove(input)) ||
             (input.head.equals("a") && controller.checkattack(input))) {
-            executer.doStep(new SetCommand(input,controller), controller.board)
+            manager.doStep(new SetCommand(input,controller), controller.board)
             nextRound(true)
         } else if (input.head.equals("i")) {
             controller.info(input)
         } else if (input.head.equals("undo")) {
-            executer.undoStep(controller)
+            manager.undoStep(controller)
             nextRound(false)
         } else if (input.head.equals("redo")) {
-            executer.redoStep(controller)
+            manager.redoStep(controller)
             nextRound(false)
         } else if (input.head.equals("save")) {
             controller.save()

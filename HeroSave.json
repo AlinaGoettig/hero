@@ -1,0 +1,297 @@
+{
+  "field" : [ {
+    "name" : "HA.",
+    "damage" : "2-3",
+    "hp" : 10,
+    "speed" : 3,
+    "style" : false,
+    "multiplier" : 28,
+    "player" : "Castle",
+    "x" : 0,
+    "y" : 0
+  }, {
+    "name" : ".FA",
+    "damage" : "1-2",
+    "hp" : 4,
+    "speed" : 5,
+    "style" : false,
+    "multiplier" : 16,
+    "player" : "Inferno",
+    "x" : 0,
+    "y" : 9
+  }, {
+    "name" : "MA.",
+    "damage" : "4-6",
+    "hp" : 10,
+    "speed" : 3,
+    "style" : true,
+    "multiplier" : 28,
+    "player" : "Castle",
+    "x" : 1,
+    "y" : 0
+  }, {
+    "name" : "MAG",
+    "damage" : "2-4",
+    "hp" : 13,
+    "speed" : 4,
+    "style" : true,
+    "multiplier" : 20,
+    "player" : "Inferno",
+    "x" : 1,
+    "y" : 14
+  }, {
+    "name" : "RO.",
+    "damage" : "3-6",
+    "hp" : 10,
+    "speed" : 4,
+    "style" : false,
+    "multiplier" : 18,
+    "player" : "Castle",
+    "x" : 2,
+    "y" : 0
+  }, {
+    "name" : ".CE",
+    "damage" : "2-7",
+    "hp" : 25,
+    "speed" : 5,
+    "style" : false,
+    "multiplier" : 10,
+    "player" : "Inferno",
+    "x" : 2,
+    "y" : 14
+  }, {
+    "name" : "AN.",
+    "damage" : "50",
+    "hp" : 250,
+    "speed" : 12,
+    "style" : false,
+    "multiplier" : 2,
+    "player" : "Castle",
+    "x" : 5,
+    "y" : 0
+  }, {
+    "name" : ".DE",
+    "damage" : "30-40",
+    "hp" : 200,
+    "speed" : 11,
+    "style" : false,
+    "multiplier" : 2,
+    "player" : "Inferno",
+    "x" : 5,
+    "y" : 14
+  }, {
+    "name" : "CH.",
+    "damage" : "20-25",
+    "hp" : 100,
+    "speed" : 6,
+    "style" : false,
+    "multiplier" : 4,
+    "player" : "Castle",
+    "x" : 8,
+    "y" : 0
+  }, {
+    "name" : ".EF",
+    "damage" : "16-24",
+    "hp" : 90,
+    "speed" : 9,
+    "style" : false,
+    "multiplier" : 4,
+    "player" : "Inferno",
+    "x" : 8,
+    "y" : 14
+  }, {
+    "name" : "ZE.",
+    "damage" : "10-12",
+    "hp" : 24,
+    "speed" : 5,
+    "style" : true,
+    "multiplier" : 6,
+    "player" : "Castle",
+    "x" : 9,
+    "y" : 0
+  }, {
+    "name" : ".PI",
+    "damage" : "13-17",
+    "hp" : 45,
+    "speed" : 5,
+    "style" : false,
+    "multiplier" : 6,
+    "player" : "Inferno",
+    "x" : 9,
+    "y" : 14
+  }, {
+    "name" : "CR.",
+    "damage" : "7-10",
+    "hp" : 35,
+    "speed" : 4,
+    "style" : false,
+    "multiplier" : 8,
+    "player" : "Castle",
+    "x" : 10,
+    "y" : 0
+  }, {
+    "name" : ".HO",
+    "damage" : "7-9",
+    "hp" : 40,
+    "speed" : 4,
+    "style" : false,
+    "multiplier" : 8,
+    "player" : "Inferno",
+    "x" : 10,
+    "y" : 14
+  } ],
+  "cp" : "Inferno",
+  "cc" : {
+    "name" : "MAG",
+    "damage" : "2-4",
+    "hp" : 13,
+    "speed" : 4,
+    "style" : true,
+    "multiplier" : 20,
+    "player" : "Inferno",
+    "x" : 1,
+    "y" : 14
+  },
+  "list" : [ {
+    "name" : "HA.",
+    "damage" : "2-3",
+    "hp" : 10,
+    "speed" : 3,
+    "style" : false,
+    "multiplier" : 28,
+    "player" : "Castle",
+    "x" : 0,
+    "y" : 0
+  }, {
+    "name" : ".FA",
+    "damage" : "1-2",
+    "hp" : 4,
+    "speed" : 5,
+    "style" : false,
+    "multiplier" : 16,
+    "player" : "Inferno",
+    "x" : 0,
+    "y" : 9
+  }, {
+    "name" : "MA.",
+    "damage" : "4-6",
+    "hp" : 10,
+    "speed" : 3,
+    "style" : true,
+    "multiplier" : 28,
+    "player" : "Castle",
+    "x" : 1,
+    "y" : 0
+  }, {
+    "name" : "MAG",
+    "damage" : "2-4",
+    "hp" : 13,
+    "speed" : 4,
+    "style" : true,
+    "multiplier" : 20,
+    "player" : "Inferno",
+    "x" : 1,
+    "y" : 14
+  }, {
+    "name" : "RO.",
+    "damage" : "3-6",
+    "hp" : 10,
+    "speed" : 4,
+    "style" : false,
+    "multiplier" : 18,
+    "player" : "Castle",
+    "x" : 2,
+    "y" : 0
+  }, {
+    "name" : ".CE",
+    "damage" : "2-7",
+    "hp" : 25,
+    "speed" : 5,
+    "style" : false,
+    "multiplier" : 10,
+    "player" : "Inferno",
+    "x" : 2,
+    "y" : 14
+  }, {
+    "name" : "AN.",
+    "damage" : "50",
+    "hp" : 250,
+    "speed" : 12,
+    "style" : false,
+    "multiplier" : 2,
+    "player" : "Castle",
+    "x" : 5,
+    "y" : 0
+  }, {
+    "name" : ".DE",
+    "damage" : "30-40",
+    "hp" : 200,
+    "speed" : 11,
+    "style" : false,
+    "multiplier" : 2,
+    "player" : "Inferno",
+    "x" : 5,
+    "y" : 14
+  }, {
+    "name" : "CH.",
+    "damage" : "20-25",
+    "hp" : 100,
+    "speed" : 6,
+    "style" : false,
+    "multiplier" : 4,
+    "player" : "Castle",
+    "x" : 8,
+    "y" : 0
+  }, {
+    "name" : ".EF",
+    "damage" : "16-24",
+    "hp" : 90,
+    "speed" : 9,
+    "style" : false,
+    "multiplier" : 4,
+    "player" : "Inferno",
+    "x" : 8,
+    "y" : 14
+  }, {
+    "name" : "ZE.",
+    "damage" : "10-12",
+    "hp" : 24,
+    "speed" : 5,
+    "style" : true,
+    "multiplier" : 6,
+    "player" : "Castle",
+    "x" : 9,
+    "y" : 0
+  }, {
+    "name" : ".PI",
+    "damage" : "13-17",
+    "hp" : 45,
+    "speed" : 5,
+    "style" : false,
+    "multiplier" : 6,
+    "player" : "Inferno",
+    "x" : 9,
+    "y" : 14
+  }, {
+    "name" : "CR.",
+    "damage" : "7-10",
+    "hp" : 35,
+    "speed" : 4,
+    "style" : false,
+    "multiplier" : 8,
+    "player" : "Castle",
+    "x" : 10,
+    "y" : 0
+  }, {
+    "name" : ".HO",
+    "damage" : "7-9",
+    "hp" : 40,
+    "speed" : 4,
+    "style" : false,
+    "multiplier" : 8,
+    "player" : "Inferno",
+    "x" : 10,
+    "y" : 14
+  } ],
+  "log" : [ "Ma_rksman dealt 112 points to Fa_miliar" ]
+}
