@@ -34,13 +34,12 @@ object Hero {
             gui.visible = true
         }
 
-        println(tui.startinfo() + tui.mainmenu)
+        println(startinfo() + mainmenu)
         while (true) {
 
             controller.gamestate match {
 
                 case "mainmenu" => {
-                    println(startinfo() + mainmenu)
                     while (controller.gamestate.equals("mainmenu")) {
                         val input = StdIn.readLine()
 
@@ -146,6 +145,7 @@ object Hero {
         val line = "=" * 105
         "| n    | \tNew Game\n" +
             "| l    | \tLoad Game\n" +
+            "| c    | \tCredits\n" +
             "| exit | \tExit the game\n" + line + "\n"
     }
 

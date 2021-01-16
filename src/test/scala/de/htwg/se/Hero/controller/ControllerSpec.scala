@@ -9,7 +9,6 @@ import org.scalatest.wordspec.AnyWordSpec
 //import de.htwg.se.util.Observable
 import org.scalatest._
 
-/*
 class ControllerSpec extends AnyWordSpec with Matchers {
     "The Gameboard" when {
         "game is running" should {
@@ -144,5 +143,3 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
 }
-
- */
