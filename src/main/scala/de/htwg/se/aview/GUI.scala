@@ -104,7 +104,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                         }
                     }
 
-                    contents += new Label("Version: 1.3 Swing GUI") {
+                    contents += new Label("Version: 2.5 Docker capable") {
                         border = new EmptyBorder(0,155,0,0)
                         foreground = Color.WHITE
                     }
