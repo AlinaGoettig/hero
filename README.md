@@ -60,8 +60,3 @@ Util Audio |
 
 [![Build Status](https://travis-ci.org/AlinaGoettig/hero.svg?branch=master)](https://travis-ci.org/AlinaGoettig/hero)
 [![Coverage Status](https://coveralls.io/repos/github/AlinaGoettig/hero/badge.svg?branch=TextUI)](https://coveralls.io/github/AlinaGoettig/hero?branch=TextUI)
-
-## Coverage in GraphicalUI Github branch:
-
-[![Build Status](https://travis-ci.org/AlinaGoettig/hero.svg?branch=GraphicalUI)](https://travis-ci.org/AlinaGoettig/hero)
-[![Coverage Status](https://coveralls.io/repos/github/AlinaGoettig/hero/badge.svg?branch=GraphicalUI)](https://coveralls.io/github/AlinaGoettig/hero?branch=GraphicalUI)

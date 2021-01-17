@@ -70,9 +70,7 @@ object Hero {
                                 newgame(input)
                             }
 
-                            case "credit" => {
-                                controller.gamestate = "mainmenu"
-                            }
+                            case "credit" => controller.gamestate = "mainmenu"
                             case "finished" => controller.gamestate = "mainmenu"
                         }
                     }
@@ -85,9 +83,7 @@ object Hero {
                         val input = StdIn.readLine().split(" ").toVector
                         if (new Interpreter(input).interpret()) {
                             if (input(0).equals("exit") || !tui.inputLine(input)) return
-                        } else {
-                            print("Invalid Input. ")
-                        }
+                        } else { print("Invalid Input. ") }
                         if (!controller.gamestate.equals("gamerun")) print("New Input: ")
                     }
                 }
@@ -111,9 +107,7 @@ object Hero {
 
             if (new Interpreter(s.split(" ").toVector).interpret()) {
                 if (s.split(" ").toVector(0).equals("exit") || !tui.inputLine(s.split(" ").toVector)) return
-            } else {
-                print("Invalid Input. ")
-            }
+            } else { print("Invalid Input. ") }
 
             print("New input: ")
         }
@@ -123,9 +117,7 @@ object Hero {
 
             if (new Interpreter(input).interpret()) {
                 if (input(0).equals("exit") || !tui.inputLine(input)) {return}
-            } else {
-                print("Invalid Input. ")
-            }
+            } else { print("Invalid Input. ") }
 
             if (!controller.gamestate.equals("gamerun")) print("New Input: ")
         }

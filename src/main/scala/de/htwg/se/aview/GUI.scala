@@ -82,9 +82,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                                     controller.gamestate = "gamerun"
                                     controller.prediction()
                                     controller.notifyObservers
-                                } else {
-                                    foreground = new Color(30,30,30)
-                                }
+                                } else { foreground = new Color(30,30,30) }
                         }
                     }
 
@@ -280,7 +278,6 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                             opaque = false
                             border = new EmptyBorder(15,15,0,30)
                             contents += new ShortButton("Pass",30,Color.WHITE)(true)(false) {
-                                //preferredSize = new Dimension(300,70)
                                 reactions += {
                                     case ButtonClicked(_) =>
                                         if (controller.winner().isDefined){
@@ -329,8 +326,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                     contents += new ShortLabel("",30,new Color(230, 200, 130))(true) {
                         controller.winner() match {
                             case Some(value) =>
-                                if (value == 1) text = "Castle"
-                                else text = "Inferno"
+                                if (value == 1) text = "Castle" else text = "Inferno"
                             case None => text = "Winner not found"
                         }
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
@@ -415,8 +411,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
                     contents += new ShortButton("Exit",30,new Color(200, 200, 200))(true)(true) {
                         icon = new ImageIcon("src/main/scala/de/htwg/se/aview/Graphics/UI/Buttonframe.png")
                         reactions += {
-                            case ButtonClicked(_) =>
-                                System.exit(1)
+                            case ButtonClicked(_) => System.exit(0)
                         }
                     }
 
