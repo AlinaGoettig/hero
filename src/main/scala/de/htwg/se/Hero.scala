@@ -24,7 +24,6 @@ object Hero {
     val UIType: Boolean = if (System.getenv("UI_TYPE").equals("full")) true else false
 
     val tui = new TUI(controller, manager)
-    val gui = new GUI(controller)
 
     def main(args: Array[String]): Unit = {
 
