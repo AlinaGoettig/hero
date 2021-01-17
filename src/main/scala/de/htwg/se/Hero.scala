@@ -73,7 +73,7 @@ object Hero {
                             case "credit" => {
                                 controller.gamestate = "mainmenu"
                             }
-                            case "finished" => return
+                            case "finished" => controller.gamestate = "mainmenu"
                         }
                     }
                 }
@@ -95,7 +95,7 @@ object Hero {
                     controller.gamestate = "mainmenu"
                     controller.notifyObservers
                 }
-                case "finished" =>
+                case "finished" => controller.gamestate = "mainmenu"
 
             }
         }

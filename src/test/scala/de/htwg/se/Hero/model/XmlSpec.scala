@@ -32,6 +32,7 @@ class XmlSpec extends WordSpec with Matchers {
         (Xmlsave \ "cp").head.label should be ("cp")
         (Xmlsave \ "list").head.label should be ("list")
         (Xmlsave \ "log").head.label should be ("log")
+        xml.save(controller);
 
         (xml.cellToXml(14,13,cell)(true) \ "x").text should be ("13")
         (xml.cellToXml(14,13,cell)(true) \ "y").text should be ("14")
