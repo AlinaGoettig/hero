@@ -1,6 +1,10 @@
-name          := "Hero"
+name          := "hero"
 organization  := "de.htwg.se"
 
+/* vorige Werte
+version       := "0.2.0"
+scalaVersion  := "2.12.7"
+ */
 version       := "0.1"
 scalaVersion  := "2.12.7"
 

@@ -6,7 +6,7 @@ Scala - Hero Project
 
 
 
-![](src/main/scala/de/htwg/se/aview/Graphics/UI/Font.png)
+![](src/main/scala/de/htwg/se/hero/aview/Graphics/UI/Font.png)
 
 Code written: [Alina Göttig](https://github.com/AlinaGoettig) & [Ronny Klotz](https://github.com/ShuraBlack)
 

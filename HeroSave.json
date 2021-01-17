@@ -15,7 +15,7 @@
     "hp" : 4,
     "speed" : 5,
     "style" : false,
-    "multiplier" : 16,
+    "multiplier" : 9,
     "player" : "Inferno",
     "x" : 0,
     "y" : 9
@@ -168,7 +168,7 @@
     "hp" : 4,
     "speed" : 5,
     "style" : false,
-    "multiplier" : 16,
+    "multiplier" : 9,
     "player" : "Inferno",
     "x" : 0,
     "y" : 9
@@ -293,5 +293,5 @@
     "x" : 10,
     "y" : 14
   } ],
-  "log" : [ "Ma_rksman dealt 112 points to Fa_miliar" ]
+  "log" : [ "Ma_rksman dealt 140 points to Fa_miliar" ]
 }
