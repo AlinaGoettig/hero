@@ -8,11 +8,6 @@ class GuiSpec extends WordSpec with Matchers {
     "A Gui" when { "new" should {
         val controller = new Controller
         val gui = new GUI(controller)
-        "have functions" in {
-            gui.mainmenu()
-            gui.credit()
-            gui.gamerun()
-            gui.scoreboard()
-        }
+
     }}
 }
