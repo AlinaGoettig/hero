@@ -165,13 +165,7 @@ class Controller @Inject () extends Observable with ControllerInterface {
         val player1 = board.list.exists(Cell => Cell.player.equals(player.head) && Cell.multiplier > 0)
         val player2 = board.list.exists(Cell => Cell.player.equals(player.last) && Cell.multiplier > 0)
 
-        if (player1 && !player2) {
-            Some(1)
-        } else if (!player1 && player2) {
-            Some(2)
-        } else {
-            None
-        }
+        if (player1 && !player2) Some(1) else if (!player1 && player2) Some(2) else None
     }
 
     // --------------------------------------------------- Attack ------------------------------------------------------
@@ -288,9 +282,7 @@ class Controller @Inject () extends Observable with ControllerInterface {
         Vector(-1, -1)
     }
 
-    def position(creature: CellInterface): Vector[Int] = {
-        intpos(creature.name)
-    }
+    def position(creature: CellInterface): Vector[Int] = intpos(creature.name)
 
     def cheatCode(code: Vector[String]): String = {
          code(1) match {
@@ -355,9 +347,7 @@ class Controller @Inject () extends Observable with ControllerInterface {
     // ---------------------------------------------- Input checks -----------------------------------------------------
 
     def checkmove(in:Vector[String]): Boolean =
-        if (in(0) == "m" && getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) {
-            true
-        } else false
+        if (in(0) == "m" && getCreature(board.field, in(2).toInt, in(1).toInt).name.equals(" _ ")) true else false
 
 
     def checkattack(in:Vector[String]) : Boolean = {

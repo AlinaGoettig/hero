@@ -55,11 +55,7 @@ class CreaturelistIterator() extends CustomIterator {
     var position: Int = 0;
 
     def hasNext: Boolean = {
-        if (position >= list.size) {
-            false;
-        } else {
-            true;
-        }
+        position < list.size
     }
 
     def next(): (Vector[Int], Cell) = {
@@ -95,11 +91,7 @@ class ObstacleListIterator() extends CustomIterator {
     var position: Int = 0;
 
     def hasNext: Boolean = {
-        if (position >= list.size) {
-            false;
-        } else {
-            true;
-        }
+        position < list.size
     }
 
     def next(): (Vector[Int], Cell) = {

@@ -33,7 +33,7 @@ object Hero {
             gui.visible = true
         }
 
-        println(startinfo() + mainmenu)
+        println(tui.startinfo() + tui.mainmenu)
         while (true) {
 
             controller.gamestate match {
@@ -121,23 +121,6 @@ object Hero {
             if (!controller.gamestate.equals("gamerun")) print("New Input: ")
         }
 
-    }
-
-    def startinfo(): String = {
-        val version = "Version: 2.5 Docker capable [TUI Mode] "
-        val top = "\n" + "=" * 44 + " Welcome to Hero " + "=" * 44
-        val middle = "\n" + " " * 35 + "Made by Alina Göttig & Ronny Klotz" + "\n"
-        val bottom = " " * ((105 - version.length) / 2) + version + "\n"
-
-        top + middle + bottom + "=" * 105 + "\n"
-    }
-
-    def mainmenu: String = {
-        val line = "=" * 105
-        "| n    | \tNew Game\n" +
-            "| l    | \tLoad Game\n" +
-            "| c    | \tCredits\n" +
-            "| exit | \tExit the game\n" + line + "\n"
     }
 
 }

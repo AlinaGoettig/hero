@@ -8,9 +8,6 @@ package de.htwg.se.aview
 import de.htwg.se.controller.controllerComponent.ControllerInterface
 import de.htwg.se.util.{Observer, SetCommand, UndoManager}
 
-import scala.io.StdIn
-
-//noinspection ScalaStyle
 class TUI(controller: ControllerInterface, manager : UndoManager) extends Observer {
 
     controller.add(this)
@@ -86,12 +83,12 @@ class TUI(controller: ControllerInterface, manager : UndoManager) extends Observ
         "=" * 105 + "\n"
     }
 
-
     def startinfo(): String = {
-        val version = "Gameversion: 1.3 GUI Implementation"
+        val version = "Version: 2.5 Docker capable [TUI Mode] "
         val top = "\n" + "=" * 44 + " Welcome to Hero " + "=" * 44
         val middle = "\n" + " " * 35 + "Made by Alina Göttig & Ronny Klotz" + "\n"
         val bottom = " " * ((105 - version.length) / 2) + version + "\n"
+
         top + middle + bottom + "=" * 105 + "\n"
     }
 
@@ -100,6 +97,6 @@ class TUI(controller: ControllerInterface, manager : UndoManager) extends Observ
         "| n    | \tNew Game\n" +
             "| l    | \tLoad Game\n" +
             "| c    | \tCredits\n" +
-            "| exit | \tExit the game\n" + line
+            "| exit | \tExit the game\n" + line + "\n"
     }
 }
