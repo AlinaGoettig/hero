@@ -35,7 +35,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
     def mainmenu(): Unit = {
 
         //Music
-        LogManager.getLogManager().reset()
+        LogManager.getLogManager.reset()
         val file = Paths get "src/main/scala/de/htwg/se/aview/Audio/Menu.mp3"
         val player: FileJavaSoundPlayer = new FileJavaSoundPlayer(file)
         player.volume = 30

@@ -1,8 +1,5 @@
 package de.htwg.se.Hero
 
-import de.htwg.se.Hero.model.Hero.{mainmenu, newgame, startinfo}
-import de.htwg.se.aview.TUI
-import de.htwg.se.controller.controllerComponent.ControllerImpl.Controller
 import org.scalatest._
 
 
