@@ -11,7 +11,7 @@ class FactoryMethod extends WordSpec with Matchers {
         val marker = CellFactory("marker")
         val obstacle = CellFactory("obstacle")
         val emptycell = CellFactory("")
-        "provide the cell" in {
+        "provide the different cells" in {
             marker should be(boardImpl.Cell(" _ ", "0", 0, 0, style = false, 0, Player("none")))
             obstacle should be(boardImpl.Cell("XXX", "0", 0, 0, style = false, 0, Player("none")))
             emptycell should be(boardImpl.Cell("   ", "0", 0, 0, style = false, 0, Player("none")))

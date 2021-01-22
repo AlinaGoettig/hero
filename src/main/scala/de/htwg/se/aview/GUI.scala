@@ -184,6 +184,7 @@ class GUI(controller: ControllerInterface) extends Frame with Observer {
 
     def gamerun(): Unit = {
 
+
         //Music
         val file = Paths get "src/main/scala/de/htwg/se/aview/Audio/Combat.mp3"
         val player = new FileJavaSoundPlayer(file)

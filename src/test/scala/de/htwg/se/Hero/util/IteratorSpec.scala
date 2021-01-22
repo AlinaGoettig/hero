@@ -10,7 +10,7 @@ class Iterator extends WordSpec with Matchers {
     "An Iterator" when { "new" should {
         val creaturelist = new CreaturelistIterator
         val obstaclelist = new ObstacleListIterator
-        "aprovide next cell information" in {
+        "provide next cell information" in {
             val creature = creaturelist.next()
             val obstacle = obstaclelist.next()
             creature._2 should be(boardImpl.Cell("HA.", "2-3", 10, 3, style = false, 28, Player("Castle")))

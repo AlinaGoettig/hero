@@ -23,7 +23,7 @@ class TuiSpec extends WordSpec with Matchers {
             tui.commands() should include("p")
             tui.commands() should include("exit")
         }
-        "be of Type" in {
+        "be type" in {
             assert(tui.commands().isInstanceOf[String])
             assert(tui.update.isInstanceOf[Unit])
         }
