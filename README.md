@@ -23,7 +23,7 @@ different values, like health points, damage amount, movment speed, etc. to figh
 
 ## HowToPlay
 Start up a new game or load an already existing save game in the main menu
-![Menu](https://s12.directupload.net/images/210123/n5v9dhyv.gif)
+![Menu](https://s12.directupload.net/images/210123/rj5drxze.gif)
 
 ## Graphics
 
