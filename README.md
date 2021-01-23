@@ -69,6 +69,7 @@ Util Audio |
 The following tasks were completed in the course of the lecture
 
 <details>
+           <summary>Tasks</summary>
            <summary>Project Setup with SBT</summary>
            <p>https://docs.google.com/presentation/d/13fk7v-o_IGjkKX0sRm0QcYclKFEbQiGEKupY5_gqZYw/edit</p>
            <summary>Version Control Systems - Git</summary>
