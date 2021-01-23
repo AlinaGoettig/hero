@@ -22,8 +22,13 @@ different values, like health points, damage amount, movment speed, etc. to figh
 [![Hero - Project release trailer](https://s12.directupload.net/images/210116/yfv8fb55.png)](https://youtu.be/WEJsVZXKBGw "Hero - Project release trailer")
 
 ## HowToPlay
-Start up a new game or load an already existing save game in the main menu
+Start up a new game or load an already existing save game in the main menu <br>
 ![Menu](https://s12.directupload.net/images/210123/rj5drxze.gif)
+![Sides](https://s12.directupload.net/images/210123/oy9xmx5u.gif)
+![Move](https://s12.directupload.net/images/210123/nexl58h2.gif)
+![Attack ranged](https://s12.directupload.net/images/210123/qfwuhx9n.gif)
+![Attack melee](https://s12.directupload.net/images/210123/pk65or2n.gif)
+![Win](https://s12.directupload.net/images/210123/nht7qkzs.gif)
 
 ## Graphics
 
