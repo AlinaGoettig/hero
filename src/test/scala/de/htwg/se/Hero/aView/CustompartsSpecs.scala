@@ -21,9 +21,12 @@ class CustompartsSpecs extends WordSpec with Matchers {
     "A CoorButton" when { "new" should {
         val controller = new Controller()
         val creature = Cell("HA.", "2-3", 10, 3, style = false, 28, Player("0"))
+        val creatureranged = Cell("MA.", "4-6", 10, 3, style = true, 28, Player("None"))
         val coorbutton = new CoorButton(1,2,creature,controller)
+        val coorButtonranged = new CoorButton(1,2,creatureranged,controller)
         "have the full creaturename"  in {
             coorbutton.cellname should be("Ha_lberdier")
+            coorButtonranged.next()
         }
     }}
 
