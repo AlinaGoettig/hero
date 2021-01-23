@@ -71,7 +71,7 @@ The following tasks were completed in the course of the lecture
 
 <details>
            <summary>Tasks</summary>
-           <summary> - [ ] Project Setup with SBT</summary>
+           <summary>Project Setup with SBT</summary>
            <summary>Version Control Systems - Git</summary>
            <summary>Agile Development</summary>
            <summary>Text User Interface</summary>
