@@ -71,32 +71,19 @@ The following tasks were completed in the course of the lecture
 
 <details>
            <summary>Tasks</summary>
-           <summary>Project Setup with SBT</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=122863</p>
+           <summary> - [ ] Project Setup with SBT</summary>
            <summary>Version Control Systems - Git</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=126192</p>
            <summary>Agile Development</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=24751</p>
            <summary>Text User Interface</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=126809</p>
            <summary>MVC Architecture</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=127348</p>
            <summary>Continuous Deployment</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=127736</p>
            <summary>Design Pattern</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=128269</p>
            <summary>Undo/Redo Manager</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=128270</p>
            <summary>Graphical User Interface</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=129369</p>
            <summary>Components</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=129894</p>
            <summary>Dependency Injection</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=130308</p>
            <summary>FileIO</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=130751</p>
            <summary>Docker</summary>
-           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=131651</p>
 </details>
 
 ## Links about the main game
