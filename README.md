@@ -3,8 +3,6 @@ Scala - Hero Project
 =====================================================
 ## The journey of our first Scala based video game
 `INFO:` If you want to clone the repository and play the game with GUI, set the environment variable UI_TYPE=full <br>
-[HowToPlay - YoutTube](https://youtu.be/xgbU-B7nY3g)
-
 
 ![](src/main/scala/de/htwg/se/aview/Graphics/UI/Font.png)
 
@@ -22,6 +20,9 @@ different values, like health points, damage amount, movment speed, etc. to figh
 [![Hero - Project release trailer](https://s12.directupload.net/images/210116/yfv8fb55.png)](https://youtu.be/WEJsVZXKBGw "Hero - Project release trailer")
 
 ## HowToPlay
+
+[HowToPlay - YoutTube](https://youtu.be/xgbU-B7nY3g)
+
 ![Menu](https://s12.directupload.net/images/210123/rj5drxze.gif)
 <br> Start up a new game or load an already existing save game in the main menu
 
