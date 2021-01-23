@@ -21,6 +21,10 @@ different values, like health points, damage amount, movment speed, etc. to figh
 
 [![Hero - Project release trailer](https://s12.directupload.net/images/210116/yfv8fb55.png)](https://youtu.be/WEJsVZXKBGw "Hero - Project release trailer")
 
+## HowToPlay
+Start up a new game or load an already existing save game in the main menu
+![Menu](https://s12.directupload.net/images/210123/n5v9dhyv.gif)
+
 ## Graphics
 
 ![Castle](https://s12.directupload.net/images/210123/iq2u8twz.png)
