@@ -22,13 +22,18 @@ different values, like health points, damage amount, movment speed, etc. to figh
 [![Hero - Project release trailer](https://s12.directupload.net/images/210116/yfv8fb55.png)](https://youtu.be/WEJsVZXKBGw "Hero - Project release trailer")
 
 ## HowToPlay
-Start up a new game or load an already existing save game in the main menu <br>
-![Menu](https://s12.directupload.net/images/210123/rj5drxze.gif)
-![Sides](https://s12.directupload.net/images/210123/oy9xmx5u.gif)
-![Move](https://s12.directupload.net/images/210123/nexl58h2.gif)
-![Attack ranged](https://s12.directupload.net/images/210123/qfwuhx9n.gif)
-![Attack melee](https://s12.directupload.net/images/210123/pk65or2n.gif)
-![Win](https://s12.directupload.net/images/210123/nht7qkzs.gif)
+![Menu](https://s12.directupload.net/images/210123/rj5drxze.gif) <br>
+Start up a new game or load an already existing save game in the main menu 
+![Sides](https://s12.directupload.net/images/210123/oy9xmx5u.gif) <br>
+Each player choose a side at the beginning of a new game
+![Move](https://s12.directupload.net/images/210123/nexl58h2.gif) <br>
+Click on a black frame to move to the position
+![Attack ranged](https://s12.directupload.net/images/210123/qfwuhx9n.gif) <br>
+Ranged creatures can attack from everywhere
+![Attack melee](https://s12.directupload.net/images/210123/pk65or2n.gif) <br>
+while melee creature need to have a black frame near them to be attackable
+![Win](https://s12.directupload.net/images/210123/nht7qkzs.gif) <br>
+Kill all creatures of a side to win
 
 ## Graphics
 
