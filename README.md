@@ -24,6 +24,7 @@ different values, like health points, damage amount, movment speed, etc. to figh
 ## Graphics
 
 ![Castle](https://s12.directupload.net/images/210123/iq2u8twz.png)
+![Inferno](https://s12.directupload.net/images/210123/j7g4vxtw.png)
 
 ## Project information
 
