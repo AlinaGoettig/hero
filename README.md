@@ -23,7 +23,7 @@ different values, like health points, damage amount, movment speed, etc. to figh
 
 ## HowToPlay
 ![Menu](https://s12.directupload.net/images/210123/rj5drxze.gif)
-<br> `Start up a new game or load an already existing save game in the main menu`
+<br> Start up a new game or load an already existing save game in the main menu
 
 ![Sides](https://s12.directupload.net/images/210123/oy9xmx5u.gif)
 <br> Markup : * Each player choose a side at the beginning of a new game
@@ -65,6 +65,13 @@ Scala Guice |
 Scala Xml |
 Play Json |
 Util Audio |
+
+The following tasks were completed in the course of the lecture
+
+Markup : <details>
+           <summary>Title 1</summary>
+           <p>Content 1 Content 1 Content 1 Content 1 Content 1</p>
+         </details>
 
 ## Links about the main game
 
