@@ -69,9 +69,10 @@ Util Audio |
 The following tasks were completed in the course of the lecture
 
 <details>
-           <summary>Tasks</summary>
-           <p>Porject Setup with SBT</p>
-                      <link>https://docs.google.com/presentation/d/13fk7v-o_IGjkKX0sRm0QcYclKFEbQiGEKupY5_gqZYw/edit</link>
+           <summary>Project Setup with SBT</summary>
+           <p>https://docs.google.com/presentation/d/13fk7v-o_IGjkKX0sRm0QcYclKFEbQiGEKupY5_gqZYw/edit</p>
+           <summary>Version Control Systems - Git</summary>
+           <p>https://moodle.htwg-konstanz.de/moodle/mod/url/view.php?id=126192</p>
 </details>
 
 ## Links about the main game
