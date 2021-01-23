@@ -26,19 +26,19 @@ different values, like health points, damage amount, movment speed, etc. to figh
 <br> Start up a new game or load an already existing save game in the main menu
 
 ![Sides](https://s12.directupload.net/images/210123/oy9xmx5u.gif)
-<br> Markup : * Each player choose a side at the beginning of a new game
+<br> Each player choose a side at the beginning of a new game
 
 ![Move](https://s12.directupload.net/images/210123/nexl58h2.gif)
-<br> Markup : * Click on a black frame to move to the position
+<br> Click on a black frame to move to the position
 
 ![Attack ranged](https://s12.directupload.net/images/210123/qfwuhx9n.gif)
-<br> Markup : * Ranged creatures can attack from everywhere
+<br> Ranged creatures can attack from everywhere
 
 ![Attack melee](https://s12.directupload.net/images/210123/pk65or2n.gif)
-<br> Markup : * while melee creature need to have a black frame near them to be attackable
+<br> while melee creature need to have a black frame near them to be attackable
 
 ![Win](https://s12.directupload.net/images/210123/nht7qkzs.gif)
-<br> Markup : * Kill all creatures of a side to win
+<br> Kill all creatures of a side to win
 
 ## Graphics
 
@@ -69,8 +69,9 @@ Util Audio |
 The following tasks were completed in the course of the lecture
 
 <details>
-           <summary>Title 1</summary>
-           <p>Content 1 Content 1 Content 1 Content 1 Content 1</p>
+           <summary>Tasks</summary>
+           <p>Porject Setup with SBT</p>
+                      <link>https://docs.google.com/presentation/d/13fk7v-o_IGjkKX0sRm0QcYclKFEbQiGEKupY5_gqZYw/edit</link>
 </details>
 
 ## Links about the main game
