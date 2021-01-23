@@ -21,6 +21,10 @@ different values, like health points, damage amount, movment speed, etc. to figh
 
 [![Hero - Project release trailer](https://s12.directupload.net/images/210116/yfv8fb55.png)](https://youtu.be/WEJsVZXKBGw "Hero - Project release trailer")
 
+## Graphics
+
+![Castle](https://s12.directupload.net/images/210123/iq2u8twz.png)
+
 ## Project information
 
 This project was developed in the course of the third semester at the HTWG-Konstanz (Applied Computer Science) in the lecture
