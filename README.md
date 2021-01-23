@@ -2,8 +2,8 @@
 Scala - Hero Project
 =====================================================
 ## The journey of our first Scala based video game
-`INFO:` If you want to clone the repository and play the game with GUI, set the environment variable UI_TYPE=full
-
+`INFO: If you want to clone the repository and play the game with GUI, set the environment variable UI_TYPE=full`
+[HowToPlay - YoutTube](https://youtu.be/WEJsVZXKBGw)
 
 
 ![](src/main/scala/de/htwg/se/aview/Graphics/UI/Font.png)
