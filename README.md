@@ -68,10 +68,10 @@ Util Audio |
 
 The following tasks were completed in the course of the lecture
 
-Markup : <details>
+<details>
            <summary>Title 1</summary>
            <p>Content 1 Content 1 Content 1 Content 1 Content 1</p>
-         </details>
+</details>
 
 ## Links about the main game
 
